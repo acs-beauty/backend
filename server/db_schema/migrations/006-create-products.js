@@ -31,17 +31,11 @@ module.exports = {
       price: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
-        validate: {
-          min: 0,
-        },
         defaultValue: 0,
       },
       discountPrice: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
-        validate: {
-          min: 0,
-        },
         defaultValue: null,
       },
       subcategoryId: {
@@ -63,9 +57,6 @@ module.exports = {
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        validate: {
-          min: 0,
-        },
         defaultValue: 0,
       },
       createdAt: {

@@ -70,9 +70,6 @@ module.exports = {
       totalPrice: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
-        validate: {
-          min: 0,
-        },
         defaultValue: 0,
       },
       createdAt: {

@@ -30,17 +30,11 @@ module.exports = {
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        validate: {
-          min: 0,
-        },
         defaultValue: 0,
       },
       totalPricePerItem: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
-        validate: {
-          min: 0,
-        },
         defaultValue: 0,
       },
     });

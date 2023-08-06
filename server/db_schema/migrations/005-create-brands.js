@@ -1,5 +1,4 @@
 "use strict";
-const { validateLinkString } = require("../../regex");
 
 /** @type {import('sequelize-cli').Migration} */
 
@@ -19,9 +18,6 @@ module.exports = {
       redirectUrl: {
         type: Sequelize.STRING(256),
         allowNull: true,
-        validate: {
-          isUrl: true,
-        }
       },
       linkKey: {
         type: Sequelize.STRING(64),
