@@ -5,4 +5,25 @@
   height: calc(100vh - #{$header-height});
   position: fixed;
   top: $header-height;
+  border: 1px solid #0000001A;
+  border-left: none;
+}
+.wrapper {
+  width: 149px;
+  height: 600px;
+  margin-top: 32px;
+  margin-left: 79px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  a {
+    text-decoration: none;
+    color: $main-text-color;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .icon {
+      margin-right: 10px;
+    }
+  }
 }
