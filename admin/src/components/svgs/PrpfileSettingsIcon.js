@@ -1,6 +1,6 @@
 import React from "react";
 
-const SettingsIcon = () => {
+const ProfileSettingsIcon = () => {
   return (
     <svg
       width="18"
@@ -17,4 +17,4 @@ const SettingsIcon = () => {
   );
 };
 
-export default SettingsIcon;
+export default ProfileSettingsIcon;

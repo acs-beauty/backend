@@ -1,0 +1,8 @@
+@import "/src/styles/variables.scss";
+
+.container {
+  width: $sidebar-width;
+  height: calc(100vh - #{$header-height});
+  position: fixed;
+  top: $header-height;
+}
