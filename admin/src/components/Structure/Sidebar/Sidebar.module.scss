@@ -5,7 +5,7 @@
   height: calc(100vh - #{$header-height});
   position: fixed;
   top: $header-height;
-  border: 1px solid #0000001A;
+  border: $default-border;
   border-left: none;
 }
 .wrapper {

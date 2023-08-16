@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import {Link} from 'react-router-dom'
-import styles from "./Sidebar.module.scss";
+import styles from './Sidebar.module.scss';
 import BoardIcon from '../../svgs/BoardIcon';
 import CategoriesIcon from '../../svgs/CategoriesIcon.js';
 import CommentsIcon from '../../svgs/CommentsIcon';
@@ -17,7 +17,7 @@ const Sidebar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
-      <Link  to="/"><div className={styles.icon}><BoardIcon color={mainColor}/></div> Дошка</Link>
+      <Link  to="/dashboard"><div className={styles.icon}><BoardIcon color={mainColor}/></div> Дошка</Link>
       <Link  to="/categories"><div className={styles.icon}><CategoriesIcon color={mainColor}/></div> Категорії</Link>
       <Link  to="/products"><div className={styles.icon}><ProductsIcon color={mainColor}/></div> Товари</Link>
       <Link  to="/users"><div className={styles.icon}><UsersIcon color={mainColor}/></div> Користувачі</Link>

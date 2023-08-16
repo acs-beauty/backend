@@ -4,7 +4,7 @@
 .container {
     width: 325px;
     height: 365px;
-    border: 1px solid #0000001A;
+    border: $default-border;
     position: relative;
     left: 1000px;
     top: 50px;
@@ -18,7 +18,7 @@
     display: flex;
     justify-content: center;
     align-items: center; 
-    @extend .Roboto500-16-1875;
+    @extend .Roboto500-16-18;
 }
 ul {
     padding: 20px 16px;
@@ -27,7 +27,7 @@ ul {
     background-color: white;
     li {
         padding-bottom:  29px;
-        @extend .Roboto400-16-1875;
+        @extend .Roboto400-16-18;
         line-height: 0;
         white-space: nowrap;
         overflow: hidden;
@@ -42,7 +42,7 @@ ul {
         padding-bottom: 0;
     }
     li:hover {
-        @extend .Roboto500-16-1875;
+        @extend .Roboto500-16-18;
         line-height: 0;
         cursor: pointer;
     }

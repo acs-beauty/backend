@@ -2,8 +2,9 @@
 
 .appWrap {
   width: $page-width;
-  height: 100vh;
+  min-height: 100vh;
+  height: fit-content;
   margin: 0 auto;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  
+  border: $default-border;
+  color: $main-text-color;
 }

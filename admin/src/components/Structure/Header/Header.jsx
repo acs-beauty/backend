@@ -29,7 +29,7 @@ const Header = () => {
             <NotificationIcon />
           </div>
           <div className={styles.icon} onClick={toggleProfilePopup}>
-            <LoginIcon />
+            <LoginIcon color={'white'} />
           </div>
         </div>
       </div>
