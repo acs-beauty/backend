@@ -14,6 +14,7 @@ const findAllCategoryAndSub = async (isAdmin) => {
         as: "subcategory",
         attributes: ["subcategoryId", "name", "linkKey", ...attributeDisabled],
         where: { ...whereDisabled },
+        required: false,
       },
     });
     return categoryAndSub;

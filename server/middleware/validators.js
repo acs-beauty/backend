@@ -39,3 +39,23 @@ module.exports.validateLinkKey = async (req, res, next) => {
     next();
   }
 };
+
+module.exports.validateCreateCategory = async (req, res, next) => {
+  const validationResult = await schemes.bodyNewCategorySchema.isValid(req.body);
+  if (!validationResult) {
+    return next(new BadRequestError("Invalid query"));
+  } else {
+    next();
+  }
+};
+
+module.exports.validateCreateSubcategory = async (req, res, next) => {
+  try {
+    await schemes.bodyNewSubcategorySchema.validate(req.body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    return next(new BadRequestError(error.errors));
+  }
+};

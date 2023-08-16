@@ -40,3 +40,24 @@ module.exports.linkKeySchema = yup.object().shape({
     .required()
     .matches(regex.validateLinkString, "Invalid linkKey format"),
 });
+
+const categorySchema = {
+  name: yup
+    .string()
+    .required()
+    .matches(regex.ukraineWordsString, "Invalid ukraine string format"),
+  linkKey: yup
+    .string()
+    .required()
+    .matches(regex.validateLinkString, "Invalid linkKey format"),
+  disabled: yup.boolean().required(),
+};
+
+module.exports.bodyNewCategorySchema = yup.object().shape({
+  ...categorySchema,
+});
+
+module.exports.bodyNewSubcategorySchema = yup.object().shape({
+  categoryId: yup.number().required().positive().integer(),
+  ...categorySchema,
+});
