@@ -34,30 +34,34 @@ module.exports.searchProductsSchema = yup.object().shape({
     .matches(regex.arraySearchProductString, "Invalid searchWords format"),
 });
 
-module.exports.linkKeySchema = yup.object().shape({
+const linkKey = {
   linkKey: yup
     .string()
     .required()
+    .min(3, "Link key must be at least 3 characters")
+    .max(64, "Link key can't exceed 64 characters")
     .matches(regex.validateLinkString, "Invalid linkKey format"),
-});
+};
+
+module.exports.linkKeySchema = yup.object().shape(linkKey);
 
 const categorySchema = {
   name: yup
     .string()
     .required()
+    .min(3, "Name must be at least 3 characters")
+    .max(64, "Name can't exceed 64 characters")
     .matches(regex.ukraineWordsString, "Invalid ukraine string format"),
-  linkKey: yup
-    .string()
-    .required()
-    .matches(regex.validateLinkString, "Invalid linkKey format"),
   disabled: yup.boolean().required(),
 };
 
 module.exports.bodyNewCategorySchema = yup.object().shape({
   ...categorySchema,
+  ...linkKey,
 });
 
 module.exports.bodyNewSubcategorySchema = yup.object().shape({
   categoryId: yup.number().required().positive().integer(),
   ...categorySchema,
+  ...linkKey,
 });
