@@ -1,16 +1,16 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 import styles from './Sidebar.module.scss';
-import BoardIcon from '../../svgs/BoardIcon';
-import CategoriesIcon from '../../svgs/CategoriesIcon.js';
-import CommentsIcon from '../../svgs/CommentsIcon';
-import ListIcon from '../../svgs/ListIcon';
-import NewsIcon from '../../svgs/NewsIcon';
-import OrdersIcon from '../../svgs/OrdersIcon';
-import ProductsIcon from '../../svgs/ProductsIcon';
-import ReviewsIcon from '../../svgs/ReviewsIcon';
-import SlidesIcon from '../../svgs/SlidesIcon';
-import UsersIcon from '../../svgs/UsersIcon';
+import BoardIcon from '../../../svgs/BoardIcon';
+import CategoriesIcon from '../../../svgs/CategoriesIcon.js';
+import CommentsIcon from '../../../svgs/CommentsIcon';
+import ListIcon from '../../../svgs/ListIcon';
+import NewsIcon from '../../../svgs/NewsIcon';
+import OrdersIcon from '../../../svgs/OrdersIcon';
+import ProductsIcon from '../../../svgs/ProductsIcon';
+import ReviewsIcon from '../../../svgs/ReviewsIcon';
+import SlidesIcon from '../../../svgs/SlidesIcon';
+import UsersIcon from '../../../svgs/UsersIcon';
 
 const Sidebar = () => {
   const mainColor = '#5C5E60'

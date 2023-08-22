@@ -1,7 +1,7 @@
 import styles from './App.module.scss';
-import Header from './components/Structure/Header/Header'
-import Sidebar from './components/Structure/Sidebar/Sidebar'
-import Content from './components/Structure/Content/Content'
+import Header from './pages/Structure/Header/Header'
+import Sidebar from './pages/Structure/Sidebar/Sidebar'
+import Content from './pages/Structure/Content/Content'
 import { BrowserRouter } from "react-router-dom";
 
 function App() {

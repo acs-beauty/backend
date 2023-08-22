@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Subcategory.module.scss";
-import ChangeIcon from "../../../svgs/ChangeIcon";
-import ArrowToRight from "../../../svgs/ArrowToRight";
+import ChangeIcon from "../../../../svgs/ChangeIcon";
+import ArrowToRight from "../../../../svgs/ArrowToRight";
 
 const Subcategory = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);

@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./Dashboard.module.scss";
 import DashboardCard from "./DashboardCard/DashboardCard";
-import ProductIcon from "../svgs/ProductsIcon";
-import IncomeIcon from "../svgs/IncomeIcon";
-import LoginIcon from "../svgs/LoginIcon";
-import ReviewsIcon from "../svgs/ReviewsIcon";
-import ToolsPanel from "../ToolsPanel/ToolsPanel";
+import ProductIcon from "../../svgs/ProductsIcon";
+import IncomeIcon from "../../svgs/IncomeIcon";
+import LoginIcon from "../../svgs/LoginIcon";
+import ReviewsIcon from "../../svgs/ReviewsIcon";
+import ToolsPanel from "../../components/ToolsPanel/ToolsPanel";
 
 const Dashboard = () => {
   return (

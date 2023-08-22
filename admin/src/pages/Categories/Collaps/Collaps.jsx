@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styles from "./Collaps.module.scss";
-import ArrowToRight from "../../svgs/ArrowToRight";
-import ChangeIcon from "../../svgs/ChangeIcon";
-import DeleteIcon from "../../svgs/DeleteIcon";
-import AddIcon from "../../svgs/AddIcon";
+import ArrowToRight from "../../../svgs/ArrowToRight";
+import ChangeIcon from "../../../svgs/ChangeIcon";
+import DeleteIcon from "../../../svgs/DeleteIcon";
+import AddIcon from "../../../svgs/AddIcon";
 import Subcategory from "./Subcategory/Subcategory";
 
 const Collaps = () => {
@@ -27,7 +27,7 @@ const Collaps = () => {
               <DeleteIcon />
             </div>
             <div className={styles.icon}>
-              <AddIcon />
+              <AddIcon color={'#FFF'}/>
             </div>
           </div>
         </div>

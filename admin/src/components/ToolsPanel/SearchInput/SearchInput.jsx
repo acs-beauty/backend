@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./SearchInput.module.scss";
-import SearchIcon from "../../svgs/SearchIcon";
+import SearchIcon from "../../../svgs/SearchIcon";
 
 const SearchInput = () => {
   const [isInputFocused, setInputFocused] = useState(false);

@@ -1,5 +1,5 @@
 import React from "react";
-import ArrowToTopIcon from "../../svgs/ArrowToTopIcon";
+import ArrowToTopIcon from "../../../svgs/ArrowToTopIcon";
 import styles from "./DashboardCard.module.scss";
 
 const DashboardCard = ({
