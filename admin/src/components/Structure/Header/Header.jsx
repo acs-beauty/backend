@@ -3,8 +3,8 @@ import styles from "./Header.module.scss";
 import { Link } from "react-router-dom";
 import LoginIcon from "../../svgs/LoginIcon";
 import NotificationIcon from "../../svgs/NotificationIcon";
-import NotificationPopup from "../../Popups/NotificationPopup";
-import ProfilePopup from "../../Popups/ProfilePopup";
+import NotificationPopup from "../../Popups/NotificationPopup/NotificationPopup";
+import ProfilePopup from "../../Popups/ProfilePopup/ProfilePopup";
 
 const Header = () => {
   const [notificationPopupVisible, setNotificationPopupVisible] =
@@ -13,13 +13,14 @@ const Header = () => {
 
   const toggleNotificationPopup = () => {
     setNotificationPopupVisible(!notificationPopupVisible);
+    setProfilePopupVisible(false)
   };
 
   const toggleProfilePopup = () => {
     setProfilePopupVisible(!profilePopupVisible);
+    setNotificationPopupVisible(false)
   };
   return (
-    <>
       <div className={styles.container}>
         <Link to="/" className={styles.headerLogo}>
           ACS Beauty
@@ -27,15 +28,15 @@ const Header = () => {
         <div className={styles.headerMenu}>
           <div className={styles.icon} onClick={toggleNotificationPopup}>
             <NotificationIcon />
+            <div className={styles.popup}>{notificationPopupVisible &&<NotificationPopup/>}</div>
           </div>
           <div className={styles.icon} onClick={toggleProfilePopup}>
             <LoginIcon color={'white'} />
+            <div className={styles.popup}>{profilePopupVisible && <ProfilePopup />}</div>
           </div>
         </div>
       </div>
-      {notificationPopupVisible && <NotificationPopup />}
-      {profilePopupVisible && <ProfilePopup />}
-    </>
+
   );
 };
 
