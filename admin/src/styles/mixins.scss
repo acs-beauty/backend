@@ -23,6 +23,11 @@
   font-size: 24px;
   line-height: 28.13px;
 }
+.Roboto700-16-18 {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 18.75px;
+}
 .Roboto700-24-28 {
   font-weight: 700;
   font-size: 24px;
@@ -31,5 +36,15 @@
 .Roboto700-48-56 {
   font-weight: 700;
   font-size: 48px;
-  line-height: 56px
+  line-height: 56px;
+}
+.Icon-main-style {
+  width: 52px;
+  height: 52px;
+  background-color: $main-color;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
