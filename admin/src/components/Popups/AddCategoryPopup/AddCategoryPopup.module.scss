@@ -2,10 +2,9 @@
 @import "/src/styles/mixins.scss";
 
 .container {
-  position: fixed;
   h3 {
     @extend .Roboto500-24-28;
-    margin: 32px auto 44px 20px;
+    margin-bottom: 44px;
   }
   .popupBody {
     width: 1063px;
@@ -14,7 +13,6 @@
     border: $default-border;
     background: #fff;
     padding-left: 32px;
-    margin-left: 21px;
     .heading {
       display: flex;
       align-items: center;

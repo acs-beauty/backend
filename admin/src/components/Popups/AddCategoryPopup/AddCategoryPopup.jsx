@@ -5,15 +5,17 @@ import AddIcon from "../../../svgs/AddIcon";
 import VioletButton from "../../VioletButton/VioletButton";
 import CloseIcon from "../../../svgs/CloseIcon";
 
-const AddCategoryPopup = () => {
+const AddCategoryPopup = ({setActive}) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} >
       <h3>Категорії/Додати категорію</h3>
       <div className={styles.popupBody}>
         <div className={styles.heading}>
           <div></div>
           <h4>ДОДАТИ КАТЕГОРІЮ</h4>
-          <div className={styles.closeIcon}>
+          <div className={styles.closeIcon} 
+           onClick={() => setActive(false)}
+          >
             <CloseIcon />
           </div>
         </div>
@@ -29,7 +31,7 @@ const AddCategoryPopup = () => {
         </label>
         <input type="text" id="name" />
         <label for="link">
-          <h className={styles.optionName}>URL</h>
+          <h6 className={styles.optionName}>URL</h6>
         </label>
         <input type="text" id="link" />
         <label for="description">

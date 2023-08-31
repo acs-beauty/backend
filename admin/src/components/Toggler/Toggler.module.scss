@@ -35,10 +35,11 @@
     }
   }
   .toggleActive {
-    background-color: $toggler-on-color;
+    background-color: $main-color;
+    color: white;
     .toggleCircle {
       left: calc(100% - 30px);
-      background-color: #97d890;
+      background-color: #7D35DA;
     }
   }
 }

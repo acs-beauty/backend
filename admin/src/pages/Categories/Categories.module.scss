@@ -2,13 +2,11 @@
 @import "/src/styles/mixins.scss";
 
 .container {
-  margin-left: 22px;
   .heading {
-    height: 104px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 80px 0 20px;
+    margin: auto 80px 44px auto;
     h3 {
       @extend .Roboto500-24-28;
     }

@@ -1,6 +1,6 @@
 @import "/src/styles/variables.scss";
 
 .container {
-  margin-top: $header-height;
-  margin-left: $sidebar-width;
+  margin-top: calc(#{$header-height} + 32px);
+  margin-left: calc(#{$sidebar-width} + 21px);
 }

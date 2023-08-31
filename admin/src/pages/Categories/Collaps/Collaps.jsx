@@ -5,12 +5,20 @@ import ChangeIcon from "../../../svgs/ChangeIcon";
 import DeleteIcon from "../../../svgs/DeleteIcon";
 import AddIcon from "../../../svgs/AddIcon";
 import Subcategory from "./Subcategory/Subcategory";
+import AddSubcategoryPopup from "../../../components/Popups/AddSubcategoryPopup/AddSubcategoryPopup";
+import ArrowToBottomIcon from "../../../svgs/ArrowToBottomIcon";
 
 const Collaps = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [active, setActive] = useState(false);
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
+    setActive(false);
+  };
+  const showAddSubcategoryPopup = () => {
+    setIsCollapsed(true);
+    setActive(true);
   };
 
   return (
@@ -26,22 +34,28 @@ const Collaps = () => {
             <div className={styles.icon}>
               <DeleteIcon />
             </div>
-            <div className={styles.icon}>
-              <AddIcon color={'#FFF'}/>
-            </div>
+            {!active && (
+              <div className={styles.icon} onClick={showAddSubcategoryPopup}>
+                <AddIcon color={"#FFF"} />
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.openSubcategoriesArrow} onClick={toggleCollapse}>
-          <ArrowToRight />
+          {isCollapsed ? <ArrowToBottomIcon /> : <ArrowToRight />}
         </div>
       </div>
-
-      {isCollapsed && (
+      {isCollapsed && !active && (
         <div className={styles.content}>
           <Subcategory />
           <Subcategory />
           <Subcategory />
           <Subcategory />
+        </div>
+      )}
+      {active && (
+        <div className={styles.content}>
+          <AddSubcategoryPopup setActive={setActive} />
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./Subcategory.module.scss";
 import ChangeIcon from "../../../../svgs/ChangeIcon";
 import ArrowToRight from "../../../../svgs/ArrowToRight";
+import ArrowToBottomIcon from "../../../../svgs/ArrowToBottomIcon";
 
 const Subcategory = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -14,7 +15,11 @@ const Subcategory = () => {
       <div className={styles.collaps}>
         <section onClick={toggleCollapse}>
           <div className={styles.openMoreArrow}>
-            <ArrowToRight iconSize={"24"} />
+            {isCollapsed ? (
+              <ArrowToBottomIcon iconSize={"24"} />
+            ) : (
+              <ArrowToRight iconSize={"24"} />
+            )}
           </div>
           <h5>Демакіяж</h5>
         </section>
