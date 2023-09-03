@@ -12,3 +12,8 @@ module.exports.arraySearchProductString =
   /^[a-zA-Zа-яА-ЯёЁ0-9]+(,[a-zA-Zа-яА-ЯёЁ0-9]+)*$/;
 
 module.exports.camelCaseString = /^[a-z]+(?:[A-Z][a-z]*)*$/;
+
+const ukrLetters = "[а-щьюяА-ЩЬЮЯґҐіІїЇєЄ]+";
+module.exports.ukraineWordsString = new RegExp(
+  `^${ukrLetters}'?${ukrLetters}(?:\\s{1}${ukrLetters}'?${ukrLetters}?)*$`
+);

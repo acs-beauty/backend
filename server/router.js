@@ -9,4 +9,7 @@ router.use("/products", productRouter);
 const categoryRouter = require("./routes/categoryRouter");
 router.use("/category", categoryRouter);
 
+const adminRouter = require("./routes/adminRouter");
+router.use("/admin", adminRouter);
+
 module.exports = router;
