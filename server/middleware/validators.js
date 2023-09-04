@@ -67,3 +67,25 @@ module.exports.validateCreateSubcategory = async (req, res, next) => {
     return next(new BadRequestError(error.errors));
   }
 };
+
+module.exports.validateUpdateCategory = async (req, res, next) => {
+  try {
+    await schemes.bodyUpdateCategorySchema.validate(req.body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    return next(new BadRequestError(error.errors));
+  }
+};
+
+module.exports.validateUpdateSubcategory = async (req, res, next) => {
+  try {
+    await schemes.bodyUpdateSubcategorySchema.validate(req.body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    return next(new BadRequestError(error.errors));
+  }
+};

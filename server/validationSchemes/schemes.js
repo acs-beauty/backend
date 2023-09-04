@@ -34,7 +34,7 @@ module.exports.searchProductsSchema = yup.object().shape({
     .matches(regex.arraySearchProductString, "Invalid searchWords format"),
 });
 
-const linkKey = {
+const linkKeyRequired = {
   linkKey: yup
     .string()
     .required()
@@ -43,9 +43,9 @@ const linkKey = {
     .matches(regex.validateLinkString, "Invalid linkKey format"),
 };
 
-module.exports.linkKeySchema = yup.object().shape(linkKey);
+module.exports.linkKeySchema = yup.object().shape(linkKeyRequired);
 
-const categorySchema = {
+const categoryRequired = {
   name: yup
     .string()
     .required()
@@ -56,12 +56,42 @@ const categorySchema = {
 };
 
 module.exports.bodyNewCategorySchema = yup.object().shape({
-  ...categorySchema,
-  ...linkKey,
+  ...categoryRequired,
+  ...linkKeyRequired,
 });
 
 module.exports.bodyNewSubcategorySchema = yup.object().shape({
   categoryId: yup.number().required().positive().integer(),
-  ...categorySchema,
+  ...categoryRequired,
+  ...linkKeyRequired,
+});
+
+const category = {
+  name: yup
+    .string()
+    .min(3, "Name must be at least 3 characters")
+    .max(64, "Name can't exceed 64 characters")
+    .matches(regex.ukraineWordsString, "Invalid ukraine string format"),
+  disabled: yup.boolean(),
+};
+
+const linkKey = {
+  linkKey: yup
+    .string()
+    .min(3, "Link key must be at least 3 characters")
+    .max(64, "Link key can't exceed 64 characters")
+    .matches(regex.validateLinkString, "Invalid linkKey format"),
+};
+
+module.exports.bodyUpdateCategorySchema = yup.object().shape({
+  categoryId: yup.number().required().positive().integer(),
+  ...category,
+  ...linkKey,
+});
+
+module.exports.bodyUpdateSubcategorySchema = yup.object().shape({
+  subcategoryId: yup.number().required().positive().integer(),
+  categoryId: yup.number().positive().integer(),
+  ...category,
   ...linkKey,
 });
