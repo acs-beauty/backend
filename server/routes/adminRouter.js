@@ -19,4 +19,16 @@ adminRouter.post(
   controllers.addSubcategory
 );
 
+adminRouter.patch(
+  "/updateCategory",
+  validators.validateUpdateCategory,
+  controllers.updateCategory
+);
+
+adminRouter.patch(
+  "/updateSubcategory",
+  validators.validateUpdateSubcategory,
+  controllers.updateSubcategory
+);
+
 module.exports = adminRouter;
