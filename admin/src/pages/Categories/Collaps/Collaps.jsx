@@ -13,9 +13,9 @@ import actionCreators from "../../../store/actions/actionCreators";
 const Collaps = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [active, setActive] = useState(false);
-  const { name } = props.data;
+  const { name, categoryId } = props.data;
   const { delCategoryRequest} = props;
-  const id = props.data.categoryId
+  
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
     setActive(false);
@@ -35,7 +35,7 @@ const Collaps = (props) => {
             <div className={styles.icon}>
               <ChangeIcon />
             </div>
-            <div className={styles.icon} onClick={() => delCategoryRequest(id)}>
+            <div className={styles.icon} onClick={() => delCategoryRequest(categoryId)}>
               <DeleteIcon />
             </div>
             {!active && (
@@ -59,7 +59,7 @@ const Collaps = (props) => {
       )}
       {active && (
         <div className={styles.content}>
-          <AddSubcategoryPopup setActive={setActive} />
+          <AddSubcategoryPopup setActive={setActive} categoryId={categoryId}/>
         </div>
       )}
     </div>
@@ -71,7 +71,9 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    categories: state.categoriesReducer,
+  };
 };
 
-export default connect(null, mapDispatchToProps)(Collaps);
+export default connect(mapStateToProps, mapDispatchToProps)(Collaps);

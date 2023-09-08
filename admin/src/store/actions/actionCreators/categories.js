@@ -38,10 +38,10 @@ export const delCategorySuccess = (res) => ({
 });
 
 // subcategories 
-export const addSubcategoryRequest = (data) => ({
-    type: ACTION.ADD_SUBCATEGORY_REQUEST,
-    data
-});
+export const addSubcategoryRequest = (data) => {
+    return{type: ACTION.ADD_SUBCATEGORY_REQUEST, data}
+   
+};
 
 export const addSubcategorySuccess = (data) => ({
     type: ACTION.ADD_SUBCATEGORY_SUCCESS,

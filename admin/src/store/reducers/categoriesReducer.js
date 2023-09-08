@@ -83,21 +83,22 @@ function categoriesReducer(state = initialState, {type, data}) {
       };
     }
     // ADD SUBCATEGORIES
-    // case ACTION.ADD_SUBCATEGORY_REQUEST: {
-    //   return {
-    //     ...state,
-    //     isFetching: true,
-    //     error: null,
-    //   };
-    // }
-    // case ACTION.ADD_SUBCATEGORY_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     isFetching: false,
-    //     categories: data,
-    //     error: null,
-    //   };
-    // }
+    case ACTION.ADD_SUBCATEGORY_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        error: null,
+      };
+    }
+    case ACTION.ADD_SUBCATEGORY_SUCCESS: {
+      const {categories} = state;
+      return {
+        ...state,
+        isFetching: false,
+        categories: data,
+        error: null,
+      };
+    }
     // // UPD SUBCATEGORIES
     // case ACTION.UPD_SUBCATEGORY_REQUEST: {
     //   return {

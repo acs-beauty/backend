@@ -7,8 +7,14 @@ export const api = {
   getCategories: () => http.get('getAllCategories'),
   
   addCategory: (data) => http.post('addCategory', data),
+
+  addSubcategory: (data) => http.post('addSubcategory', data),
   
-  updateCategory: (data) => http.patch(`updateCategory`, data),
+  updateCategory: (data) => http.patch('updateCategory', data),
+
+  updateSubcategory: (data) => http.patch('updateSubcategory', data),
   
   deleteCategory: (id) => http.delete(`category/${id}`, id),
+
+  deleteSubcategory: (id) => http.delete(`subcategory/${id}`, id)
 }

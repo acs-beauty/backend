@@ -52,3 +52,13 @@ export function* delCategorySaga({ id }) {
     yield put(categoriesError(err));
   }
 }
+
+export function* addSubcategorySaga({ data: newData }) {
+  console.log(newData)
+  try {
+    const data = yield call(api.addSubcategory, newData);
+    yield put(addSubcategorySuccess(data));
+  } catch (err) {
+    yield put(categoriesError(err));
+  }
+}

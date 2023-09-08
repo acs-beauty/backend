@@ -3,8 +3,15 @@ import styles from "./AddSubcategoryPopup.module.scss";
 import CloseIcon from "../../../svgs/CloseIcon";
 import VioletButton from "../../VioletButton/VioletButton";
 import Toggler from "../../Toggler/Toggler";
+import { Formik, Form, Field } from "formik";
+import { connect } from "react-redux";
+import actionCreators from "../../../store/actions/actionCreators";
+import * as Yup from "yup";
+import { ukraineWordsString, validateLinkString } from "../../../utils/regex";
 
-const AddSubcategoryPopup = ({ setActive }) => {
+const AddSubcategoryPopup = ({ setActive, ...props }) => {
+  const { addSubcategoryRequest, categoryId } = props;
+
   return (
     <div className={styles.container}>
       <div className={styles.heading}>
@@ -14,32 +21,85 @@ const AddSubcategoryPopup = ({ setActive }) => {
           <CloseIcon />
         </div>
       </div>
-      <div className={styles.form}>
-        <label for="name">
-          <h6 className={styles.optionName}>Назва підкатегорії</h6>
-        </label>
-        <input type="text" id="name" />
-        <label for="link">
-          <h6 className={styles.optionName}>URL</h6>
-        </label>
-        <input type="text" id="link" />
-        <label for="description">
-          <h6 className={styles.optionName}>Опис</h6>
-        </label>
-        <input
-          type="text"
-          id="description"
-          className={styles.descriptionInput}
-        />
-        <div className={styles.togglerContainer}>
-          <Toggler />
-        </div>
-      </div>
-      <div className={styles.violetButton}>
-        <VioletButton buttonText={"ДОДАТИ"} onClickFunction={"#"} />
-      </div>
+      <Formik
+        initialValues={{ name: "", linkKey: "", disabled: false, categoryId: categoryId }}
+        validationSchema={Yup.object({
+          name: Yup.string()
+            .required("Обов`язковий")
+            .min(3, "Назва має складатися не менше ніж з 3 символів")
+            .max(64, "Назва не може перевищувати 64 символи")
+            .matches(
+              ukraineWordsString,
+              "Можна використовувати лише українські літери"
+            ),
+          linkKey: Yup.string()
+            .required("Обов`язковий")
+            .min(3, "Посилання має складатися не менше ніж з 3 символів")
+            .max(64, "Посилання не може перевищувати 64 символи")
+            .matches(
+              validateLinkString,
+              "Можна використовувати лише латинські літери"
+            ),
+        })}
+        onSubmit={(values) => {
+          addSubcategoryRequest(values);
+          setActive(false);
+        }}
+      >
+        {({ errors, touched, handleChange, handleSubmit, isValid }) => (
+          <Form>
+            <div className={styles.form}>
+              <div>
+                <label for="name">
+                  <h6 className={styles.optionName}>Назва підкатегорії</h6>
+                </label>
+                <Field
+                  name="name"
+                  type="text"
+                  className={styles.field}
+                  onChange={handleChange}
+                />
+                {touched.name && errors.name && (
+                  <div className={styles.error}>{errors.name}</div>
+                )}
+              </div>
+              <div>
+                <label for="linkKey">
+                  <h6 className={styles.optionName}>URL</h6>
+                </label>
+                <Field
+                  name="linkKey"
+                  type="text"
+                  className={styles.field}
+                  onChange={handleChange}
+                />
+                {touched.linkKey && errors.linkKey && (
+                  <div className={styles.error}>{errors.linkKey}</div>
+                )}
+              </div>
+              <div className={styles.togglerContainer}>
+                <Toggler />
+              </div>
+              <div className={styles.violetButton}>
+                <VioletButton
+                  onClickFunction={handleSubmit}
+                  type={"submit"}
+                  buttonText={"ДОДАТИ"}
+                  disabled={!isValid || !touched.name || !touched.linkKey}
+                />
+              </div>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };
 
-export default AddSubcategoryPopup;
+const mapDispatchToProps = (dispatch) => ({
+  addSubcategoryRequest: (data) =>
+    dispatch(actionCreators.addSubcategoryRequest(data)),
+});
+
+export default connect(null, mapDispatchToProps)(AddSubcategoryPopup);
+
