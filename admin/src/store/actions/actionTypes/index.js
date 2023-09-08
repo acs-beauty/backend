@@ -1,7 +1,8 @@
 import CATEGORIES from './categories'
 
-export const ACTION = {
+const ACTION = {
     ...CATEGORIES,
 }
 
+export default ACTION;
 

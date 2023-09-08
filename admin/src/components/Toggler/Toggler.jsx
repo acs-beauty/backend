@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./Toggler.module.scss";
+import { useFormikContext } from "formik";
 
 const Toggler = () => {
-  const [isToggled, setIsToggled] = useState(false);
+  const formik = useFormikContext();
 
   const toggleElement = () => {
-    setIsToggled(!isToggled);
+    formik.setFieldValue("disabled", !formik.values.disabled);
   };
   return (
     <div className={styles.container}>
       <h5>Відображення</h5>
       <button
-        className={`${styles.toggle} ${isToggled ? styles.toggleActive : ""}`}
+        type="button"
+        className={`${styles.toggle} ${
+          formik.values.disabled ? styles.toggleActive : ""
+        }`}
         onClick={toggleElement}
       >
         <div className={styles.toggleCircle}></div>
-        {isToggled ? <h6>Увiмкнено</h6> : <h6>Вимкнено</h6>}
+        {formik.values.disabled ? <h6>Увiмкнено</h6> : <h6>Вимкнено</h6>}
       </button>
     </div>
   );

@@ -1,6 +1,7 @@
-import categories from './categories'
+import * as categories from './categories'
 
-export const actionCreators = {
+const actionCreators = {
     ...categories,
-}
 
+}
+export default actionCreators;

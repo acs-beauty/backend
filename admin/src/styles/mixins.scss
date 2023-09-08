@@ -68,3 +68,7 @@
   text-transform: uppercase;
   cursor: pointer;
 }
+.Disabled-button-styles {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -21,6 +21,7 @@
       h2 {
         @extend .Roboto500-24-28;
         align-self: center;
+        white-space: nowrap;
         text-transform: uppercase;
       }
       .actions {

@@ -6,8 +6,8 @@ const initialState = {
   error: null,
 };
 
-function novaPostReducers(state = initialState, action) {
-  switch (action.type) {
+function categoriesReducer(state = initialState, {type, data}) {
+  switch (type) {
     // REQUEST
     case ACTION.GET_CATEGORIES_REQUEST: {
       return {
@@ -18,7 +18,6 @@ function novaPostReducers(state = initialState, action) {
     }
     // SUCCESS
     case ACTION.GET_CATEGORIES_SUCCESS: {
-        const {data} = action;
       return {
         ...state,
         isFetching: false,
@@ -27,15 +26,14 @@ function novaPostReducers(state = initialState, action) {
       };
     }
     // ADD CATEGORIES
-    case ACTION.ADD_CATEGORIES_REQUEST: {
+    case ACTION.ADD_CATEGORY_REQUEST: {
       return {
         ...state,
         isFetching: true,
         error: null,
       };
     }
-    case ACTION.ADD_CATEGORIES_SUCCESS: {
-        const {data} = action;
+    case ACTION.ADD_CATEGORY_SUCCESS: {
         const {categories} = state;
       return {
         ...state,
@@ -45,19 +43,18 @@ function novaPostReducers(state = initialState, action) {
       };
     }
     // UPD CATEGORIES
-    case ACTION.UPD_CATEGORIES_REQUEST: {
+    case ACTION.UPD_CATEGORY_REQUEST: {
       return {
         ...state,
         isFetching: true,
         error: null,
       };
     }
-    case ACTION.UPD_CATEGORIES_SUCCESS: {
-        const {updatedData} = action;
+    case ACTION.UPD_CATEGORY_SUCCESS: {
         const {categories} = state;
-        const id = categories.findIndex(category => category.id === updatedData.id)
+        const id = categories.findIndex(category => category.id === data.id)
         const updatedCategories = [...categories];
-        updatedCategories[id] = updatedData;
+        updatedCategories[id] = data;
       return {
         ...state,
         isFetching: false,
@@ -66,15 +63,15 @@ function novaPostReducers(state = initialState, action) {
       };
     }
     // DEL CATEGORIES
-    case ACTION.DEL_CATEGORIES_REQUEST: {
+    case ACTION.DEL_CATEGORY_REQUEST: {
       return {
         ...state,
         isFetching: true,
         error: null,
       };
     }
-    case ACTION.DEL_CATEGORIES_SUCCESS: {
-        const {id} = action;
+    case ACTION.DEL_CATEGORY_SUCCESS: {
+        const id = data;
         const {categories} = state;
         const updatedCategories = [...categories];
         updatedCategories.splice(updatedCategories.findIndex(category => category.id === id), 1);
@@ -86,59 +83,59 @@ function novaPostReducers(state = initialState, action) {
       };
     }
     // ADD SUBCATEGORIES
-    case ACTION.ADD_SUBCATEGORIES_REQUEST: {
-      return {
-        ...state,
-        isFetching: true,
-        error: null,
-      };
-    }
-    case ACTION.ADD_SUBCATEGORIES_SUCCESS: {
-      return {
-        ...state,
-        isFetching: false,
-        categories: action.data,
-        error: null,
-      };
-    }
-    // UPD SUBCATEGORIES
-    case ACTION.UPD_SUBCATEGORIES_REQUEST: {
-      return {
-        ...state,
-        isFetching: true,
-        error: null,
-      };
-    }
-    case ACTION.UPD_SUBCATEGORIES_SUCCESS: {
-      return {
-        ...state,
-        isFetching: false,
-        categories: action.data,
-        error: null,
-      };
-    }
-    // DEL SUBCATEGORIES
-    case ACTION.DEL_SUBCATEGORIES_REQUEST: {
-      return {
-        ...state,
-        isFetching: true,
-        error: null,
-      };
-    }
-    case ACTION.DEL_SUBCATEGORIES_SUCCESS: {
-      return {
-        ...state,
-        isFetching: false,
-        categories: action.data,
-        error: null,
-      };
-    }
+    // case ACTION.ADD_SUBCATEGORY_REQUEST: {
+    //   return {
+    //     ...state,
+    //     isFetching: true,
+    //     error: null,
+    //   };
+    // }
+    // case ACTION.ADD_SUBCATEGORY_SUCCESS: {
+    //   return {
+    //     ...state,
+    //     isFetching: false,
+    //     categories: data,
+    //     error: null,
+    //   };
+    // }
+    // // UPD SUBCATEGORIES
+    // case ACTION.UPD_SUBCATEGORY_REQUEST: {
+    //   return {
+    //     ...state,
+    //     isFetching: true,
+    //     error: null,
+    //   };
+    // }
+    // case ACTION.UPD_SUBCATEGORY_SUCCESS: {
+    //   return {
+    //     ...state,
+    //     isFetching: false,
+    //     categories: data,
+    //     error: null,
+    //   };
+    // }
+    // // DEL SUBCATEGORIES
+    // case ACTION.DEL_SUBCATEGORY_REQUEST: {
+    //   return {
+    //     ...state,
+    //     isFetching: true,
+    //     error: null,
+    //   };
+    // }
+    // case ACTION.DEL_SUBCATEGORY_SUCCESS: {
+    //   return {
+    //     ...state,
+    //     isFetching: false,
+    //     categories: data,
+    //     error: null,
+    //   };
+    // }
     // ERROR
     case ACTION.CATEGORIES_ERROR: {
       return {
         ...state,
         isFetching: false,
-        error: action.error,
+        error: data,
       };
     }
     default:
@@ -146,4 +143,4 @@ function novaPostReducers(state = initialState, action) {
   }
 }
 
-export default novaPostReducers;
+export default categoriesReducer;

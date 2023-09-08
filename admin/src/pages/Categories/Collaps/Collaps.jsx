@@ -8,9 +8,11 @@ import Subcategory from "./Subcategory/Subcategory";
 import AddSubcategoryPopup from "../../../components/Popups/AddSubcategoryPopup/AddSubcategoryPopup";
 import ArrowToBottomIcon from "../../../svgs/ArrowToBottomIcon";
 
-const Collaps = () => {
+const Collaps = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [active, setActive] = useState(false);
+
+  const { name } = props.data;
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -26,7 +28,7 @@ const Collaps = () => {
       <div className={styles.collapsContainer}>
         <div></div>
         <div className={styles.categoryName}>
-          <h2>ДОГЛЯД</h2>
+          <h2>{name}</h2>
           <div className={styles.actions}>
             <div className={styles.icon}>
               <ChangeIcon />
