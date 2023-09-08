@@ -7,13 +7,15 @@ import AddIcon from "../../../svgs/AddIcon";
 import Subcategory from "./Subcategory/Subcategory";
 import AddSubcategoryPopup from "../../../components/Popups/AddSubcategoryPopup/AddSubcategoryPopup";
 import ArrowToBottomIcon from "../../../svgs/ArrowToBottomIcon";
+import { connect } from "react-redux";
+import actionCreators from "../../../store/actions/actionCreators";
 
 const Collaps = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [active, setActive] = useState(false);
-
   const { name } = props.data;
-
+  const { delCategoryRequest} = props;
+  const id = props.data.categoryId
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
     setActive(false);
@@ -33,7 +35,7 @@ const Collaps = (props) => {
             <div className={styles.icon}>
               <ChangeIcon />
             </div>
-            <div className={styles.icon}>
+            <div className={styles.icon} onClick={() => delCategoryRequest(id)}>
               <DeleteIcon />
             </div>
             {!active && (
@@ -64,4 +66,12 @@ const Collaps = (props) => {
   );
 };
 
-export default Collaps;
+const mapDispatchToProps = (dispatch) => ({
+  delCategoryRequest: (id) => dispatch(actionCreators.delCategoryRequest(id)),
+});
+
+const mapStateToProps = (state) => {
+  return {};
+};
+
+export default connect(null, mapDispatchToProps)(Collaps);
