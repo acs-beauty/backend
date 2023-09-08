@@ -44,6 +44,7 @@ const AddSubcategoryPopup = ({ setActive, ...props }) => {
         onSubmit={(values) => {
           addSubcategoryRequest(values);
           setActive(false);
+          window.location.reload();
         }}
       >
         {({ errors, touched, handleChange, handleSubmit, isValid }) => (
