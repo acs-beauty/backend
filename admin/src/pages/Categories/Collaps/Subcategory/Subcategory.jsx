@@ -4,8 +4,9 @@ import ChangeIcon from "../../../../svgs/ChangeIcon";
 import ArrowToRight from "../../../../svgs/ArrowToRight";
 import ArrowToBottomIcon from "../../../../svgs/ArrowToBottomIcon";
 
-const Subcategory = () => {
+const Subcategory = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const {name, subcategoryId} = props.subcategory
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -21,7 +22,7 @@ const Subcategory = () => {
               <ArrowToRight iconSize={"24"} />
             )}
           </div>
-          <h5>Демакіяж</h5>
+          <h5>{name}</h5>
         </section>
         <div className={styles.icon}>
           <ChangeIcon />

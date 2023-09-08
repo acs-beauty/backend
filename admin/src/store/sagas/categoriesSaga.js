@@ -54,7 +54,6 @@ export function* delCategorySaga({ id }) {
 }
 
 export function* addSubcategorySaga({ data: newData }) {
-  console.log(newData)
   try {
     const data = yield call(api.addSubcategory, newData);
     yield put(addSubcategorySuccess(data));
