@@ -37,7 +37,7 @@ const findByLinkKeyCategory = async (linkKey) => {
       include: [
         {
           model: Subcategory,
-          as: "subcategory",
+          as: "subcategories",
           attributes: ["subcategoryId", "name", "linkKey"],
         },
       ],
