@@ -2,6 +2,7 @@
 const findAllCategoryAndSub = require("../queries/findAllCategoryAndSub");
 const createCategoryOrSub = require("../queries/createCategoryOrSub");
 const updateCategoryOrSub = require("../queries/updateCategoryOrSub");
+const deleteCategoryOrSub = require("../queries/deleteCategoryOrSub");
 const { bodyHelper } = require("../utils/bodyHelperUpdateCategoryOrSub");
 
 module.exports.getAllCategories = async (req, res, next) => {
@@ -93,6 +94,32 @@ module.exports.updateSubcategory = async (req, res, next) => {
     );
 
     res.status(200).send({ updateSubcategory });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.deleteCategory = async (req, res, next) => {
+  try {
+    const isDelete = await deleteCategoryOrSub(req.params.categoryId, true);
+    if (isDelete) {
+      res.status(200).send({ message: "success" });
+    } else {
+      res.send({ message: "failure" });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.deleteSubcategory = async (req, res, next) => {
+  try {
+    const isDelete = await deleteCategoryOrSub(req.params.subcategoryId, false);
+    if (isDelete) {
+      res.status(200).send({ message: "success" });
+    } else {
+      res.send({ message: "failure" });
+    }
   } catch (error) {
     next(error);
   }
