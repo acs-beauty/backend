@@ -13,7 +13,7 @@ import actionCreators from "../../../store/actions/actionCreators";
 const Collaps = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [active, setActive] = useState(false);
-  const { name, categoryId, subcategory } = props.data;
+  const { name, categoryId, subcategories } = props.data;
   const { delCategoryRequest} = props;
 
   const toggleCollapse = () => {
@@ -51,9 +51,9 @@ const Collaps = (props) => {
       </div>
       {isCollapsed && !active && (
         <div className={styles.content}>
-          {subcategory.length
-            ? subcategory.map((subcategory) => (
-                <Subcategory subcategory={subcategory} key={subcategory.subcategoryId} />
+          {subcategories.length
+            ? subcategories.map((subcategories) => (
+                <Subcategory subcategories={subcategories} key={subcategories.subcategoryId} />
               ))
             : null}
         </div>

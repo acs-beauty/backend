@@ -6,7 +6,7 @@ import ArrowToBottomIcon from "../../../../svgs/ArrowToBottomIcon";
 
 const Subcategory = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const {name, subcategoryId} = props.subcategory
+  const {name, subcategoryId} = props.subcategories
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
