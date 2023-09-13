@@ -95,3 +95,11 @@ module.exports.bodyUpdateSubcategorySchema = yup.object().shape({
   ...category,
   ...linkKey,
 });
+
+module.exports.categoryIdSchema = yup.object().shape({
+  categoryId: yup.number().required().positive().integer(),
+});
+
+module.exports.subcategoryIdSchema = yup.object().shape({
+  subcategoryId: yup.number().required().positive().integer(),
+});

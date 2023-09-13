@@ -11,7 +11,7 @@ const findAllCategoryAndSub = async (isAdmin) => {
       where: { ...whereDisabled },
       include: {
         model: Subcategory,
-        as: "subcategory",
+        as: "subcategories",
         attributes: ["subcategoryId", "name", "linkKey", ...attributeDisabled],
         where: { ...whereDisabled },
         required: false,

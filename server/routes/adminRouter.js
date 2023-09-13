@@ -5,30 +5,42 @@ const validators = require("../middleware/validators");
 
 const adminRouter = Router();
 
-adminRouter.get("/getAllCategories", controllers.getAllCategories);
+adminRouter.get("/categories", controllers.getAllCategories);
 
 adminRouter.post(
-  "/addCategory",
+  "/category",
   validators.validateCreateCategory,
   controllers.addCategory
 );
 
 adminRouter.post(
-  "/addSubcategory",
+  "/subcategory",
   validators.validateCreateSubcategory,
   controllers.addSubcategory
 );
 
 adminRouter.patch(
-  "/updateCategory",
+  "/category",
   validators.validateUpdateCategory,
   controllers.updateCategory
 );
 
 adminRouter.patch(
-  "/updateSubcategory",
+  "/subcategory",
   validators.validateUpdateSubcategory,
   controllers.updateSubcategory
+);
+
+adminRouter.delete(
+  "/category/:categoryId",
+  validators.validateCategoryId,
+  controllers.deleteCategory
+);
+
+adminRouter.delete(
+  "/subcategory/:subcategoryId",
+  validators.validateSubcategoryId,
+  controllers.deleteSubcategory
 );
 
 module.exports = adminRouter;

@@ -8,7 +8,7 @@ const createCategoryOrSub = async (body, isCategory) => {
       ...body,
     });
 
-    return newCategory;
+    return newCategory.get({ plain: true });
   } catch (error) {
     throw new Error(error);
   }

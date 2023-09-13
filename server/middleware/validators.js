@@ -89,3 +89,25 @@ module.exports.validateUpdateSubcategory = async (req, res, next) => {
     return next(new BadRequestError(error.errors));
   }
 };
+
+module.exports.validateCategoryId = async (req, res, next) => {
+  try {
+    await schemes.CategoryIdSchema.validate(req.params, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    return next(new BadRequestError(error.errors));
+  }
+};
+
+module.exports.validateSubcategoryId = async (req, res, next) => {
+  try {
+    await schemes.SubcategoryIdSchema.validate(req.params, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    return next(new BadRequestError(error.errors));
+  }
+};
