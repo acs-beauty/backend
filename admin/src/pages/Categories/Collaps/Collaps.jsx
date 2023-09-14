@@ -24,7 +24,6 @@ const Collaps = (props) => {
     setIsCollapsed(true);
     setActive(true);
   };
-
   return (
     <div className={styles.container}>
       <div className={styles.collapsContainer}>

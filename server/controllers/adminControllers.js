@@ -133,6 +133,7 @@ module.exports.updateSubcategory = async (req, res, next) => {
 module.exports.deleteCategory = async (req, res, next) => {
   try {
     const isDelete = await deleteCategoryOrSub(req.params.categoryId, true);
+    console.log(req.params.categoryId)
     if (isDelete) {
       res.status(200).send({ message: "success" });
     } else {

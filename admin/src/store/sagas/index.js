@@ -5,7 +5,9 @@ import {
   addCategorySaga,
   updCategorySaga,
   delCategorySaga,
+
   addSubcategorySaga,
+  delSubcategorySaga,
 } from "./categoriesSaga";
 
 function* rootSaga() {
@@ -15,5 +17,7 @@ function* rootSaga() {
   yield takeEvery(ACTION.DEL_CATEGORY_REQUEST, delCategorySaga);
 
   yield takeEvery(ACTION.ADD_SUBCATEGORY_REQUEST, addSubcategorySaga);
+  yield takeEvery(ACTION.DEL_SUBCATEGORY_REQUEST, delSubcategorySaga);
+
 }
 export default rootSaga;

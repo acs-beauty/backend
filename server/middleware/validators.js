@@ -92,7 +92,7 @@ module.exports.validateUpdateSubcategory = async (req, res, next) => {
 
 module.exports.validateCategoryId = async (req, res, next) => {
   try {
-    await schemes.CategoryIdSchema.validate(req.params, {
+    await schemes.categoryIdSchema.validate(req.params, {
       abortEarly: false,
     });
     next();
@@ -103,7 +103,7 @@ module.exports.validateCategoryId = async (req, res, next) => {
 
 module.exports.validateSubcategoryId = async (req, res, next) => {
   try {
-    await schemes.SubcategoryIdSchema.validate(req.params, {
+    await schemes.subcategoryIdSchema.validate(req.params, {
       abortEarly: false,
     });
     next();

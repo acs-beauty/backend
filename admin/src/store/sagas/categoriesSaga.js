@@ -12,6 +12,7 @@ const {
     delCategorySuccess,
 
     addSubcategorySuccess,
+    delSubcategorySuccess,
 
     categoriesError,
   
@@ -44,7 +45,8 @@ export function* updCategorySaga({ data: newData }) {
   }
 }
 
-export function* delCategorySaga({ id }) {
+export function* delCategorySaga(data) {
+  const id = data.data
   try {
     yield call(api.deleteCategory, id);
     yield put(delCategorySuccess(id));
@@ -57,6 +59,16 @@ export function* addSubcategorySaga({ data: newData }) {
   try {
     const data = yield call(api.addSubcategory, newData);
     yield put(addSubcategorySuccess(data));
+  } catch (err) {
+    yield put(categoriesError(err));
+  }
+}
+
+export function* delSubcategorySaga(data) {
+  const id = data.data
+  try {
+    yield call(api.deleteSubcategory, id);
+    yield put(delSubcategorySuccess(id));
   } catch (err) {
     yield put(categoriesError(err));
   }

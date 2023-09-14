@@ -91,7 +91,6 @@ function categoriesReducer(state = initialState, {type, data}) {
       };
     }
     case ACTION.ADD_SUBCATEGORY_SUCCESS: {
-      const {categories} = state;
       return {
         ...state,
         isFetching: false,
@@ -115,22 +114,26 @@ function categoriesReducer(state = initialState, {type, data}) {
     //     error: null,
     //   };
     // }
-    // // DEL SUBCATEGORIES
-    // case ACTION.DEL_SUBCATEGORY_REQUEST: {
-    //   return {
-    //     ...state,
-    //     isFetching: true,
-    //     error: null,
-    //   };
-    // }
-    // case ACTION.DEL_SUBCATEGORY_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     isFetching: false,
-    //     categories: data,
-    //     error: null,
-    //   };
-    // }
+    // DEL SUBCATEGORIES
+    case ACTION.DEL_SUBCATEGORY_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        error: null,
+      };
+    }
+    case ACTION.DEL_SUBCATEGORY_SUCCESS: {
+      const id = data;
+        const {subcategories} = state;
+        const updatedSubcategories = [...subcategories];
+        updatedSubcategories.splice(updatedSubcategories.findIndex(subcategory => subcategory.id === id), 1);
+      return {
+        ...state,
+        isFetching: false,
+        categories: updatedSubcategories,
+        error: null,
+      };
+    }
     // ERROR
     case ACTION.CATEGORIES_ERROR: {
       return {

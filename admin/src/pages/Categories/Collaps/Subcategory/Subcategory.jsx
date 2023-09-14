@@ -3,10 +3,14 @@ import styles from "./Subcategory.module.scss";
 import ChangeIcon from "../../../../svgs/ChangeIcon";
 import ArrowToRight from "../../../../svgs/ArrowToRight";
 import ArrowToBottomIcon from "../../../../svgs/ArrowToBottomIcon";
+import DeleteIcon from '../../../../svgs/DeleteIcon';
+import { connect } from "react-redux";
+import actionCreators from '../../../../store/actions/actionCreators';
 
 const Subcategory = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const {name, subcategoryId} = props.subcategories
+  const { delSubcategoryRequest} = props;
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -24,9 +28,15 @@ const Subcategory = (props) => {
           </div>
           <h5>{name}</h5>
         </section>
+        <section>
         <div className={styles.icon}>
           <ChangeIcon />
         </div>
+        <div className={styles.icon} onClick={() => delSubcategoryRequest(subcategoryId)}>
+        <DeleteIcon/>
+        </div>
+        </section>
+        
       </div>
       {isCollapsed && (
         <div className={styles.content}>
@@ -37,4 +47,14 @@ const Subcategory = (props) => {
   );
 };
 
-export default Subcategory;
+const mapDispatchToProps = (dispatch) => ({
+  delSubcategoryRequest: (id) => dispatch(actionCreators.delSubcategoryRequest(id)),
+});
+
+const mapStateToProps = (state) => {
+  return {
+    categories: state.categoriesReducer,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Subcategory);

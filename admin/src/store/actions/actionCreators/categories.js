@@ -60,10 +60,11 @@ export const delSubcategoryRequest = (id) => ({
     data: id
 
 });
-export const delSubcategorySuccess = (res) => ({
+export const delSubcategorySuccess = (res) => {
+    return{
     type: ACTION.DEL_SUBCATEGORY_SUCCESS,
     data: res
-});
+}};
 
 // error
 export const categoriesError = (err) => ({
