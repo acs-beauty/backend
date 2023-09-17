@@ -4,6 +4,7 @@ const createCategoryOrSub = require("../queries/createCategoryOrSub");
 const updateCategoryOrSub = require("../queries/updateCategoryOrSub");
 const deleteCategoryOrSub = require("../queries/deleteCategoryOrSub");
 const { bodyHelper } = require("../utils/bodyHelperUpdateCategoryOrSub");
+const { SUCCESS, FAILURE } = require("../constants");
 
 module.exports.getAllCategories = async (req, res, next) => {
   const isAdmin = true;
@@ -29,13 +30,17 @@ module.exports.addCategory = async (req, res, next) => {
   try {
     const newCategory = await createCategoryOrSub(body, true);
 
-    const category = {
-      categoryId: newCategory.categoryId,
-      imageBannerName: newCategory.imageBannerName,
-      subcategories: [],
-    };
+    if (newCategory) {
+      const category = {
+        categoryId: newCategory.categoryId,
+        imageBannerName: newCategory.imageBannerName,
+        subcategories: [],
+      };
 
-    res.status(200).send(category);
+      res.status(200).send({ message: SUCCESS, category });
+    } else {
+      res.send({ message: FAILURE });
+    }
   } catch (error) {
     next(error);
   }
@@ -55,12 +60,16 @@ module.exports.addSubcategory = async (req, res, next) => {
   try {
     const newSubcategory = await createCategoryOrSub(body, false);
 
-    const subcategory = {
-      subcategoryId: newSubcategory.subcategoryId,
-      imageBannerName: newSubcategory.imageBannerName,
-    };
+    if (newSubcategory) {
+      const subcategory = {
+        subcategoryId: newSubcategory.subcategoryId,
+        imageBannerName: newSubcategory.imageBannerName,
+      };
 
-    res.status(200).send(subcategory);
+      res.status(200).send({ message: SUCCESS, subcategory });
+    } else {
+      res.send({ message: FAILURE });
+    }
   } catch (error) {
     next(error);
   }
@@ -80,14 +89,14 @@ module.exports.updateCategory = async (req, res, next) => {
 
     if (updateCategory) {
       const response = {
-        message: "success",
+        message: SUCCESS,
         category: {
           ...image,
         },
       };
       res.status(200).send(response);
     } else {
-      res.send({ message: "failure" });
+      res.send({ message: FAILURE });
     }
   } catch (error) {
     next(error);
@@ -108,14 +117,14 @@ module.exports.updateSubcategory = async (req, res, next) => {
 
     if (updateSubcategory) {
       const response = {
-        message: "success",
+        message: SUCCESS,
         subcategory: {
           ...image,
         },
       };
       res.status(200).send(response);
     } else {
-      res.send({ message: "failure" });
+      res.send({ message: FAILURE });
     }
   } catch (error) {
     next(error);
@@ -126,9 +135,9 @@ module.exports.deleteCategory = async (req, res, next) => {
   try {
     const isDelete = await deleteCategoryOrSub(req.params.categoryId, true);
     if (isDelete) {
-      res.status(200).send({ message: "success" });
+      res.status(200).send({ message: SUCCESS });
     } else {
-      res.send({ message: "failure" });
+      res.send({ message: FAILURE });
     }
   } catch (error) {
     next(error);
@@ -139,9 +148,9 @@ module.exports.deleteSubcategory = async (req, res, next) => {
   try {
     const isDelete = await deleteCategoryOrSub(req.params.subcategoryId, false);
     if (isDelete) {
-      res.status(200).send({ message: "success" });
+      res.status(200).send({ message: SUCCESS });
     } else {
-      res.send({ message: "failure" });
+      res.send({ message: FAILURE });
     }
   } catch (error) {
     next(error);
