@@ -17,9 +17,7 @@ module.exports.getAllCategories = async (req, res, next) => {
 };
 
 module.exports.addCategory = async (req, res, next) => {
-  const image = req.body.imageBannerName // поменять, после Мультэра
-    ? { imageBannerName: req.body.imageBannerName } // поменять, после Мультэра
-    : {};
+  const image = req.file ? { imageBannerName: req.file.filename } : {};
 
   const body = {
     name: req.body.name,
@@ -44,9 +42,7 @@ module.exports.addCategory = async (req, res, next) => {
 };
 
 module.exports.addSubcategory = async (req, res, next) => {
-  const image = req.body.imageBannerName // поменять, после Мультэра
-    ? { imageBannerName: req.body.imageBannerName } // поменять, после Мультэра
-    : {};
+  const image = req.file ? { imageBannerName: req.file.filename } : {};
 
   const body = {
     categoryId: req.body.categoryId,
@@ -71,9 +67,7 @@ module.exports.addSubcategory = async (req, res, next) => {
 };
 
 module.exports.updateCategory = async (req, res, next) => {
-  const image = req.body.imageBannerName // поменять, после Мультэра
-    ? { imageBannerName: req.body.imageBannerName } // поменять, после Мультэра
-    : {};
+  const image = req.file ? { imageBannerName: req.file.filename } : {};
 
   const { bodyCategory } = bodyHelper(req.body);
 
@@ -101,9 +95,7 @@ module.exports.updateCategory = async (req, res, next) => {
 };
 
 module.exports.updateSubcategory = async (req, res, next) => {
-  const image = req.body.imageBannerName // поменять, после Мультэра
-    ? { imageBannerName: req.body.imageBannerName } // поменять, после Мультэра
-    : {};
+  const image = req.file ? { imageBannerName: req.file.filename } : {};
 
   const { bodySubCategory } = bodyHelper(req.body);
 
@@ -133,7 +125,6 @@ module.exports.updateSubcategory = async (req, res, next) => {
 module.exports.deleteCategory = async (req, res, next) => {
   try {
     const isDelete = await deleteCategoryOrSub(req.params.categoryId, true);
-    console.log(req.params.categoryId)
     if (isDelete) {
       res.status(200).send({ message: "success" });
     } else {

@@ -4,6 +4,7 @@ const multer = require("multer");
 const ServerError = require("../errors/ServerError");
 const env = process.env.NODE_ENV || "development";
 const devFilePath = path.resolve(__dirname, "../../public/images");
+const { v4: uuidv4 } = require("uuid");
 
 const filePath = env === "production" ? "/var/www/html/images/" : devFilePath;
 
@@ -18,7 +19,7 @@ const storageImageFiles = multer.diskStorage({
     cb(null, filePath);
   },
   filename(req, file, cb) {
-    cb(null, Date.now() + file.originalname);
+    cb(null, `${uuidv4()}.${file.originalname.split(".").pop()}`);
   },
 });
 
