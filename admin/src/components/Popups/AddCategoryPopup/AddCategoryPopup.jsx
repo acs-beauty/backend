@@ -53,7 +53,7 @@ const AddCategoryPopup = ({ setActive, ...props }) => {
           onSubmit={(values) => {
             addCategoryRequest(values);
             setActive(false);
-            window.location.reload();
+            // window.location.reload();
           }}
         >
           {({ errors, touched, handleChange, handleSubmit, isValid }) => (

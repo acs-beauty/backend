@@ -4,8 +4,8 @@ const ArrowToBottomIcon = ({iconSize}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={{iconSize} || 48}
-      height={{iconSize} || 48}
+      width={iconSize || 48}
+      height={iconSize || 48}
       viewBox="0 0 48 48"
       fill="none"
     >

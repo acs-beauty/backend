@@ -44,14 +44,14 @@ const AddSubcategoryPopup = ({ setActive, ...props }) => {
         onSubmit={(values) => {
           addSubcategoryRequest(values);
           setActive(false);
-          window.location.reload();
+          // window.location.reload();
         }}
       >
         {({ errors, touched, handleChange, handleSubmit, isValid }) => (
           <Form>
             <div className={styles.form}>
               <div>
-                <label for="name">
+                <label htmlFor="name">
                   <h6 className={styles.optionName}>Назва підкатегорії</h6>
                 </label>
                 <Field
@@ -65,7 +65,7 @@ const AddSubcategoryPopup = ({ setActive, ...props }) => {
                 )}
               </div>
               <div>
-                <label for="linkKey">
+                <label htmlFor="linkKey">
                   <h6 className={styles.optionName}>URL</h6>
                 </label>
                 <Field

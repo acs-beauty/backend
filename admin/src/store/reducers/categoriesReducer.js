@@ -2,11 +2,12 @@ import ACTION from "../actions/actionTypes";
 
 const initialState = {
   categories: [],
+
   isFetching: false,
   error: null,
 };
 
-function categoriesReducer(state = initialState, {type, data}) {
+function categoriesReducer(state = initialState, { type, data }) {
   switch (type) {
     // REQUEST
     case ACTION.GET_CATEGORIES_REQUEST: {
@@ -34,7 +35,7 @@ function categoriesReducer(state = initialState, {type, data}) {
       };
     }
     case ACTION.ADD_CATEGORY_SUCCESS: {
-        const {categories} = state;
+      const { categories } = state;
       return {
         ...state,
         isFetching: false,
@@ -51,10 +52,10 @@ function categoriesReducer(state = initialState, {type, data}) {
       };
     }
     case ACTION.UPD_CATEGORY_SUCCESS: {
-        const {categories} = state;
-        const id = categories.findIndex(category => category.id === data.id)
-        const updatedCategories = [...categories];
-        updatedCategories[id] = data;
+      const { categories } = state;
+      const id = categories.findIndex((category) => category.id === data.id);
+      const updatedCategories = [...categories];
+      updatedCategories[id] = data;
       return {
         ...state,
         isFetching: false,
@@ -71,14 +72,18 @@ function categoriesReducer(state = initialState, {type, data}) {
       };
     }
     case ACTION.DEL_CATEGORY_SUCCESS: {
-        const id = data;
-        const {categories} = state;
-        const updatedCategories = [...categories];
-        updatedCategories.splice(updatedCategories.findIndex(category => category.id === id), 1);
+      const id = data;
+      const { categories } = state;
+      const searchIndex = categories.findIndex(
+        ({ categoryId }) => categoryId === id
+      );
+      if (searchIndex > 0) {
+        categories.splice(searchIndex, 1);
+      }
       return {
         ...state,
         isFetching: false,
-        categories: updatedCategories,
+        categories: categories,
         error: null,
       };
     }
@@ -123,14 +128,18 @@ function categoriesReducer(state = initialState, {type, data}) {
       };
     }
     case ACTION.DEL_SUBCATEGORY_SUCCESS: {
-      const id = data;
-        const {subcategories} = state;
-        const updatedSubcategories = [...subcategories];
-        updatedSubcategories.splice(updatedSubcategories.findIndex(subcategory => subcategory.id === id), 1);
+      const subcategoryIdToRemove = data; 
+      const { categories } = state;
+      const updatedCategories = categories.map((category) => ({
+        ...category,
+        subcategories: category.subcategories.filter(
+          (subcategory) => subcategory.subcategoryId !== subcategoryIdToRemove
+        ),
+      }));
       return {
         ...state,
         isFetching: false,
-        categories: updatedSubcategories,
+        categories: updatedCategories,
         error: null,
       };
     }

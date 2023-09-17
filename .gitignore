@@ -9,7 +9,7 @@ client/node_modules
 server/node_modules
 admin/node_modules
 .git
-public
+/public
 client/.yarn
 client/.yarnrc.yml
 admin/.yarn
