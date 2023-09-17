@@ -1,0 +1,150 @@
+import ACTION from "../actions/actionTypes";
+
+const initialState = {
+  categories: [],
+  isFetching: false,
+  error: null,
+};
+
+function categoriesReducer(state = initialState, {type, data}) {
+  switch (type) {
+    // REQUEST
+    case ACTION.GET_CATEGORIES_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        error: null,
+      };
+    }
+    // SUCCESS
+    case ACTION.GET_CATEGORIES_SUCCESS: {
+      return {
+        ...state,
+        isFetching: false,
+        categories: data,
+        error: null,
+      };
+    }
+    // ADD CATEGORIES
+    case ACTION.ADD_CATEGORY_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        error: null,
+      };
+    }
+    case ACTION.ADD_CATEGORY_SUCCESS: {
+        const {categories} = state;
+      return {
+        ...state,
+        isFetching: false,
+        categories: [...categories, data],
+        error: null,
+      };
+    }
+    // UPD CATEGORIES
+    case ACTION.UPD_CATEGORY_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        error: null,
+      };
+    }
+    case ACTION.UPD_CATEGORY_SUCCESS: {
+        const {categories} = state;
+        const id = categories.findIndex(category => category.id === data.id)
+        const updatedCategories = [...categories];
+        updatedCategories[id] = data;
+      return {
+        ...state,
+        isFetching: false,
+        categories: updatedCategories,
+        error: null,
+      };
+    }
+    // DEL CATEGORIES
+    case ACTION.DEL_CATEGORY_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        error: null,
+      };
+    }
+    case ACTION.DEL_CATEGORY_SUCCESS: {
+        const id = data;
+        const {categories} = state;
+        const updatedCategories = [...categories];
+        updatedCategories.splice(updatedCategories.findIndex(category => category.id === id), 1);
+      return {
+        ...state,
+        isFetching: false,
+        categories: updatedCategories,
+        error: null,
+      };
+    }
+    // ADD SUBCATEGORIES
+    case ACTION.ADD_SUBCATEGORY_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        error: null,
+      };
+    }
+    case ACTION.ADD_SUBCATEGORY_SUCCESS: {
+      return {
+        ...state,
+        isFetching: false,
+        categories: data,
+        error: null,
+      };
+    }
+    // // UPD SUBCATEGORIES
+    // case ACTION.UPD_SUBCATEGORY_REQUEST: {
+    //   return {
+    //     ...state,
+    //     isFetching: true,
+    //     error: null,
+    //   };
+    // }
+    // case ACTION.UPD_SUBCATEGORY_SUCCESS: {
+    //   return {
+    //     ...state,
+    //     isFetching: false,
+    //     categories: data,
+    //     error: null,
+    //   };
+    // }
+    // DEL SUBCATEGORIES
+    case ACTION.DEL_SUBCATEGORY_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        error: null,
+      };
+    }
+    case ACTION.DEL_SUBCATEGORY_SUCCESS: {
+      const id = data;
+        const {subcategories} = state;
+        const updatedSubcategories = [...subcategories];
+        updatedSubcategories.splice(updatedSubcategories.findIndex(subcategory => subcategory.id === id), 1);
+      return {
+        ...state,
+        isFetching: false,
+        categories: updatedSubcategories,
+        error: null,
+      };
+    }
+    // ERROR
+    case ACTION.CATEGORIES_ERROR: {
+      return {
+        ...state,
+        isFetching: false,
+        error: data,
+      };
+    }
+    default:
+      return state;
+  }
+}
+
+export default categoriesReducer;

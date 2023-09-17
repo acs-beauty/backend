@@ -1,0 +1,10 @@
+@import "./styles/variables.scss";
+
+.appWrap {
+  width: $page-width;
+  min-height: 100vh;
+  height: fit-content;
+  margin: 0 auto;
+  border: $default-border;
+  color: $main-text-color;
+}
