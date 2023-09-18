@@ -22,7 +22,7 @@ const findByPkCategory = async (categoryId) => {
     if (category) {
       return category.get({ plain: true });
     } else {
-      return new BadRequestError("такого айди нема");
+      return new BadRequestError("такої категорії немає");
     }
   } catch (error) {
     throw new Error(error);

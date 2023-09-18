@@ -1,5 +1,6 @@
 "use strict";
-const { Category, Subcategory } = require("../db_schema/models");
+const { Category, Subcategory, Sequelize } = require("../db_schema/models");
+const { UNKNOWN } = require("../constants");
 
 const updateCategoryOrSub = async (id, body, isCategory) => {
   const model = isCategory ? Category : Subcategory;
@@ -10,7 +11,14 @@ const updateCategoryOrSub = async (id, body, isCategory) => {
       {
         ...body,
       },
-      { where }
+      {
+        where: {
+          ...where,
+          linkKey: {
+            [Sequelize.Op.not]: UNKNOWN,
+          },
+        },
+      }
     );
 
     return updateCategory;
