@@ -2,7 +2,7 @@
 const { Category, Subcategory, Sequelize } = require("../db_schema/models");
 const { UNKNOWN } = require("../constants");
 
-const deleteCategoryOrSub = async (id, isCategory) => {
+const deleteCategoryOrSub = async (id, isCategory, transaction) => {
   const model = isCategory ? Category : Subcategory;
   const where = isCategory ? { categoryId: id } : { subcategoryId: id };
 
@@ -14,6 +14,7 @@ const deleteCategoryOrSub = async (id, isCategory) => {
           [Sequelize.Op.not]: UNKNOWN,
         },
       },
+      transaction,
     });
 
     return !!isDelete;

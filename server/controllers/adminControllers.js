@@ -6,6 +6,7 @@ const deleteCategoryOrSub = require("../queries/deleteCategoryOrSub");
 const findByLinkKeyCategory = require("../queries/findByLinkKeyCategory");
 const { bodyHelper } = require("../utils/bodyHelperUpdateCategoryOrSub");
 const { SUCCESS, FAILURE, UNKNOWN } = require("../constants");
+const { sequelize } = require("../db_schema/models");
 
 module.exports.getAllCategories = async (req, res, next) => {
   const isAdmin = true;
@@ -40,7 +41,7 @@ module.exports.addCategory = async (req, res, next) => {
 
       res.status(200).send({ message: SUCCESS, category });
     } else {
-      res.send({ message: FAILURE });
+      res.status(400).send({ message: FAILURE });
     }
   } catch (error) {
     next(error);
@@ -69,7 +70,7 @@ module.exports.addSubcategory = async (req, res, next) => {
 
       res.status(200).send({ message: SUCCESS, subcategory });
     } else {
-      res.send({ message: FAILURE });
+      res.status(400).send({ message: FAILURE });
     }
   } catch (error) {
     next(error);
@@ -97,7 +98,7 @@ module.exports.updateCategory = async (req, res, next) => {
       };
       res.status(200).send(response);
     } else {
-      res.send({ message: FAILURE });
+      res.status(400).send({ message: FAILURE });
     }
   } catch (error) {
     next(error);
@@ -125,7 +126,7 @@ module.exports.updateSubcategory = async (req, res, next) => {
       };
       res.status(200).send(response);
     } else {
-      res.send({ message: FAILURE });
+      res.status(400).send({ message: FAILURE });
     }
   } catch (error) {
     next(error);
@@ -133,6 +134,8 @@ module.exports.updateSubcategory = async (req, res, next) => {
 };
 
 module.exports.deleteCategory = async (req, res, next) => {
+  const transaction = await sequelize.transaction();
+
   try {
     if (req.subcategoryIds) {
       const unknownCategory = await findByLinkKeyCategory(UNKNOWN, true);
@@ -141,16 +144,26 @@ module.exports.deleteCategory = async (req, res, next) => {
         {
           categoryId: unknownCategory.categoryId,
         },
-        false
+        false,
+        transaction
       );
     }
-    const isDelete = await deleteCategoryOrSub(req.params.categoryId, true);
+
+    const isDelete = await deleteCategoryOrSub(
+      req.params.categoryId,
+      true,
+      transaction
+    );
+
     if (isDelete) {
+      await transaction.commit();
       res.status(200).send({ message: SUCCESS });
     } else {
-      res.send({ message: FAILURE });
+      await transaction.rollback();
+      res.status(400).send({ message: FAILURE });
     }
   } catch (error) {
+    await transaction.rollback();
     next(error);
   }
 };
@@ -161,7 +174,7 @@ module.exports.deleteSubcategory = async (req, res, next) => {
     if (isDelete) {
       res.status(200).send({ message: SUCCESS });
     } else {
-      res.send({ message: FAILURE });
+      res.status(400).send({ message: FAILURE });
     }
   } catch (error) {
     next(error);
