@@ -3,8 +3,9 @@ const findAllCategoryAndSub = require("../queries/findAllCategoryAndSub");
 const createCategoryOrSub = require("../queries/createCategoryOrSub");
 const updateCategoryOrSub = require("../queries/updateCategoryOrSub");
 const deleteCategoryOrSub = require("../queries/deleteCategoryOrSub");
+const findByLinkKeyCategory = require("../queries/findByLinkKeyCategory");
 const { bodyHelper } = require("../utils/bodyHelperUpdateCategoryOrSub");
-const { SUCCESS, FAILURE } = require("../constants");
+const { SUCCESS, FAILURE, UNKNOWN } = require("../constants");
 
 module.exports.getAllCategories = async (req, res, next) => {
   const isAdmin = true;
@@ -133,6 +134,16 @@ module.exports.updateSubcategory = async (req, res, next) => {
 
 module.exports.deleteCategory = async (req, res, next) => {
   try {
+    if (req.subcategoryIds) {
+      const unknownCategory = await findByLinkKeyCategory(UNKNOWN, true);
+      await updateCategoryOrSub(
+        req.subcategoryIds,
+        {
+          categoryId: unknownCategory.categoryId,
+        },
+        false
+      );
+    }
     const isDelete = await deleteCategoryOrSub(req.params.categoryId, true);
     if (isDelete) {
       res.status(200).send({ message: SUCCESS });

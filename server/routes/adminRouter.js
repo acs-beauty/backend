@@ -3,6 +3,7 @@ const { Router } = require("express");
 const controllers = require("../controllers/adminControllers");
 const validators = require("../middleware/validators");
 const fileUpload = require("../utils/fileUpload");
+const check = require("../middleware/availabilityCheckCategories");
 
 const adminRouter = Router();
 
@@ -39,6 +40,7 @@ adminRouter.patch(
 adminRouter.delete(
   "/category/:categoryId",
   validators.validateCategoryId,
+  check.availabilityCheckCategories,
   controllers.deleteCategory
 );
 
