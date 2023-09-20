@@ -97,7 +97,7 @@ const AddCategoryPopup = ({ setActive, ...props }) => {
             setActive(false);
           }}
         >
-          {({ errors, touched, handleChange, handleSubmit, isValid }) => (
+          {({ errors, touched, handleChange, handleSubmit, isValid, values }) => (
             <Form>
               <div>
                 <label htmlFor="name">
@@ -136,7 +136,7 @@ const AddCategoryPopup = ({ setActive, ...props }) => {
                   type={"submit"}
                   buttonText={activeCategoryId ? "ЗБЕРЕГТИ" : "СТВОРИТИ"}
                   radius={"8px"}
-                  disabled={!isValid || !touched.name || !touched.linkKey}
+                  disabled={!isValid || !values.name || !values.linkKey}
                 />
               </div>
             </Form>
