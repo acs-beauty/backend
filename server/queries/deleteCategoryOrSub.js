@@ -1,13 +1,20 @@
 "use strict";
-const { Category, Subcategory } = require("../db_schema/models");
+const { Category, Subcategory, Sequelize } = require("../db_schema/models");
+const { UNKNOWN } = require("../constants");
 
-const deleteCategoryOrSub = async (id, isCategory) => {
+const deleteCategoryOrSub = async (id, isCategory, transaction) => {
   const model = isCategory ? Category : Subcategory;
   const where = isCategory ? { categoryId: id } : { subcategoryId: id };
 
   try {
     const isDelete = await model.destroy({
-      where,
+      where: {
+        ...where,
+        linkKey: {
+          [Sequelize.Op.not]: UNKNOWN,
+        },
+      },
+      transaction,
     });
 
     return !!isDelete;

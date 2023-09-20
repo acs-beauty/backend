@@ -16,7 +16,6 @@ module.exports.getNavigation = async (req, res, next) => {
 module.exports.getCategoryByLinkKey = async (req, res, next) => {
   try {
     const category = await findByLinkKeyCategory(req.params.linkKey);
-    console.log(category)
 
     if (!category) {
       return res.status(404).json({ error: "Category not found" });

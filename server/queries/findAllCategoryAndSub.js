@@ -13,7 +13,7 @@ const findAllCategoryAndSub = async (isAdmin) => {
     ? [
         [
           Sequelize.literal(
-            `CAST(COUNT("subcategories->products"."productId") AS INTEGER)`
+            `CAST(COUNT("subcategories->products") AS INTEGER)`
           ),
           "productCount",
         ],
@@ -36,7 +36,6 @@ const findAllCategoryAndSub = async (isAdmin) => {
         ],
         required: !isAdmin,
         where: { ...whereDisabled },
-        order: [["name", "ASC"]],
         include: {
           model: Product,
           as: "products",
@@ -45,8 +44,11 @@ const findAllCategoryAndSub = async (isAdmin) => {
           required: !isAdmin,
         },
       },
+      order: [
+        ["name", "ASC"],
+        ["subcategories", "name", "ASC"],
+      ],
       group: ["Category.categoryId", "subcategories.subcategoryId"],
-      order: [["name", "ASC"]],
     });
 
     return categoryAndSub;
