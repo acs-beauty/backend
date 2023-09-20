@@ -53,7 +53,9 @@ function categoriesReducer(state = initialState, { type, data }) {
     }
     case ACTION.UPD_CATEGORY_SUCCESS: {
       const { categories } = state;
-      const id = categories.findIndex((category) => category.id === data.id);
+      const id = categories.findIndex(
+        (category) => category.categoryId === data.categoryId
+      );
       const updatedCategories = [...categories];
       updatedCategories[id] = data;
       return {
@@ -128,7 +130,7 @@ function categoriesReducer(state = initialState, { type, data }) {
       };
     }
     case ACTION.DEL_SUBCATEGORY_SUCCESS: {
-      const subcategoryIdToRemove = data; 
+      const subcategoryIdToRemove = data;
       const { categories } = state;
       const updatedCategories = categories.map((category) => ({
         ...category,
