@@ -5,6 +5,7 @@ import VioletButton from "../../components/VioletButton/VioletButton";
 import AddCategoryPopup from "../../components/Popups/AddCategoryPopup/AddCategoryPopup";
 import { connect } from "react-redux";
 import actionCreators from "../../store/actions/actionCreators";
+import { UNKNOWN } from "../../constants";
 
 const Categories = (props) => {
   const [active, setActive] = useState(false);
@@ -35,14 +36,16 @@ const Categories = (props) => {
         </div>
         <div className={styles.collapses}>
           {categories.length
-            ? categories.map((category) => (
-                <Category
-                  data={category}
-                  key={category.categoryId}
-                  setActive={setActive}
-                  setActiveCategoryId={setActiveCategoryId}
-                />
-              ))
+            ? categories.map((category) =>
+                category.name !== UNKNOWN ? (
+                  <Category
+                    data={category}
+                    key={category.categoryId}
+                    setActive={setActive}
+                    setActiveCategoryId={setActiveCategoryId}
+                  />
+                ) : null
+              )
             : null}
         </div>
       </div>
