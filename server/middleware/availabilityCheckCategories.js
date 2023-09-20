@@ -8,9 +8,11 @@ module.exports.availabilityCheckCategories = async (req, res, next) => {
 
     if (category.code === 400) {
       res.status(400).send({ ...category });
+      return;
     }
     if (category.linkKey === UNKNOWN) {
       res.status(400).send({ message: "не можна цього робити" });
+      return;
     }
 
     const subcategoryIds = category?.subcategories.length
