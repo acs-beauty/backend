@@ -48,6 +48,10 @@
       border-radius: 4px;
       border: $default-border;
     }
+    input:focus {
+      border: $active-field-border;
+      outline: none;
+    }
     h5 {
       @extend .Roboto700-16-18;
     }
