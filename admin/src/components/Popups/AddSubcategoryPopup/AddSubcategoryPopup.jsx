@@ -47,7 +47,7 @@ const AddSubcategoryPopup = ({ setActive, ...props }) => {
           // window.location.reload();
         }}
       >
-        {({ errors, touched, handleChange, handleSubmit, isValid }) => (
+        {({ errors, touched, handleChange, handleSubmit, isValid, values }) => (
           <Form>
             <div className={styles.form}>
               <div>
@@ -86,7 +86,7 @@ const AddSubcategoryPopup = ({ setActive, ...props }) => {
                   onClickFunction={handleSubmit}
                   type={"submit"}
                   buttonText={"ДОДАТИ"}
-                  disabled={!isValid || !touched.name || !touched.linkKey}
+                  disabled={!isValid || !values.name || !values.linkKey}
                 />
               </div>
             </div>

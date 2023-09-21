@@ -9,18 +9,43 @@ import { connect } from "react-redux";
 import actionCreators from "../../../store/actions/actionCreators";
 import * as Yup from "yup";
 import { ukraineWordsString, validateLinkString } from "../../../utils/regex";
+import { updCategoryRequest } from "../../../store/actions/actionCreators/categories";
 
 const AddCategoryPopup = ({ setActive, ...props }) => {
-  const { addCategoryRequest } = props;
-
+  const {
+    addCategoryRequest,
+    updCategoryRequest,
+    categories,
+    setActiveCategoryId,
+    activeCategoryId,
+  } = props;
+  const categoriesArray = categories.categories;
+  const activeCategoryIndex = categoriesArray.findIndex(
+    (category) => category.categoryId === activeCategoryId
+  );
+  const dataField = categoriesArray[activeCategoryIndex];
   return (
     <div className={styles.container}>
-      <h3>Категорії/Додати категорію</h3>
+      {activeCategoryId ? (
+        <h3>Категорії/Редагувати категорію</h3>
+      ) : (
+        <h3>Категорії/Додати категорію</h3>
+      )}
       <div className={styles.popupBody}>
         <div className={styles.heading}>
           <div></div>
-          <h4>ДОДАТИ КАТЕГОРІЮ</h4>
-          <div className={styles.closeIcon} onClick={() => setActive(false)}>
+          {activeCategoryId ? (
+            <h4>РЕДАГУВАТИ КАТЕГОРІЮ</h4>
+          ) : (
+            <h4>ДОДАТИ КАТЕГОРІЮ</h4>
+          )}
+          <div
+            className={styles.closeIcon}
+            onClick={() => {
+              setActive(false);
+              setActiveCategoryId(null);
+            }}
+          >
             <CloseIcon />
           </div>
         </div>
@@ -28,10 +53,23 @@ const AddCategoryPopup = ({ setActive, ...props }) => {
           <div className={styles.icon}>
             <AddIcon color={"#5c5e60"} />
           </div>
-          <h5>Додати зображення</h5>
+          {activeCategoryId ? (
+            <h5>Редагувати зображення</h5>
+          ) : (
+            <h5>Додати зображення</h5>
+          )}
         </div>
         <Formik
-          initialValues={{ name: "", linkKey: "", disabled: false }}
+          initialValues={
+            activeCategoryId
+              ? {
+                  categoryId: dataField.categoryId,
+                  name: dataField.name,
+                  linkKey: dataField.linkKey,
+                  disabled: dataField.disabled,
+                }
+              : { name: "", linkKey: "", disabled: false }
+          }
           validationSchema={Yup.object({
             name: Yup.string()
               .required("Обов`язковий")
@@ -51,12 +89,15 @@ const AddCategoryPopup = ({ setActive, ...props }) => {
               ),
           })}
           onSubmit={(values) => {
-            addCategoryRequest(values);
+            {
+              activeCategoryId
+                ? updCategoryRequest(values)
+                : addCategoryRequest(values);
+            }
             setActive(false);
-            // window.location.reload();
           }}
         >
-          {({ errors, touched, handleChange, handleSubmit, isValid }) => (
+          {({ errors, touched, handleChange, handleSubmit, isValid, values }) => (
             <Form>
               <div>
                 <label htmlFor="name">
@@ -93,9 +134,9 @@ const AddCategoryPopup = ({ setActive, ...props }) => {
                 <VioletButton
                   onClickFunction={handleSubmit}
                   type={"submit"}
-                  buttonText={"CТВОРИТИ"}
+                  buttonText={activeCategoryId ? "ЗБЕРЕГТИ" : "СТВОРИТИ"}
                   radius={"8px"}
-                  disabled={!isValid || !touched.name || !touched.linkKey}
+                  disabled={!isValid || !values.name || !values.linkKey}
                 />
               </div>
             </Form>
@@ -108,6 +149,13 @@ const AddCategoryPopup = ({ setActive, ...props }) => {
 const mapDispatchToProps = (dispatch) => ({
   addCategoryRequest: (data) =>
     dispatch(actionCreators.addCategoryRequest(data)),
+  updCategoryRequest: (data) =>
+    dispatch(actionCreators.updCategoryRequest(data)),
 });
+const mapStateToProps = (state) => {
+  return {
+    categories: state.categoriesReducer,
+  };
+};
 
-export default connect(null, mapDispatchToProps)(AddCategoryPopup);
+export default connect(mapStateToProps, mapDispatchToProps)(AddCategoryPopup);
