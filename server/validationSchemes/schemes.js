@@ -11,7 +11,10 @@ module.exports.queryStringSchema = yup.object().shape({
   categoryId: yup.number().positive().integer(),
   novelty: yup.string().oneOf(["true", "false"]),
   hit: yup.string().oneOf(["true", "false"]),
-  minPrice: yup.number().min(0).max(MAX_PRICE - 1),
+  minPrice: yup
+    .number()
+    .min(0)
+    .max(MAX_PRICE - 1),
   maxPrice: yup.number().min(0).max(MAX_PRICE),
   discount: yup.string().oneOf(["true"]),
   sortBy: yup.string().oneOf(["price", "titleName", "createdAt"]),
@@ -102,4 +105,15 @@ module.exports.categoryIdSchema = yup.object().shape({
 
 module.exports.subcategoryIdSchema = yup.object().shape({
   subcategoryId: yup.number().required().positive().integer(),
+});
+
+module.exports.authSchema = yup.object().shape({
+  login: yup
+    .string()
+    .required()
+    .matches(regex.emailRegex, "Invalid email format"),
+  password: yup
+    .string()
+    .required()
+    .matches(regex.passwordRegex, "Invalid password format"),
 });

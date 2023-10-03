@@ -12,7 +12,7 @@ const authRouter = Router();
 
 authRouter.post(
   "/login",
-  // validators.validateLogin,
+  validators.validateAuthorization, //
   controllers.login
 );
 

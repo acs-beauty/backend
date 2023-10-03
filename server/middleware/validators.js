@@ -111,3 +111,14 @@ module.exports.validateSubcategoryId = async (req, res, next) => {
     return next(new BadRequestError(error.errors));
   }
 };
+
+module.exports.validateAuthorization = async (req, res, next) => {
+  try {
+    await schemes.authSchema.validate(req.body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    return next(new BadRequestError(error.errors));
+  }
+};
