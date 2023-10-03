@@ -6,11 +6,11 @@ const TokenError = require("../errors/TokenError");
 const { JWT_SECRET_ACCESS, JWT_SECRET_REFRESH } = process.env;
 
 module.exports.checkToken = async (req, res, next) => {
-  const [bearer, accessToken] = req.headers.authorization.split(" ");
-  if (!accessToken) {
-    return next(new TokenError("need token"));
-  }
   try {
+    const [bearer, accessToken] = req.headers.authorization.split(" ");
+    if (!accessToken) {
+      return next(new TokenError("need token"));
+    }
     req.tokenData = jwt.verify(accessToken, JWT_SECRET_ACCESS);
     next();
   } catch (error) {
@@ -19,11 +19,11 @@ module.exports.checkToken = async (req, res, next) => {
 };
 
 module.exports.checkRefreshToken = async (req, res, next) => {
-  const refreshToken = req.body.refreshToken;
-  if (!refreshToken) {
-    return next(new TokenError("need refresh token"));
-  }
   try {
+    const refreshToken = req.body.refreshToken;
+    if (!refreshToken) {
+      return next(new TokenError("need refresh token"));
+    }
     req.refreshTokenData = jwt.verify(refreshToken, JWT_SECRET_REFRESH);
     next();
   } catch (error) {
