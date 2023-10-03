@@ -1,5 +1,7 @@
 "use strict";
 const { Router } = require("express");
+const checkToken = require("./middleware/checkToken");
+const checkRoles = require("./middleware/checkRoles");
 
 const router = Router();
 
@@ -13,7 +15,12 @@ const categoryRouter = require("./routes/categoryRouter");
 router.use("/category", categoryRouter);
 
 const adminRouter = require("./routes/adminRouter");
-router.use("/admin", adminRouter);
+router.use(
+  "/admin",
+  checkToken.checkToken,
+  checkRoles.onlyForAdmin,
+  adminRouter
+);
 
 const userRouter = require("./routes/userRouter");
 router.use("/user", userRouter);
