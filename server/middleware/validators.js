@@ -4,7 +4,7 @@ const BadRequestError = require("../errors/BadRequestError");
 
 module.exports.validatePreviewProducts = async (req, res, next) => {
   try {
-    await schemes.queryStringSchema.isValid(req.query, {
+    await schemes.queryStringSchema.validate(req.query, {
       abortEarly: false,
     });
     next();
@@ -15,7 +15,7 @@ module.exports.validatePreviewProducts = async (req, res, next) => {
 
 module.exports.validateProductId = async (req, res, next) => {
   try {
-    await schemes.productIdSchema.isValid(req.params, {
+    await schemes.productIdSchema.validate(req.params, {
       abortEarly: false,
     });
     next();
@@ -26,7 +26,7 @@ module.exports.validateProductId = async (req, res, next) => {
 
 module.exports.validateSearchProducts = async (req, res, next) => {
   try {
-    await schemes.searchProductsSchema.isValid(req.query, {
+    await schemes.searchProductsSchema.validate(req.query, {
       abortEarly: false,
     });
     next();
@@ -37,7 +37,7 @@ module.exports.validateSearchProducts = async (req, res, next) => {
 
 module.exports.validateLinkKey = async (req, res, next) => {
   try {
-    await schemes.linkKeySchema.isValid(req.params, {
+    await schemes.linkKeySchema.validate(req.params, {
       abortEarly: false,
     });
     next();
@@ -48,7 +48,7 @@ module.exports.validateLinkKey = async (req, res, next) => {
 
 module.exports.validateCreateCategory = async (req, res, next) => {
   try {
-    await schemes.bodyNewCategorySchema.isValid(req.body, {
+    await schemes.bodyNewCategorySchema.validate(req.body, {
       abortEarly: false,
     });
     next();
