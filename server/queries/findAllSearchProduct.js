@@ -6,6 +6,7 @@ const {
   Subcategory,
 } = require("../db_schema/models");
 const { Op, literal, col } = Sequelize;
+const { AVAILABLE, FEW, NOT_AVAILABLE, QUANTITY } = require("../constants");
 
 const findAllSearchProduct = async (searchWords, limit, offset) => {
   try {
@@ -29,10 +30,20 @@ const findAllSearchProduct = async (searchWords, limit, offset) => {
       attributes: [
         "productId",
         "titleName",
-        "description",
         "mainImageName",
         "price",
         "discountPrice",
+        [
+          literal(`CASE
+            WHEN quantity = 0 THEN '${NOT_AVAILABLE}'
+            WHEN quantity BETWEEN 1 AND ${QUANTITY} THEN '${FEW}'
+            WHEN quantity > ${QUANTITY} THEN '${AVAILABLE}'
+            END
+          `),
+          "quantityStatus",
+        ],
+        "novelty",
+        "hit",
         [col("subcategory.linkKey"), "subcategoryLinkKey"],
         [col("subcategory.category.linkKey"), "categoryLinkKey"],
       ],
