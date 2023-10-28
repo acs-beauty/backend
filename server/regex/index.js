@@ -17,7 +17,7 @@ module.exports.camelCaseString = /^[a-z]+(?:[A-Z][a-z]*)*$/;
 
 const ukrLetters = "[а-щьюяА-ЩЬЮЯґҐіІїЇєЄ]+";
 module.exports.ukraineWordsString = new RegExp(
-  `^${ukrLetters}'?${ukrLetters}(?:\\s{1}${ukrLetters}'?${ukrLetters}?)*$`
+  `^${ukrLetters}(?:'?${ukrLetters})?(?:\\s{1}${ukrLetters}(?:'?${ukrLetters})?)*$`
 );
 
 module.exports.emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
