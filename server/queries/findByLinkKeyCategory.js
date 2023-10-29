@@ -47,7 +47,11 @@ const findByLinkKeyCategory = async (linkKey, isAdmin) => {
       include: [...addInclude],
     });
 
-    return category.get({ plain: true });
+    if (category) {
+      return category.get({ plain: true });
+    }
+
+    return category;
   } catch (error) {
     throw new Error(error);
   }

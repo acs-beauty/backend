@@ -13,6 +13,7 @@ adminRouter.post(
   "/category",
   fileUpload.uploadImage,
   validators.validateCreateCategory,
+  checkCategories.availabilityLinkKey,
   controllers.addCategory
 );
 
@@ -21,6 +22,7 @@ adminRouter.post(
   fileUpload.uploadImage,
   validators.validateCreateSubcategory,
   checkCategories.availabilityCategories,
+  checkCategories.availabilityLinkKey,
   controllers.addSubcategory
 );
 
@@ -28,6 +30,7 @@ adminRouter.patch(
   "/category",
   fileUpload.uploadImage,
   validators.validateUpdateCategory,
+  checkCategories.availabilityLinkKey,
   controllers.updateCategory
 );
 
@@ -36,6 +39,7 @@ adminRouter.patch(
   fileUpload.uploadImage,
   validators.validateUpdateSubcategory,
   checkCategories.availabilityCategories,
+  checkCategories.availabilityLinkKey,
   controllers.updateSubcategory
 );
 
