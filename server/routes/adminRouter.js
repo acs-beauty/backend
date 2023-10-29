@@ -3,7 +3,7 @@ const { Router } = require("express");
 const controllers = require("../controllers/adminControllers");
 const validators = require("../middleware/validators");
 const fileUpload = require("../utils/fileUpload");
-const check = require("../middleware/availabilityCheckCategories");
+const checkCategories = require("../middleware/checkCategories");
 
 const adminRouter = Router();
 
@@ -20,6 +20,7 @@ adminRouter.post(
   "/subcategory",
   fileUpload.uploadImage,
   validators.validateCreateSubcategory,
+  checkCategories.availabilityCategories,
   controllers.addSubcategory
 );
 
@@ -34,13 +35,14 @@ adminRouter.patch(
   "/subcategory",
   fileUpload.uploadImage,
   validators.validateUpdateSubcategory,
+  checkCategories.availabilityCategories,
   controllers.updateSubcategory
 );
 
 adminRouter.delete(
   "/category/:categoryId",
   validators.validateCategoryId,
-  check.availabilityCheckCategories,
+  checkCategories.availabilityCategoriesWhenDelete,
   controllers.deleteCategory
 );
 
