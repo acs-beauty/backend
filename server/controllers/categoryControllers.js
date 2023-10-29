@@ -18,7 +18,7 @@ module.exports.getCategoryByLinkKey = async (req, res, next) => {
     const category = await findByLinkKeyCategory(req.params.linkKey);
 
     if (!category) {
-      return res.status(404).json({ error: "Category not found" });
+      return res.status(404).send({ message: "Category not found" });
     }
     const rebuild = ({ subcategories, ...other }) => ({
       ...other,
@@ -39,7 +39,7 @@ module.exports.getSubcategoryByLinkKey = async (req, res, next) => {
     const subcategory = await findByLinkKeySubcategory(req.params.linkKey);
 
     if (!subcategory) {
-      return res.status(404).json({ error: "Subcategory not found" });
+      return res.status(404).send({ message: "Subcategory not found" });
     }
 
     res.status(200).send(subcategory);
