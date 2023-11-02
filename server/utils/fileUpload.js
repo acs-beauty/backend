@@ -5,6 +5,7 @@ const ServerError = require("../errors/ServerError");
 const env = process.env.NODE_ENV || "development";
 const devFilePath = path.resolve(__dirname, "../../public/images");
 const { v4: uuidv4 } = require("uuid");
+const { MAX_SIZE_IMAGE_FILE } = require("../constants");
 
 const filePath = env === "production" ? "/var/www/html/images/" : devFilePath; // поменять!!
 
@@ -23,14 +24,34 @@ const storageImageFiles = multer.diskStorage({
   },
 });
 
-const uploadImageMulter = multer({ storage: storageImageFiles }).single("file");
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/webp") {
+    cb(null, true);
+  } else {
+    cb(new ServerError("Invalid file format"), false);
+  }
+};
+
+const limits = {
+  fileSize: MAX_SIZE_IMAGE_FILE,
+};
+
+const uploadImageMulter = multer({
+  storage: storageImageFiles,
+  fileFilter: fileFilter,
+  limits: limits,
+}).single("file");
 
 module.exports.uploadImage = (req, res, next) => {
   uploadImageMulter(req, res, (err) => {
     if (err instanceof multer.MulterError) {
-      next(new ServerError());
+      return next(
+        new ServerError(
+          `файл перевищує розмір, максимальний розмір файлу ${MAX_SIZE_IMAGE_FILE} байт`
+        )
+      );
     } else if (err) {
-      next(new ServerError());
+      return next(new ServerError("файл має бути формату webp"));
     }
     return next();
   });
