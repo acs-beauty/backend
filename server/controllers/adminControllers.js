@@ -5,7 +5,13 @@ const updateCategoryOrSub = require("../queries/updateCategoryOrSub");
 const deleteCategoryOrSub = require("../queries/deleteCategoryOrSub");
 const findByLinkKeyCategory = require("../queries/findByLinkKeyCategory");
 const { bodyHelper } = require("../utils/bodyHelperUpdateCategoryOrSub");
-const { SUCCESS, FAILURE, UNKNOWN } = require("../constants");
+const deleteFile = require("../utils/deleteFile");
+const {
+  SUCCESS,
+  FAILURE,
+  UNKNOWN,
+  IMAGE_BANNER_NAME,
+} = require("../constants");
 const { sequelize } = require("../db_schema/models");
 
 module.exports.getAllCategories = async (req, res, next) => {
@@ -90,6 +96,9 @@ module.exports.updateCategory = async (req, res, next) => {
     );
 
     if (updateCategory) {
+      if (req.currentImage && req.currentImage !== IMAGE_BANNER_NAME) {
+        await deleteFile(req.currentImage);
+      }
       const response = {
         message: SUCCESS,
         category: {
@@ -118,6 +127,9 @@ module.exports.updateSubcategory = async (req, res, next) => {
     );
 
     if (updateSubcategory) {
+      if (req.currentImage && req.currentImage !== IMAGE_BANNER_NAME) {
+        await deleteFile(req.currentImage);
+      }
       const response = {
         message: SUCCESS,
         subcategory: {
@@ -157,6 +169,9 @@ module.exports.deleteCategory = async (req, res, next) => {
 
     if (isDelete) {
       await transaction.commit();
+      if (req.currentImage && req.currentImage !== IMAGE_BANNER_NAME) {
+        await deleteFile(req.currentImage);
+      }
       res.status(200).send({ message: SUCCESS });
     } else {
       await transaction.rollback();

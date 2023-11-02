@@ -1,4 +1,5 @@
 "use strict";
+const { IMAGE_BANNER_NAME } = require("../../constants");
 
 /** @type {import('sequelize-cli').Migration} */
 
@@ -28,7 +29,7 @@ module.exports = {
       imageBannerName: {
         type: Sequelize.STRING(128),
         allowNull: false,
-        defaultValue: "category_no_image_banner.png",
+        defaultValue: IMAGE_BANNER_NAME,
       },
     });
   },

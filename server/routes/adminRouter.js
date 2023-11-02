@@ -4,6 +4,7 @@ const controllers = require("../controllers/adminControllers");
 const validators = require("../middleware/validators");
 const fileUpload = require("../utils/fileUpload");
 const checkCategories = require("../middleware/checkCategories");
+const getFileName = require("../middleware/getFileName");
 
 const adminRouter = Router();
 
@@ -31,6 +32,7 @@ adminRouter.patch(
   fileUpload.uploadImage,
   validators.validateUpdateCategory,
   checkCategories.availabilityLinkKey,
+  getFileName.getImageBannerName,
   controllers.updateCategory
 );
 
@@ -40,6 +42,7 @@ adminRouter.patch(
   validators.validateUpdateSubcategory,
   checkCategories.availabilityCategories,
   checkCategories.availabilityLinkKey,
+  getFileName.getImageBannerName,
   controllers.updateSubcategory
 );
 

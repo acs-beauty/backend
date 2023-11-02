@@ -1,6 +1,7 @@
 "use strict";
 const { validateLinkString } = require("../../regex");
 const { Model } = require("sequelize");
+const { IMAGE_BANNER_NAME } = require("../../constants");
 
 module.exports = (sequelize, DataTypes) => {
   class Subcategory extends Model {
@@ -45,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         unique: true,
       },
-      imageName: {
+      imageName: { // DELETE !!!
         type: DataTypes.STRING(128),
         allowNull: false,
         defaultValue: "subcategory_no_image.png",
@@ -53,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       imageBannerName: {
         type: DataTypes.STRING(128),
         allowNull: false,
-        defaultValue: "subcategory_no_image_banner.png",
+        defaultValue: IMAGE_BANNER_NAME,
       },
       disabled: {
         type: DataTypes.BOOLEAN,

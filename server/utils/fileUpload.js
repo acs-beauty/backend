@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV || "development";
 const devFilePath = path.resolve(__dirname, "../../public/images");
 const { v4: uuidv4 } = require("uuid");
 
-const filePath = env === "production" ? "/var/www/html/images/" : devFilePath;
+const filePath = env === "production" ? "/var/www/html/images/" : devFilePath; // поменять!!
 
 if (!fs.existsSync(filePath)) {
   fs.mkdirSync(filePath, {

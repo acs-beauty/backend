@@ -21,7 +21,10 @@ module.exports.availabilityCategoriesWhenDelete = async (req, res, next) => {
       ? category.subcategories.map(({ subcategoryId }) => subcategoryId)
       : null;
 
+    // for move subcategories
     req.subcategoryIds = subcategoryIds;
+    // for delete image
+    req.currentImage = category?.imageBannerName;
 
     next();
   } catch (error) {
