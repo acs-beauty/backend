@@ -6,6 +6,8 @@ const env = process.env.NODE_ENV || "development";
 const devFilePath = path.resolve(__dirname, "../../public/images");
 const { v4: uuidv4 } = require("uuid");
 const { MAX_SIZE_IMAGE_FILE } = require("../constants");
+const deleteFile = require("./deleteFile");
+const { imageConversionToWebp } = require("./imageProcessing");
 
 const filePath = env === "production" ? "/var/www/html/images/" : devFilePath; // поменять!!
 
@@ -25,7 +27,7 @@ const storageImageFiles = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === "image/webp") {
+  if (["image/jpeg", "image/png", "image/webp"].includes(file.mimetype)) {
     cb(null, true);
   } else {
     cb(new ServerError("Invalid file format"), false);
@@ -42,8 +44,8 @@ const uploadImageMulter = multer({
   limits: limits,
 }).single("file");
 
-module.exports.uploadImage = (req, res, next) => {
-  uploadImageMulter(req, res, (err) => {
+module.exports.uploadImage = async (req, res, next) => {
+  uploadImageMulter(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       return next(
         new ServerError(
@@ -51,8 +53,27 @@ module.exports.uploadImage = (req, res, next) => {
         )
       );
     } else if (err) {
-      return next(new ServerError("файл має бути формату webp"));
+      return next(
+        new ServerError("файл має бути формату jpeg, jpg, png або webp")
+      );
     }
+
+    if (req.file?.mimetype !== "image/webp") {
+      try {
+        const inputFilePath = req.file.path;
+        const outputFileName = `${req.file.filename.split(".").shift()}.webp`;
+        const outputFilePath = path.join(req.file.destination, outputFileName);
+
+        await imageConversionToWebp(inputFilePath, outputFilePath);
+        await deleteFile(req.file.filename);
+
+        req.file.filename = outputFileName;
+      } catch (error) {
+        await deleteFile(req.file.filename);
+        return next(new ServerError("Помилка при конвертації файла в WebP"));
+      }
+    }
+
     return next();
   });
 };
