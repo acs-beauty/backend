@@ -10,13 +10,13 @@ module.exports.getImageBannerName = async (req, res, next) => {
 
     if (req.route.path === "/category") {
       const category = await findByPkCategory(req.body.categoryId);
-      req.currentImage = category?.imageBannerName;
+      req.currentImage = category.imageBannerName;
       return next();
     }
 
     if (req.route.path === "/subcategory") {
       const subcategory = await findByPkSubcategory(req.body.subcategoryId);
-      req.currentImage = subcategory?.imageBannerName;
+      req.currentImage = subcategory.imageBannerName;
       return next();
     }
   } catch (error) {

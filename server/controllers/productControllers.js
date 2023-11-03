@@ -48,10 +48,11 @@ module.exports.getProductId = async (req, res, next) => {
 };
 
 module.exports.searchProducts = async (req, res, next) => {
-  const searchWords = req.query.searchWords?.split(",") || [];
   const limit = req.query.limit || 8;
   const offset = req.query.offset || 0;
   try {
+    const searchWords = req.query.searchWords.split(",") || [];
+
     const [totalProducts, products] = await findAllSearchProduct(
       searchWords,
       limit,

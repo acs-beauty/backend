@@ -6,6 +6,7 @@ const deleteCategoryOrSub = require("../queries/deleteCategoryOrSub");
 const findByLinkKeyCategory = require("../queries/findByLinkKeyCategory");
 const { bodyHelper } = require("../utils/bodyHelperUpdateCategoryOrSub");
 const deleteFile = require("../utils/deleteFile");
+const BadRequestError = require("../errors/BadRequestError");
 const {
   SUCCESS,
   FAILURE,
@@ -47,7 +48,7 @@ module.exports.addCategory = async (req, res, next) => {
 
       res.status(200).send({ message: SUCCESS, category });
     } else {
-      res.status(400).send({ message: FAILURE });
+      return next(new BadRequestError(FAILURE));
     }
   } catch (error) {
     next(error);
@@ -76,7 +77,7 @@ module.exports.addSubcategory = async (req, res, next) => {
 
       res.status(200).send({ message: SUCCESS, subcategory });
     } else {
-      res.status(400).send({ message: FAILURE });
+      return next(new BadRequestError(FAILURE));
     }
   } catch (error) {
     next(error);
@@ -107,7 +108,7 @@ module.exports.updateCategory = async (req, res, next) => {
       };
       res.status(200).send(response);
     } else {
-      res.status(400).send({ message: FAILURE });
+      return next(new BadRequestError(FAILURE));
     }
   } catch (error) {
     next(error);
@@ -138,7 +139,7 @@ module.exports.updateSubcategory = async (req, res, next) => {
       };
       res.status(200).send(response);
     } else {
-      res.status(400).send({ message: FAILURE });
+      return next(new BadRequestError(FAILURE));
     }
   } catch (error) {
     next(error);
@@ -175,7 +176,7 @@ module.exports.deleteCategory = async (req, res, next) => {
       res.status(200).send({ message: SUCCESS });
     } else {
       await transaction.rollback();
-      res.status(400).send({ message: FAILURE });
+      return next(new BadRequestError(FAILURE));
     }
   } catch (error) {
     await transaction.rollback();
@@ -189,7 +190,7 @@ module.exports.deleteSubcategory = async (req, res, next) => {
     if (isDelete) {
       res.status(200).send({ message: SUCCESS });
     } else {
-      res.status(400).send({ message: FAILURE });
+      return next(new BadRequestError(FAILURE));
     }
   } catch (error) {
     next(error);
