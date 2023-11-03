@@ -58,7 +58,7 @@ module.exports.uploadImage = async (req, res, next) => {
       );
     }
 
-    if (req.file?.mimetype !== "image/webp") {
+    if (req.file && req.file.mimetype !== "image/webp") {
       try {
         const inputFilePath = req.file.path;
         const outputFileName = `${req.file.filename.split(".").shift()}.webp`;
