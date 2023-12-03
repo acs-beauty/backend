@@ -1,5 +1,6 @@
 "use strict";
-const { Sequelize, User, Role } = require("../db_schema/models");
+const Sequelize = require('sequelize')
+const { User, Role } = require("../models");
 const NotFound = require("../errors/UserNotFoundError");
 const { Op, literal, col } = Sequelize;
 

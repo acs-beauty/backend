@@ -1,16 +1,16 @@
-"use strict";
-const { ParameterName } = require("../db_schema/models");
+'use strict'
+const { ParameterName } = require('../models')
 
 const findAllParameterNames = async () => {
   try {
     const allParameterName = await ParameterName.findAll({
-      attributes: ["nameKey", "value"],
+      attributes: ['nameKey', 'value'],
       raw: true,
-    });
-    return allParameterName;
+    })
+    return allParameterName
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error)
   }
-};
+}
 
-module.exports = findAllParameterNames;
+module.exports = findAllParameterNames
