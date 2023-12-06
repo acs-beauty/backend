@@ -7,13 +7,16 @@ const { JWT_SECRET_ACCESS, JWT_SECRET_REFRESH } = process.env;
 
 module.exports.checkToken = async (req, res, next) => {
   try {
-    const [bearer, accessToken] = req.headers.authorization.split(" ");
+    // console.log("token =========================")
+    const accessToken = req.headers.authorization.split(" ")[1];
     if (!accessToken) {
       return next(new TokenError("need token"));
     }
     req.tokenData = jwt.verify(accessToken, JWT_SECRET_ACCESS);
     next();
   } catch (error) {
+    // console.log('token 111111111111111111111')
+
     next(new TokenError());
   }
 };

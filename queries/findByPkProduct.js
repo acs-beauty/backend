@@ -13,11 +13,11 @@ const {
 const { Op, literal, col } = Sequelize
 const { AVAILABLE, FEW, NOT_AVAILABLE, QUANTITY } = require('../constants')
 
-const findByPkProduct = async productId => {
+const findByPkProduct = async id => {
   try {
-    const product = await Product.findByPk(productId, {
+    const product = await Product.findByPk(id, {
       attributes: [
-        'productId',
+        'id',
         'titleName',
         'description',
         'composition',
@@ -46,7 +46,7 @@ const findByPkProduct = async productId => {
           model: Parameter,
           as: 'parameter',
           attributes: {
-            exclude: ['parameterId', 'productId'],
+            exclude: ['parameterId', 'id'],
           },
         },
         {

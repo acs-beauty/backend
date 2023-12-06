@@ -1,29 +1,16 @@
 'use strict'
-
-// const { DataTypes } = require('sequelize')
-// const sequelize = require('../../connection')
-// const { Role } = require('./Role.js')
-
 const { Model } = require('sequelize')
-
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate({ Role, Product }) {
-      User.hasMany(Role, {
-        as: 'roles',
-        foreignKey: 'id',
-        targetKey: 'userId',
-      })
-      User.belongsToMany(Product, {
-        through: 'UserFavorite',
-        foreignKey: 'id',
-        as: 'favorites',
-      })
+    static associate(models) {
+      // User.belongsToMany(models.Product, {
+      //   through: 'UserFavorite',
+      //   foreignKey: 'id',
+      //   as: 'favorites',
+      // })
     }
   }
-
   User.init(
-    'User',
     {
       id: {
         type: DataTypes.INTEGER,
@@ -33,11 +20,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       firstName: {
         type: DataTypes.STRING(64),
-        allowNull: false,
+        defaultValue: '',
+        // allowNull: false,
       },
       lastName: {
         type: DataTypes.STRING(64),
-        allowNull: false,
+        defaultValue: '',
+        // allowNull: false,
       },
       email: {
         type: DataTypes.STRING(128),
@@ -52,30 +41,35 @@ module.exports = (sequelize, DataTypes) => {
       },
       password: {
         type: DataTypes.STRING(128),
-        allowNull: false,
+        // allowNull: false,
+        defaultValue: '',
       },
       phone: {
         type: DataTypes.STRING(13),
-        allowNull: false,
-        unique: true,
-        validate: {
-          len: {
-            args: [12, 12],
-            msg: 'Phone number must be 12 characters long',
-          },
-        },
+        // allowNull: false,
+        defaultValue: '',
+        // unique: true,
+        // validate: {
+        //   len: {
+        //     args: [12, 13],
+        //     msg: 'Phone number must be 13 characters long',
+        //   },
+        // },
       },
-      refreshToken: {
-        type: DataTypes.TEXT,
-        allowNull: true,
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
+      // refreshToken: {
+      //   type: DataTypes.TEXT,
+      //   allowNull: true,
+      // },
     },
     {
       sequelize,
-      freezeTableName: true,
+      modelName: 'User',
+      tableName: 'User',
       timestamps: true,
-      createdAt: 'createdDate',
-      updatedAt: 'updatedDate',
       indexes: [
         {
           unique: true,
@@ -88,93 +82,5 @@ module.exports = (sequelize, DataTypes) => {
       ],
     }
   )
+  return User
 }
-
-// User.hasMany(Role)
-// Role.belongsTo(User)
-
-// module.exports = { User }
-
-// module.exports = (sequelize, DataTypes) => {
-//   class User extends Model {
-//     static associate(models) {
-//       User.hasMany(models.Role, {
-//         as: 'roles',
-//         foreignKey: 'userId',
-//         targetKey: 'userId',
-//       })
-//       User.belongsToMany(models.Product, {
-//         through: 'UserFavorite',
-//         foreignKey: 'userId',
-//         as: 'favorites',
-//       })
-//     }
-//   }
-
-//   User.init(
-//     {
-//       userId: {
-//         type: DataTypes.INTEGER,
-//         allowNull: false,
-//         autoIncrement: true,
-//         primaryKey: true,
-//       },
-//       firstName: {
-//         type: DataTypes.STRING(64),
-//         allowNull: false,
-//       },
-//       lastName: {
-//         type: DataTypes.STRING(64),
-//         allowNull: false,
-//       },
-//       email: {
-//         type: DataTypes.STRING(128),
-//         allowNull: false,
-//         unique: true,
-//         validate: {
-//           isEmail: {
-//             args: true,
-//             msg: 'email is in an invalid format',
-//           },
-//         },
-//       },
-//       password: {
-//         type: DataTypes.STRING(128),
-//         allowNull: false,
-//       },
-//       phone: {
-//         type: DataTypes.STRING(12),
-//         allowNull: false,
-//         unique: true,
-//         validate: {
-//           len: {
-//             args: [12, 12],
-//             msg: 'Phone number must be 12 characters long',
-//           },
-//         },
-//       },
-//       refreshToken: {
-//         type: DataTypes.TEXT,
-//         allowNull: true,
-//       },
-//       createdAt: {
-//         type: DataTypes.DATE,
-//         allowNull: false,
-//         defaultValue: DataTypes.NOW,
-//       },
-//       updatedAt: {
-//         type: DataTypes.DATE,
-//         allowNull: false,
-//         defaultValue: DataTypes.NOW,
-//       },
-//     },
-//     {
-//       sequelize,
-//       modelName: 'User',
-//       tableName: 'Users',
-//       timestamps: false,
-//     }
-//   )
-
-//   return User
-// }

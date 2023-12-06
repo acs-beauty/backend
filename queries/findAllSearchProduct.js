@@ -30,7 +30,7 @@ const findAllSearchProduct = async (searchWords, limit, offset) => {
       limit,
       offset,
       attributes: [
-        'productId',
+        'id',
         'titleName',
         'mainImageName',
         'price',

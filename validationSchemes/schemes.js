@@ -25,7 +25,7 @@ module.exports.queryStringSchema = yup.object().shape({
 });
 
 module.exports.productIdSchema = yup.object().shape({
-  productId: yup.number().required().positive().integer(),
+  id: yup.number().required().positive().integer(),
 });
 
 module.exports.searchProductsSchema = yup.object().shape({

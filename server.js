@@ -1,8 +1,10 @@
 'use strict'
 require('dotenv').config()
-// const { Sequelize, DataTypes } = require('sequelize')
-const sequelize = require('./connection')
-const { User } = require('./models/User.js')
+const { Sequelize, DataTypes } = require('sequelize')
+// const sequelize = require('./connection.js')
+const { sequelize } = require('./models')
+// const User = require('./models/User.js')
+// const { Role } = require('./models/Role.js')
 
 // User.create({
 //   id: 1,
@@ -14,7 +16,8 @@ const { User } = require('./models/User.js')
 //   refreshToken: 'wef ji23582389jhiofwh7823423',
 // })
 
-console.log(JSON.stringify(User, null, 4))
+// console.log(JSON.stringify(User, null, 4))
+// console.log(User(Sequelize, DataTypes))
 // User.sync({ alter: true })
 
 const app = require('./app.js')
@@ -25,6 +28,7 @@ const start = async () => {
   try {
     await sequelize.authenticate()
     await sequelize.sync({ alter: true })
+    // await User.sync()
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}!`)
     })

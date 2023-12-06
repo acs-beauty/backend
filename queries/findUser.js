@@ -1,15 +1,15 @@
 "use strict";
 const Sequelize = require('sequelize')
-const { User, Role } = require("../models");
+const { User } = require("../models");
 const NotFound = require("../errors/UserNotFoundError");
-const { Op, literal, col } = Sequelize;
+// const { Op, literal, col } = Sequelize;
 
 const findUser = async (where) => {
   try {
     const user = await User.findOne({
       where: { ...where },
       attributes: [
-        "userId",
+        "id",
         "firstName",
         "lastName",
         "email",
@@ -17,11 +17,11 @@ const findUser = async (where) => {
         "password",
         "refreshToken",
       ],
-      include: {
-        model: Role,
-        as: "roles",
-        attributes: ["role"],
-      },
+      // include: {
+      //   model: Role,
+      //   as: "roles",
+      //   attributes: ["role"],
+      // },
     });
 
     return user.get({ plain: true });

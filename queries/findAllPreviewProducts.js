@@ -48,7 +48,7 @@ const findAllPreviewProducts = async ({
         ['quantity', 'DESC'],
       ],
       attributes: [
-        'productId',
+        'id',
         'titleName',
         'mainImageName',
         'price',

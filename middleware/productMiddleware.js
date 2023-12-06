@@ -26,7 +26,7 @@ module.exports.previewProducts = (req, res, next) => {
 
   if (req.query.productIds) {
     Object.assign(whereColumn.whereProducts, {
-      productId: {
+      id: {
         [Op.in]: req.query.productIds.split(','),
       },
     })
