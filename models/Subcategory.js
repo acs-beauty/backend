@@ -1,16 +1,16 @@
 'use strict'
 const { validateLinkString } = require('../regex')
 const { Model } = require('sequelize')
-const { IMAGE_BANNER_NAME } = require('../constants')
+// const { IMAGE_BANNER_NAME } = require('../constants')
 
 module.exports = (sequelize, DataTypes) => {
   class Subcategory extends Model {
     static associate(models) {
-      // Subcategory.belongsTo(models.Category, {
-      //   as: "category",
-      //   foreignKey: "id",
-      //   targetKey: "subcategoryId",
-      // });
+      Subcategory.belongsTo(models.Category, {
+        // as: "category",
+        // foreignKey: "id",
+        // targetKey: "subcategoryId",
+      });
       Subcategory.hasMany(models.Product, {
         // as: 'products',
         // foreignKey: 'productId',

@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]
     if (!token) {
-    //   console.log('11111111111111')
+      //   console.log('11111111111111')
       return next(ApiError.notAuthorized('Пользователь не авторизован'))
     }
     const decoded = jwt.verify(token, process.env.SECRET_KEY)
@@ -21,7 +21,10 @@ module.exports = async (req, res, next) => {
     // if (!(decoded.id === user?.id || decoded.isAdmin)) {
     //   return next(ApiError.forbidden('У вас недостаточно прав или вы пытаетесь получить защищённую информацию'))
     // }
-    //   console.log('44444444444444')
+    if (!decoded.isAdmin) {
+      return next(ApiError.forbidden('У вас недостаточно прав или вы пытаетесь получить защищённую информацию'))
+    }
+    console.log('decoded.isAdmin = ', decoded.isAdmin)
     //   console.log('decoded.id = ', decoded.id)
     //   console.log('user.id = ', user.id)
     req.id = decoded.id

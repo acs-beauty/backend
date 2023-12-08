@@ -64,6 +64,23 @@ app.use('/public', express.static('../public'))
  *                      type: string
  *                  password:
  *                      type: string
+ *          PostedCategory:
+ *              type: object
+ *              properties:
+ *                  name:
+ *                      type: string
+ *                  slug:
+ *                      type: string
+ *          ReturnedCategory:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  name:
+ *                      type: string
+ *                  slug:
+ *                      type: string
+ * 
  *          token:
  *              type: object
  *              properties:
@@ -126,6 +143,49 @@ app.use('/public', express.static('../public'))
  *                      schema:
  *                          items:
  *                              $ref: '#components/schema/token'
+ */
+
+/**
+ * @swagger
+ * /api/category/{id}:
+ *  get:
+ *      summary: get category
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ * 
+ *      responses: 
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedCategory'
+ */
+
+/**
+ * @swagger
+ * /api/category:
+ *  post:
+ *      summary: add category
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedCategory'
+ *      responses: 
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedCategory'
  */
 
 app.use('/api', router)
