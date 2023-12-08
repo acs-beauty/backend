@@ -64,6 +64,11 @@ app.use('/public', express.static('../public'))
  *                      type: string
  *                  password:
  *                      type: string
+ *          token:
+ *              type: object
+ *              properties:
+ *                  token:
+ *                      type: string
  */
 
 /**
@@ -99,7 +104,28 @@ app.use('/public', express.static('../public'))
  *                  application/json:
  *                      schema:
  *                          items:
- *                              $ref: '#components/schema/User'
+ *                              $ref: '#components/schema/token'
+ */
+
+/**
+ * @swagger
+ * /api/user/login:
+ *  post:
+ *      summary: login user
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/UserForRegistration'
+ *      responses: 
+ *          200:
+ *              description: logined successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/token'
  */
 
 app.use('/api', router)

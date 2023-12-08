@@ -75,10 +75,11 @@ module.exports = (sequelize, DataTypes) => {
           unique: true,
           fields: ['id'],
         },
-        {
-          unique: true,
-          fields: ['email'],
-        },
+        // {
+        //   unique: true,
+        //   using: 'hash',
+        //   fields: ['email'],
+        // },
       ],
     }
   )
