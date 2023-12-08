@@ -69,8 +69,7 @@ app.use('/public', express.static('../public'))
  *              properties:
  *                  name:
  *                      type: string
- *                  slug:
- *                      type: string
+ * 
  *          ReturnedCategory:
  *              type: object
  *              properties:
@@ -86,6 +85,14 @@ app.use('/public', express.static('../public'))
  *              properties:
  *                  token:
  *                      type: string
+ * securitySchemes:
+ *      bearerAuth:            
+ *        type: http
+ *        scheme: bearer
+ *        bearerFormat: JWT
+ * 
+ * security:
+ * - bearerAuth: []
  */
 
 /**
@@ -181,6 +188,27 @@ app.use('/public', express.static('../public'))
  *      responses: 
  *          200:
  *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedCategory'
+ */
+
+/**
+ * @swagger
+ * /api/category/{id}:
+ *  delete:
+ *      summary: delete category
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *      responses: 
+ *          204:
+ *              description: deleted successfully
  *              content:
  *                  application/json:
  *                      schema:

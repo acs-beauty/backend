@@ -4,24 +4,29 @@ const { Category } = require('../models')
 const findUser = require('../queries/findUser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const slugify = require('slugify')
 
 const generateJWT = (id, email, isAdmin) => jwt.sign({ id, email, isAdmin }, process.env.SECRET_KEY, { expiresIn: '24h' })
 
 class CategoryController {
   async post(req, res, next) {
     try {
-      const { name, slug } = req.body
+      const { name } = req.body
       if (!name) {
         return next(ApiError.badRequest('Не передано поле name'))
       }
-      if (!slug) {
-        return next(ApiError.badRequest('Не передано поле slug'))
-      }
+      // if (!slug) {
+      //   return next(ApiError.badRequest('Не передано поле slug'))
+      // }
 
-      const category = await Category.create({ name, slug })
+      const category = await Category.create({ name, slug: slugify(name, { lower: true }) })
       return res.json(category)
     } catch {
-      return next(ApiError.badRequest('непредвиденная ошибка'))
+      return next(
+        ApiError.badRequest(
+          'Непредвиденная ошибка, возможно вы пытаетесь передать категорию с полем slug, которое уже есть в базе данных'
+        )
+      )
     }
   }
 
@@ -48,13 +53,20 @@ class CategoryController {
         return next(ApiError.badRequest('Не передан параметр id'))
       }
 
-      await Category.destroy({
-        where: {
-          id,
-        },
-      })
-      
-      return res.json("Категория была успешно удалена")
+      const category = await Category.findByPk(id)
+      if (!category) {
+        return next(ApiError.notFound(`категория с id ${id} не найдена`))
+      }
+      await category.destroy()
+
+      // await Category.destroy({
+      //   where: {
+      //     id,
+      //   },
+      // })
+
+      return res.status(204).json()
+      // return res.json('Категория была успешно удалена')
     } catch {
       return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
     }
