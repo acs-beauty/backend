@@ -9,13 +9,16 @@ const authRouter = require("./routes/authRouter");
 router.use("/auth", authRouter);
 
 const productRouter = require("./routes/productRouter");
-router.use("/products", productRouter);
+router.use("/product", productRouter);
 
 const categoryRouter = require("./routes/categoryRouter");
 router.use("/category", categoryRouter);
 
 const subcategoryRouter = require('./routes/subcategoryRouter')
 router.use('/subcategory', subcategoryRouter)
+
+const brandRouter = require('./routes/brandRouter')
+router.use('/brand', brandRouter)
 
 const adminRouter = require("./routes/adminRouter");
 router.use(

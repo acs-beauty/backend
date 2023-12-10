@@ -5,15 +5,15 @@ module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     static associate(models) {
       Product.belongsTo(models.Subcategory, {
-        as: 'subcategory',
+        // as: 'subcategory',
         // foreignKey: 'subcategoryId',
         // targetKey: 'subcategoryId',
       })
-      // Product.belongsTo(models.Brand, {
-      //   as: 'brand',
-      //   foreignKey: 'brandId',
-      //   targetKey: 'id',
-      // })
+      Product.belongsTo(models.Brand, {
+        // as: 'brand',
+        // foreignKey: 'brandId',
+        // targetKey: 'id',
+      })
       // Product.hasOne(models.Parameter, {
       //   as: 'parameter',
       //   foreignKey: 'parameterId',
@@ -65,7 +65,6 @@ module.exports = (sequelize, DataTypes) => {
       // },
       price: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
         validate: {
           min: 0,
         },
@@ -73,11 +72,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       discount: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: true,
+        // allowNull: true,
+        defaultValue: 0,
         validate: {
           min: 0,
         },
-        defaultValue: null,
       },
       // subcategoryId: {
       //   allowNull: false,

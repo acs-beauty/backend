@@ -1,21 +1,18 @@
 const ApiError = require('../errors/ApiError')
-const { Subcategory } = require('../models')
+const { Brand } = require('../models')
 
-class subcategoryController {
+class brandController {
   async post(req, res, next) {
-    const { name, CategoryId } = req.body
+    const { name } = req.body
     try {
       if (!name) {
         return next(ApiError.badRequest('Не передано поле name'))
       }
-      if (!CategoryId) {
-        return next(ApiError.badRequest('Не передано поле CategoryId'))
-      }
 
-      const subcategory = await Subcategory.create({ name, CategoryId })
-      return res.json(subcategory)
+      const brand = await Brand.create({ name })
+      return res.json(brand)
     } catch {
-      return next(ApiError.badRequest(`Непредвиденная ошибка, возможно не существует родительской категории с id ${CategoryId}`))
+      return next(ApiError.badRequest('Непредвиденная ошибка'))
     }
   }
 
@@ -27,8 +24,8 @@ class subcategoryController {
         return next(ApiError.badRequest('Не передан параметр id'))
       }
 
-      const subcategory = await Subcategory.findByPk(id)
-      return res.json(subcategory)
+      const brand = await Brand.findByPk(id)
+      return res.json(brand)
     } catch {
       return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
     }
@@ -42,11 +39,11 @@ class subcategoryController {
         return next(ApiError.badRequest('Не передан параметр id'))
       }
 
-      const subcategory = await Subcategory.findByPk(id)
-      if (!subcategory) {
-        return next(ApiError.notFound(`подкатегория с id ${id} не найдена`))
+      const brand = await Brand.findByPk(id)
+      if (!brand) {
+        return next(ApiError.notFound(`брэнд с id ${id} не найден`))
       }
-      await subcategory.destroy()
+      await brand.destroy()
 
       // await Category.destroy({
       //   where: {
@@ -62,4 +59,4 @@ class subcategoryController {
   }
 }
 
-module.exports = new subcategoryController()
+module.exports = new brandController()
