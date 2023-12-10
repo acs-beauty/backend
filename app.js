@@ -76,6 +76,30 @@ app.use('/public', express.static('../public'))
  *                      type: string
  *                  CategoryId:
  *                      type: string
+ *          PostedBrand:
+ *              type: object
+ *              properties:
+ *                  name:
+ *                      type: string
+ *          PostedProduct:
+ *              type: object
+ *              properties:
+ *                  name:
+ *                      type: string
+ *                  description:
+ *                      type: string
+ *                  price:
+ *                      type: number
+ *                  discount:
+ *                      type: integer
+ *                  novelty:
+ *                      type: boolean
+ *                  hit:
+ *                      type: boolean
+ *                  SubcategoryId:
+ *                      type: integer
+ *                  BrandId:
+ *                      type: integer
  *
  *          ReturnedCategory:
  *              type: object
@@ -95,6 +119,34 @@ app.use('/public', express.static('../public'))
  *                      type: string
  *                  CategoryId:
  *                      type: string
+ *          ReturnedBrand:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  name:
+ *                      type: string
+ *          ReturnedProduct:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  name:
+ *                      type: string
+ *                  description:
+ *                      type: string
+ *                  price:
+ *                      type: integer
+ *                  discount:
+ *                      type: integer
+ *                  novelty:
+ *                      type: boolean
+ *                  hit:
+ *                      type: boolean
+ *                  SubcategoryId:
+ *                      type: integer
+ *                  BrandId:
+ *                      type: integer
  *
  *          token:
  *              type: object
@@ -275,6 +327,124 @@ app.use('/public', express.static('../public'))
  * /api/subcategory/{id}:
  *  delete:
  *      summary: delete subcategory
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *      responses:
+ *          204:
+ *              description: deleted successfully
+ */
+
+/**
+ * @swagger
+ * /api/product/{id}:
+ *  get:
+ *      summary: get product
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedProduct'
+ */
+
+/**
+ * @swagger
+ * /api/product:
+ *  post:
+ *      summary: add product
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedProduct'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedProduct'
+ */
+
+/**
+ * @swagger
+ * /api/product/{id}:
+ *  delete:
+ *      summary: delete product
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *      responses:
+ *          204:
+ *              description: deleted successfully
+ */
+
+/**
+ * @swagger
+ * /api/brand/{id}:
+ *  get:
+ *      summary: get brand
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedBrand'
+ */
+
+/**
+ * @swagger
+ * /api/brand:
+ *  post:
+ *      summary: add brand
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedBrand'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedBrand'
+ */
+
+/**
+ * @swagger
+ * /api/brand/{id}:
+ *  delete:
+ *      summary: delete brand
  *      parameters:
  *        - in: path
  *          name: id

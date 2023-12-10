@@ -90,11 +90,11 @@ module.exports = (sequelize, DataTypes) => {
       //   allowNull: false,
       //   type: DataTypes.INTEGER,
       // },
-      brand: {
-        allowNull: false,
-        type: DataTypes.STRING(60),
-        defaultValue: '',
-      },
+      // brand: {
+      //   allowNull: false,
+      //   type: DataTypes.STRING(60),
+      //   defaultValue: '',
+      // },
       // quantity: {
       //   type: DataTypes.INTEGER,
       //   allowNull: false,

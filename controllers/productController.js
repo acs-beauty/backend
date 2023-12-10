@@ -9,7 +9,7 @@ const { Product } = require('../models')
 
 class productController {
   async post(req, res, next) {
-    const { name, description, price, discount, brand, novelty, hit, SubcategoryId } = req.body
+    const { name, description, price, discount, BrandId, novelty, hit, SubcategoryId } = req.body
     try {
       if (!name) {
         return next(ApiError.badRequest('Не передано поле name'))
@@ -18,7 +18,7 @@ class productController {
         return next(ApiError.badRequest('Не передано поле SubcategoryId'))
       }
 
-      const product = await Product.create({ name, description, price, discount, brand, novelty, hit, SubcategoryId })
+      const product = await Product.create({ name, description, price, discount, BrandId, novelty, hit, SubcategoryId })
       return res.json(product)
     } catch {
       return next(
