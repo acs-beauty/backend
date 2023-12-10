@@ -14,6 +14,9 @@ router.use("/products", productRouter);
 const categoryRouter = require("./routes/categoryRouter");
 router.use("/category", categoryRouter);
 
+const subcategoryRouter = require('./routes/subcategoryRouter')
+router.use('/subcategory', subcategoryRouter)
+
 const adminRouter = require("./routes/adminRouter");
 router.use(
   "/admin",

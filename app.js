@@ -69,7 +69,14 @@ app.use('/public', express.static('../public'))
  *              properties:
  *                  name:
  *                      type: string
- * 
+ *          PostedSubcategory:
+ *              type: object
+ *              properties:
+ *                  name:
+ *                      type: string
+ *                  CategoryId:
+ *                      type: string
+ *
  *          ReturnedCategory:
  *              type: object
  *              properties:
@@ -79,18 +86,27 @@ app.use('/public', express.static('../public'))
  *                      type: string
  *                  slug:
  *                      type: string
- * 
+ *          ReturnedSubcategory:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  name:
+ *                      type: string
+ *                  CategoryId:
+ *                      type: string
+ *
  *          token:
  *              type: object
  *              properties:
  *                  token:
  *                      type: string
  * securitySchemes:
- *      bearerAuth:            
+ *      bearerAuth:
  *        type: http
  *        scheme: bearer
  *        bearerFormat: JWT
- * 
+ *
  * security:
  * - bearerAuth: []
  */
@@ -121,7 +137,7 @@ app.use('/public', express.static('../public'))
  *              application/json:
  *                  schema:
  *                      $ref: '#components/schema/UserForRegistration'
- *      responses: 
+ *      responses:
  *          200:
  *              description: registered successfully
  *              content:
@@ -142,7 +158,7 @@ app.use('/public', express.static('../public'))
  *              application/json:
  *                  schema:
  *                      $ref: '#components/schema/UserForRegistration'
- *      responses: 
+ *      responses:
  *          200:
  *              description: logined successfully
  *              content:
@@ -163,8 +179,8 @@ app.use('/public', express.static('../public'))
  *          schema:
  *              type: integer
  *          required: true
- * 
- *      responses: 
+ *
+ *      responses:
  *          200:
  *              description: get successfully
  *              content:
@@ -185,7 +201,7 @@ app.use('/public', express.static('../public'))
  *              application/json:
  *                  schema:
  *                      $ref: '#components/schema/PostedCategory'
- *      responses: 
+ *      responses:
  *          200:
  *              description: added successfully
  *              content:
@@ -206,14 +222,68 @@ app.use('/public', express.static('../public'))
  *          schema:
  *              type: integer
  *          required: true
- *      responses: 
+ *      responses:
  *          204:
  *              description: deleted successfully
+ */
+
+/**
+ * @swagger
+ * /api/subcategory/{id}:
+ *  get:
+ *      summary: get subcategory
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
  *              content:
  *                  application/json:
  *                      schema:
  *                          items:
- *                              $ref: '#components/schema/ReturnedCategory'
+ *                              $ref: '#components/schema/ReturnedSubcategory'
+ */
+
+/**
+ * @swagger
+ * /api/subcategory:
+ *  post:
+ *      summary: add subcategory
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedSubcategory'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedSubcategory'
+ */
+
+/**
+ * @swagger
+ * /api/subcategory/{id}:
+ *  delete:
+ *      summary: delete subcategory
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *      responses:
+ *          204:
+ *              description: deleted successfully
  */
 
 app.use('/api', router)
