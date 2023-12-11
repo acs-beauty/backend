@@ -1,4 +1,3 @@
-"use strict";
 const ApplicationError = require("./ApplicationError");
 
 class RightsError extends ApplicationError {

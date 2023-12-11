@@ -1,27 +1,29 @@
-"use strict";
+'use strict'
+const Sequelize = require('sequelize')
+
 const {
-  Sequelize,
+  // Sequelize,
   Product,
   Brand,
   Category,
   Subcategory,
   Parameter,
   ProductImage,
-} = require("../db_schema/models");
-const { Op, literal, col } = Sequelize;
-const { AVAILABLE, FEW, NOT_AVAILABLE, QUANTITY } = require("../constants");
+} = require('../models')
+const { Op, literal, col } = Sequelize
+const { AVAILABLE, FEW, NOT_AVAILABLE, QUANTITY } = require('../constants')
 
-const findByPkProduct = async (productId) => {
+const findByPkProduct = async id => {
   try {
-    const product = await Product.findByPk(productId, {
+    const product = await Product.findByPk(id, {
       attributes: [
-        "productId",
-        "titleName",
-        "description",
-        "composition",
-        "mainImageName",
-        "price",
-        "discountPrice",
+        'id',
+        'titleName',
+        'description',
+        'composition',
+        'mainImageName',
+        'price',
+        'discountPrice',
         [
           literal(`CASE
             WHEN quantity = 0 THEN '${NOT_AVAILABLE}'
@@ -29,39 +31,39 @@ const findByPkProduct = async (productId) => {
             WHEN quantity > ${QUANTITY} THEN '${AVAILABLE}'
             END
           `),
-          "quantityStatus",
+          'quantityStatus',
         ],
-        "novelty",
-        "hit",
+        'novelty',
+        'hit',
       ],
       include: [
         {
           model: Brand,
-          as: "brand",
-          attributes: ["name", "country", "linkKey"],
+          as: 'brand',
+          attributes: ['name', 'country', 'linkKey'],
         },
         {
           model: Parameter,
-          as: "parameter",
+          as: 'parameter',
           attributes: {
-            exclude: ["parameterId", "productId"],
+            exclude: ['parameterId', 'id'],
           },
         },
         {
           model: ProductImage,
-          as: "images",
-          attributes: ["imageName"],
+          as: 'images',
+          attributes: ['imageName'],
         },
       ],
-    });
+    })
     if (product) {
-      return product.get({ plain: true });
+      return product.get({ plain: true })
     } else {
-      throw "This product does not exist";
+      throw 'This product does not exist'
     }
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error)
   }
-};
+}
 
-module.exports = findByPkProduct;
+module.exports = findByPkProduct

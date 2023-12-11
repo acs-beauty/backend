@@ -1,5 +1,5 @@
-"use strict";
-const { sequelize } = require("../db_schema/models");
+'use strict'
+const { sequelize } = require('../models')
 
 const query = `
   SELECT
@@ -26,21 +26,21 @@ const query = `
     "Subcategory"."linkKey" = :linkKey
   GROUP BY
     "Subcategory"."subcategoryId", "Category"."categoryId"
-`;
+`
 
-const findByLinkKeySubcategory = async (linkKey) => {
+const findByLinkKeySubcategory = async linkKey => {
   try {
     const [subcategory] = await sequelize.query(query, {
       type: sequelize.QueryTypes.SELECT,
       replacements: {
         linkKey,
       },
-    });
+    })
 
-    return subcategory;
+    return subcategory
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error)
   }
-};
+}
 
-module.exports = findByLinkKeySubcategory;
+module.exports = findByLinkKeySubcategory

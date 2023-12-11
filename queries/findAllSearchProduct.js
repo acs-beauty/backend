@@ -1,24 +1,26 @@
-"use strict";
+'use strict'
+const Sequelize = require('sequelize')
+
 const {
-  Sequelize,
+  // Sequelize,
   Product,
   Category,
   Subcategory,
-} = require("../db_schema/models");
-const { Op, literal, col } = Sequelize;
-const { AVAILABLE, FEW, NOT_AVAILABLE, QUANTITY } = require("../constants");
+} = require('../models')
+const { Op, literal, col } = Sequelize
+const { AVAILABLE, FEW, NOT_AVAILABLE, QUANTITY } = require('../constants')
 
 const findAllSearchProduct = async (searchWords, limit, offset) => {
   try {
     const { count, rows } = await Product.findAndCountAll({
       where: {
         [Op.or]: [
-          ...searchWords.map((word) => ({
+          ...searchWords.map(word => ({
             titleName: {
               [Op.iLike]: `%${word}%`,
             },
           })),
-          ...searchWords.map((word) => ({
+          ...searchWords.map(word => ({
             description: {
               [Op.iLike]: `%${word}%`,
             },
@@ -28,11 +30,11 @@ const findAllSearchProduct = async (searchWords, limit, offset) => {
       limit,
       offset,
       attributes: [
-        "productId",
-        "titleName",
-        "mainImageName",
-        "price",
-        "discountPrice",
+        'id',
+        'titleName',
+        'mainImageName',
+        'price',
+        'discountPrice',
         [
           literal(`CASE
             WHEN quantity = 0 THEN '${NOT_AVAILABLE}'
@@ -40,33 +42,33 @@ const findAllSearchProduct = async (searchWords, limit, offset) => {
             WHEN quantity > ${QUANTITY} THEN '${AVAILABLE}'
             END
           `),
-          "quantityStatus",
+          'quantityStatus',
         ],
-        "novelty",
-        "hit",
-        [col("subcategory.linkKey"), "subcategoryLinkKey"],
-        [col("subcategory.category.linkKey"), "categoryLinkKey"],
+        'novelty',
+        'hit',
+        [col('subcategory.linkKey'), 'subcategoryLinkKey'],
+        [col('subcategory.category.linkKey'), 'categoryLinkKey'],
       ],
       include: [
         {
           model: Subcategory,
-          as: "subcategory",
+          as: 'subcategory',
           attributes: [],
           include: [
             {
               model: Category,
-              as: "category",
+              as: 'category',
               attributes: [],
             },
           ],
         },
       ],
-    });
+    })
 
-    return [count, rows];
+    return [count, rows]
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error)
   }
-};
+}
 
-module.exports = findAllSearchProduct;
+module.exports = findAllSearchProduct

@@ -1,17 +1,17 @@
-"use strict";
-const { Product } = require("../db_schema/models");
+'use strict'
+const { Product } = require('../models')
 
 const findAllProductIds = async () => {
   try {
     const allProductIds = await Product.findAll({
-      attributes: ["productId"],
+      attributes: ['id'],
       raw: true,
-    });
+    })
 
-    return allProductIds.map((product) => product.productId);
+    return allProductIds.map(product => product.id)
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error)
   }
-};
+}
 
-module.exports = findAllProductIds;
+module.exports = findAllProductIds

@@ -1,11 +1,11 @@
-"use strict";
-const { Category, Subcategory, Sequelize } = require("../db_schema/models");
-const { UNKNOWN } = require("../constants");
+'use strict'
+const { Category, Subcategory, Sequelize } = require('../models')
+const { UNKNOWN } = require('../constants')
 
 const updateCategoryOrSub = async (id, body, isCategory, txn) => {
-  const model = isCategory ? Category : Subcategory;
-  const where = isCategory ? { categoryId: id } : { subcategoryId: id };
-  const transaction = txn ? { transaction: txn } : {};
+  const model = isCategory ? Category : Subcategory
+  const where = isCategory ? { categoryId: id } : { subcategoryId: id }
+  const transaction = txn ? { transaction: txn } : {}
 
   try {
     const [updateCategory] = await model.update(
@@ -21,12 +21,12 @@ const updateCategoryOrSub = async (id, body, isCategory, txn) => {
         },
         ...transaction,
       }
-    );
+    )
 
-    return updateCategory;
+    return updateCategory
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error)
   }
-};
+}
 
-module.exports = updateCategoryOrSub;
+module.exports = updateCategoryOrSub

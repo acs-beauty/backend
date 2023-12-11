@@ -1,13 +1,15 @@
-"use strict";
-const { Sequelize, Category, Subcategory } = require("../db_schema/models");
-const { literal } = Sequelize;
+'use strict'
+const Sequelize = require('sequelize')
+
+const { Category, Subcategory } = require('../models')
+const { literal } = Sequelize
 
 const findByLinkKeyCategory = async (linkKey, isAdmin) => {
   const addAttributes = !isAdmin
     ? [
-        "name",
-        "linkKey",
-        "imageBannerName",
+        'name',
+        'linkKey',
+        'imageBannerName',
         [
           literal(`(
             SELECT MIN(LEAST("Products"."price", "Products"."discountPrice"))
@@ -15,7 +17,7 @@ const findByLinkKeyCategory = async (linkKey, isAdmin) => {
             WHERE "Products"."subcategoryId" IN (
             SELECT "subcategoryId" FROM "Subcategories" WHERE "categoryId" = "Category"."categoryId")
           )`),
-          "minPrice",
+          'minPrice',
         ],
         [
           literal(`(
@@ -24,37 +26,37 @@ const findByLinkKeyCategory = async (linkKey, isAdmin) => {
             WHERE "Products"."subcategoryId" IN (
             SELECT "subcategoryId" FROM "Subcategories" WHERE "categoryId" = "Category"."categoryId")
           )`),
-          "maxPrice",
+          'maxPrice',
         ],
       ]
-    : [];
+    : []
   const addInclude = !isAdmin
     ? [
         {
           model: Subcategory,
-          as: "subcategories",
-          attributes: ["subcategoryId", "name", "linkKey"],
+          as: 'subcategories',
+          attributes: ['subcategoryId', 'name', 'linkKey'],
         },
       ]
-    : [];
+    : []
 
   try {
     const category = await Category.findOne({
       where: {
         linkKey,
       },
-      attributes: ["categoryId", ...addAttributes],
+      attributes: ['categoryId', ...addAttributes],
       include: [...addInclude],
-    });
+    })
 
     if (category) {
-      return category.get({ plain: true });
+      return category.get({ plain: true })
     }
 
-    return category;
+    return category
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error)
   }
-};
+}
 
-module.exports = findByLinkKeyCategory;
+module.exports = findByLinkKeyCategory

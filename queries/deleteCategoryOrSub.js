@@ -1,10 +1,10 @@
-"use strict";
-const { Category, Subcategory, Sequelize } = require("../db_schema/models");
-const { UNKNOWN } = require("../constants");
+'use strict'
+const { Category, Subcategory, Sequelize } = require('../models')
+const { UNKNOWN } = require('../constants')
 
 const deleteCategoryOrSub = async (id, isCategory, transaction) => {
-  const model = isCategory ? Category : Subcategory;
-  const where = isCategory ? { categoryId: id } : { subcategoryId: id };
+  const model = isCategory ? Category : Subcategory
+  const where = isCategory ? { categoryId: id } : { subcategoryId: id }
 
   try {
     const isDelete = await model.destroy({
@@ -15,12 +15,12 @@ const deleteCategoryOrSub = async (id, isCategory, transaction) => {
         },
       },
       transaction,
-    });
+    })
 
-    return !!isDelete;
+    return !!isDelete
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error)
   }
-};
+}
 
-module.exports = deleteCategoryOrSub;
+module.exports = deleteCategoryOrSub
