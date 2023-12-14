@@ -4,6 +4,7 @@ const checkToken = require("../middleware/checkToken");
 // const controllers = require("../controllers/userController");
 const userController = require("../controllers/userController");
 const authMiddleware = require("../middleware/authMiddleware");
+const adminAuthMiddleware = require("../middleware/adminAuthMiddleware");
 
 const userRouter = Router();
 
@@ -17,7 +18,7 @@ const userRouter = Router();
  *          200:
  *              description: to register
  */
-userRouter.post('/registration', userController.registration)
+userRouter.post('/registration', adminAuthMiddleware, userController.registration)
 userRouter.post('/login', userController.login)
 userRouter.get("/me", authMiddleware, userController.me);
 

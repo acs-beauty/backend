@@ -2,6 +2,7 @@
 const express = require('express')
 const cors = require('cors')
 const router = require('./router.js')
+const cookieParser = require('cookie-parser')
 // const handlerError = require("./errors/handlerError");
 const errorHandlingMiddleware = require('./middleware/errorHandlingMiddleware')
 
@@ -29,6 +30,7 @@ const swaggerSpec = swaggerJSDoc(options)
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
 app.use('/public', express.static('../public'))
 
@@ -49,8 +51,6 @@ app.use('/public', express.static('../public'))
  *                      type: string
  *                  phone:
  *                      type: string
- *                  isAdmin:
- *                      type: boolean
  *                  createdAt:
  *                      type: string
  *                      format: date
@@ -68,6 +68,13 @@ app.use('/public', express.static('../public'))
  *              type: object
  *              properties:
  *                  name:
+ *                      type: string
+ *          PatchedCategory:
+ *              type: object
+ *              properties:
+ *                  name:
+ *                      type: string
+ *                  slug:
  *                      type: string
  *          PostedSubcategory:
  *              type: object
@@ -265,6 +272,27 @@ app.use('/public', express.static('../public'))
 
 /**
  * @swagger
+ * /api/category:
+ *  patch:
+ *      summary: patch category
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PatchedCategory'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedCategory'
+ */
+
+/**
+ * @swagger
  * /api/category/{id}:
  *  delete:
  *      summary: delete category
@@ -408,6 +436,22 @@ app.use('/public', express.static('../public'))
  *          schema:
  *              type: integer
  *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedBrand'
+ */
+
+/**
+ * @swagger
+ * /api/brand/:
+ *  get:
+ *      summary: get brands
  *
  *      responses:
  *          200:

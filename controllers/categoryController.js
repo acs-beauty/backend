@@ -6,8 +6,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const slugify = require('slugify')
 
-const generateJWT = (id, email, isAdmin) => jwt.sign({ id, email, isAdmin }, process.env.SECRET_KEY, { expiresIn: '24h' })
-
 class CategoryController {
   async post(req, res, next) {
     try {
@@ -45,6 +43,25 @@ class CategoryController {
     }
   }
 
+  async patch(req, res, next) {
+    try {
+      const { id } = req.params
+
+      if (!id) {
+        return next(ApiError.badRequest('Не передан параметр id'))
+      }
+
+      const category = await Category.update(req.body, {
+        where: {
+          id,
+        },
+      })
+      return res.json(category)
+    } catch {
+      return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
+    }
+  }
+
   async delete(req, res, next) {
     try {
       const { id } = req.params
@@ -71,32 +88,6 @@ class CategoryController {
       return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
     }
   }
-
-  async login(req, res, next) {
-    const { email, password } = req.body
-    const user = await User.findOne({ where: { email } })
-    if (!user) {
-      return next(ApiError.notFound('Пользователь с таким email не найден'))
-    }
-    let comparePassword = bcrypt.compareSync(password, user.password)
-    if (!comparePassword) {
-      return next(ApiError.badRequest('Указан неверный пароль'))
-    }
-    // const token = generateJWT(user.id, user.email, user.isAdmin)
-    const token = generateJWT(user.id, user.email)
-    return res.json({ token })
-  }
-
-  async me(req, res, next) {
-    const id = req.id
-    const user = await User.findOne({ where: { id } })
-    const { password, ...info } = user.toJSON()
-
-    return res.json(info)
-  }
-
-  // async post(req, res) {}
-  // async patch(req, res) {}
 }
 
 module.exports = new CategoryController()

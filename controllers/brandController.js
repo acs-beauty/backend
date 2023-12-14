@@ -31,6 +31,15 @@ class brandController {
     }
   }
 
+  async getAll(req, res, next) {
+    try {
+      const brands = await Brand.findAll()
+      return res.json(brands)
+    } catch {
+      return next(ApiError.badRequest('Непредвиденная ошибка'))
+    }
+  }
+
   async delete(req, res, next) {
     try {
       const { id } = req.params
