@@ -21,9 +21,7 @@ class productController {
       const product = await Product.create({ name, description, price, discount, BrandId, novelty, hit, SubcategoryId })
       return res.json(product)
     } catch {
-      return next(
-        ApiError.badRequest(`Непредвиденная ошибка, возможно не существует подкатегории с id ${SubcategoryId}`)
-      )
+      return next(ApiError.badRequest(`Непредвиденная ошибка, возможно не существует подкатегории с id ${SubcategoryId}`))
     }
   }
 
@@ -38,7 +36,7 @@ class productController {
       const product = await Product.findByPk(id)
       return res.json(product)
     } catch {
-      return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
+      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
     }
   }
 
@@ -65,7 +63,7 @@ class productController {
       return res.status(204).json()
       // return res.json('Категория была успешно удалена')
     } catch {
-      return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
+      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
     }
   }
 }

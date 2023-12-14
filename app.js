@@ -283,7 +283,7 @@ app.use('/public', express.static('../public'))
  *                      $ref: '#components/schema/PatchedCategory'
  *      responses:
  *          200:
- *              description: added successfully
+ *              description: patched successfully
  *              content:
  *                  application/json:
  *                      schema:
@@ -343,6 +343,27 @@ app.use('/public', express.static('../public'))
  *      responses:
  *          200:
  *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedSubcategory'
+ */
+
+/**
+ * @swagger
+ * /api/subcategory/{id}:
+ *  patch:
+ *      summary: patch subcategory
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedSubcategory'
+ *      responses:
+ *          200:
+ *              description: patched successfully
  *              content:
  *                  application/json:
  *                      schema:

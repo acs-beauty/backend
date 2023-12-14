@@ -27,7 +27,7 @@ class brandController {
       const brand = await Brand.findByPk(id)
       return res.json(brand)
     } catch {
-      return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
+      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
     }
   }
 
@@ -63,7 +63,7 @@ class brandController {
       return res.status(204).json()
       // return res.json('Категория была успешно удалена')
     } catch {
-      return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
+      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
     }
   }
 }

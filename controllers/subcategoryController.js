@@ -19,6 +19,29 @@ class subcategoryController {
     }
   }
 
+  async patch(req, res, next) {
+    const { CategoryId } = req.body
+    try {
+      const { id } = req.params
+
+      if (!id) {
+        return next(ApiError.badRequest('Не передан параметр id'))
+      }
+
+      const subcategory = await Subcategory.update(req.body, {
+        where: {
+          id,
+        },
+      })
+      return res.json(subcategory)
+    } catch {
+      const msg = `Возможно в запросе не передан параметр id или${
+        CategoryId ? ` не существует категория с id ${CategoryId}` : ''
+      }`
+      return next(ApiError.badRequest(msg))
+    }
+  }
+
   async get(req, res, next) {
     try {
       const { id } = req.params
@@ -30,7 +53,7 @@ class subcategoryController {
       const subcategory = await Subcategory.findByPk(id)
       return res.json(subcategory)
     } catch {
-      return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
+      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
     }
   }
 
@@ -57,7 +80,7 @@ class subcategoryController {
       return res.status(204).json()
       // return res.json('Категория была успешно удалена')
     } catch {
-      return next(ApiError.badRequest('Возможно не передан параметр id или он имеет неправильный формат'))
+      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
     }
   }
 }
