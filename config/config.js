@@ -1,19 +1,21 @@
-require('dotenv').config()
 const config = {
-  username: 'postgres',
-  password: 'Roman123',
-  database: 'postgres',
-  host: 'postgres2.cdo5tzminv4o.eu-north-1.rds.amazonaws.com',
-  port: 5432,
-  dialect: 'postgres',
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
+  host: process.env.POSTGRES_HOST,
+  port: process.env.POSTGRES_PORT,
+  dialect: process.env.POSTGRES_DIALECT,
   dialectOptions: {
     ssl: {
       require: true,
       rejectUnauthorized: false,
     },
   },
-  operatorsAliases: 'Op',
-  seederStorage: 'sequelize',
+  options: {
+    logging: false,
+  },
+  operatorsAliases: process.env.OPERATOR_ALIASES,
+  seederStorage: process.env.SEEDER_STORAGE,
 }
 
 module.exports = config
