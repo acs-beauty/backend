@@ -3,10 +3,56 @@ const express = require('express')
 const cors = require('cors')
 const router = require('./router.js')
 const cookieParser = require('cookie-parser')
+// const { initialize } = require('express-openapi')
+// const openapi = require('@wesleytodd/openapi')
 // const handlerError = require("./errors/handlerError");
 const errorHandlingMiddleware = require('./middleware/errorHandlingMiddleware')
 
 const app = express()
+
+// const apiDoc = {
+//   swagger: '2.0',
+//   basePath: '/v1',
+//   info: {
+//     title: 'A getting started API.',
+//     version: '1.0.0',
+//   },
+//   definitions: {
+//     World: {
+//       type: 'object',
+//       properties: {
+//         name: {
+//           description: 'The name of this world.',
+//           type: 'string',
+//         },
+//       },
+//       required: ['name'],
+//     },
+//   },
+//   paths: {},
+// }
+
+// initialize({
+//   app,
+//   // NOTE: If using yaml you can provide a path relative to process.cwd() e.g.
+//   apiDoc: apiDoc,
+//   // apiDoc: require('v3-api-doc'),
+//   // dependencies: {
+//   //   worldsService: v1WorldsService,
+//   // },
+//   paths: './api-v1/paths',
+// })
+
+// const oapi = openapi({
+//   openapi: '3.0.0',
+//   info: {
+//     title: 'Express Application',
+//     description: 'Generated docs from an Express api',
+//     version: '1.0.0',
+//   },
+// })
+// app.use(oapi)
+// app.use('/swaggerui', oapi.swaggerui)
 const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUI = require('swagger-ui-express')
 
@@ -117,6 +163,25 @@ app.use('/public', express.static('../public'))
  *                      type: string
  *                  slug:
  *                      type: string
+ *          ReturnedCategories:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  name:
+ *                      type: string
+ *                  slug:
+ *                      type: string
+ *                  subcategories:
+ *                      type: array
+ *                      items: 
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: integer
+ *                          name:
+ *                            type: string
+ * 
  *          ReturnedSubcategory:
  *              type: object
  *              properties:
@@ -225,6 +290,22 @@ app.use('/public', express.static('../public'))
  *                      schema:
  *                          items:
  *                              $ref: '#components/schema/token'
+ */
+
+/**
+ * @swagger
+ * /api/category:
+ *  get:
+ *      summary: get categories
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedCategories'
  */
 
 /**
@@ -526,3 +607,5 @@ app.use('/api', router)
 app.use(errorHandlingMiddleware)
 
 module.exports = app
+
+// module.exports = { openapi }

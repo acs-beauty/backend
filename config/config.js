@@ -11,9 +11,10 @@ const config = {
       rejectUnauthorized: false,
     },
   },
-  options: {
-    logging: false,
-  },
+  logging: false,
+  // cli: {
+  //   migrationsDir: 'migrations',
+  // },
   operatorsAliases: process.env.OPERATOR_ALIASES,
   seederStorage: process.env.SEEDER_STORAGE,
 }

@@ -1,49 +1,49 @@
-"use strict";
-const findByLinkKeyCategory = require("../queries/findByLinkKeyCategory");
-const findByLinkKeySubcategory = require("../queries/findByLinkKeySubcategory");
-const findAllCategoryAndSub = require("../queries/findAllCategoryAndSub");
+// "use strict";
+// const findByLinkKeyCategory = require("../queries/findByLinkKeyCategory");
+// const findByLinkKeySubcategory = require("../queries/findByLinkKeySubcategory");
+// const findAllCategoryAndSub = require("../queries/findAllCategoryAndSub");
 
-module.exports.getNavigation = async (req, res, next) => {
-  try {
-    const categoryAndSub = await findAllCategoryAndSub();
+// module.exports.getNavigation = async (req, res, next) => {
+//   try {
+//     const categoryAndSub = await findAllCategoryAndSub();
 
-    res.status(200).send(categoryAndSub);
-  } catch (error) {
-    next(error);
-  }
-};
+//     res.status(200).send(categoryAndSub);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
-module.exports.getCategoryByLinkKey = async (req, res, next) => {
-  try {
-    const category = await findByLinkKeyCategory(req.params.linkKey);
+// module.exports.getCategoryByLinkKey = async (req, res, next) => {
+//   try {
+//     const category = await findByLinkKeyCategory(req.params.linkKey);
 
-    if (!category) {
-      return res.status(404).send({ message: "Category not found" });
-    }
-    const rebuild = ({ subcategories, ...other }) => ({
-      ...other,
-      subcategories: subcategories.map((sub) => ({
-        ...sub,
-        categoryLinkKey: other.linkKey,
-      })),
-    });
+//     if (!category) {
+//       return res.status(404).send({ message: "Category not found" });
+//     }
+//     const rebuild = ({ subcategories, ...other }) => ({
+//       ...other,
+//       subcategories: subcategories.map((sub) => ({
+//         ...sub,
+//         categoryLinkKey: other.linkKey,
+//       })),
+//     });
 
-    res.status(200).send(rebuild(category));
-  } catch (error) {
-    next(error);
-  }
-};
+//     res.status(200).send(rebuild(category));
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
-module.exports.getSubcategoryByLinkKey = async (req, res, next) => {
-  try {
-    const subcategory = await findByLinkKeySubcategory(req.params.linkKey);
+// module.exports.getSubcategoryByLinkKey = async (req, res, next) => {
+//   try {
+//     const subcategory = await findByLinkKeySubcategory(req.params.linkKey);
 
-    if (!subcategory) {
-      return res.status(404).send({ message: "Subcategory not found" });
-    }
+//     if (!subcategory) {
+//       return res.status(404).send({ message: "Subcategory not found" });
+//     }
 
-    res.status(200).send(subcategory);
-  } catch (error) {
-    next(error);
-  }
-};
+//     res.status(200).send(subcategory);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
