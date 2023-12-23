@@ -22,6 +22,7 @@ module.exports = async (req, res, next) => {
     // req.id = decoded.id
     next()
   } catch (e) {
+    console.log(e.message)
     return next(ApiError.notAuthorized('Пользователь не авторизован'))
   }
 }

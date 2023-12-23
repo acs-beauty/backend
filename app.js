@@ -318,27 +318,27 @@ app.all('*', (req, res, next) => {
  *                              $ref: '#components/schema/ReturnedCategories'
  */
 
-/**
- * @swagger
- * /api/category/{id}:
- *  get:
- *      summary: get category
- *      parameters:
- *        - in: path
- *          name: id
- *          schema:
- *              type: integer
- *          required: true
- *
- *      responses:
- *          200:
- *              description: get successfully
- *              content:
- *                  application/json:
- *                      schema:
- *                          items:
- *                              $ref: '#components/schema/ReturnedCategory'
- */
+// /**
+//  * @swagger
+//  * /api/category/{id}:
+//  *  get:
+//  *      summary: get category
+//  *      parameters:
+//  *        - in: path
+//  *          name: id
+//  *          schema:
+//  *              type: integer
+//  *          required: true
+//  *
+//  *      responses:
+//  *          200:
+//  *              description: get successfully
+//  *              content:
+//  *                  application/json:
+//  *                      schema:
+//  *                          items:
+//  *                              $ref: '#components/schema/ReturnedCategory'
+//  */
 
 /**
  * @swagger
@@ -398,27 +398,27 @@ app.all('*', (req, res, next) => {
  *              description: deleted successfully
  */
 
-/**
- * @swagger
- * /api/subcategory/{id}:
- *  get:
- *      summary: get subcategory
- *      parameters:
- *        - in: path
- *          name: id
- *          schema:
- *              type: integer
- *          required: true
- *
- *      responses:
- *          200:
- *              description: get successfully
- *              content:
- *                  application/json:
- *                      schema:
- *                          items:
- *                              $ref: '#components/schema/ReturnedSubcategory'
- */
+// /**
+//  * @swagger
+//  * /api/subcategory/{id}:
+//  *  get:
+//  *      summary: get subcategory
+//  *      parameters:
+//  *        - in: path
+//  *          name: id
+//  *          schema:
+//  *              type: integer
+//  *          required: true
+//  *
+//  *      responses:
+//  *          200:
+//  *              description: get successfully
+//  *              content:
+//  *                  application/json:
+//  *                      schema:
+//  *                          items:
+//  *                              $ref: '#components/schema/ReturnedSubcategory'
+//  */
 
 /**
  * @swagger
@@ -537,27 +537,27 @@ app.all('*', (req, res, next) => {
  *              description: deleted successfully
  */
 
-/**
- * @swagger
- * /api/brand/{id}:
- *  get:
- *      summary: get brand
- *      parameters:
- *        - in: path
- *          name: id
- *          schema:
- *              type: integer
- *          required: true
- *
- *      responses:
- *          200:
- *              description: get successfully
- *              content:
- *                  application/json:
- *                      schema:
- *                          items:
- *                              $ref: '#components/schema/ReturnedBrand'
- */
+// /**
+//  * @swagger
+//  * /api/brand/{id}:
+//  *  get:
+//  *      summary: get brand
+//  *      parameters:
+//  *        - in: path
+//  *          name: id
+//  *          schema:
+//  *              type: integer
+//  *          required: true
+//  *
+//  *      responses:
+//  *          200:
+//  *              description: get successfully
+//  *              content:
+//  *                  application/json:
+//  *                      schema:
+//  *                          items:
+//  *                              $ref: '#components/schema/ReturnedBrand'
+//  */
 
 /**
  * @swagger

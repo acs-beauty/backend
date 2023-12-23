@@ -3,7 +3,6 @@ require('dotenv').config()
 // const { Sequelize, DataTypes } = require('sequelize')
 const { sequelize } = require('./models')
 
-
 const app = require('./app.js')
 
 const PORT = process.env.API_PORT
@@ -11,8 +10,8 @@ const PORT = process.env.API_PORT
 const start = async () => {
   try {
     await sequelize.authenticate()
-    // await sequelize.sync({ alter: true })
-    await sequelize.sync()
+    await sequelize.sync({ alter: true })
+    // await sequelize.sync()
     // await User.sync()
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}!`)

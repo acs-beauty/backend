@@ -10,7 +10,7 @@ const categoryRouter = Router();
 categoryRouter.post('/', authMiddleware, categoryController.post)
 categoryRouter.patch('/:id', authMiddleware, categoryController.patch)
 categoryRouter.get('/', categoryController.getAll)
-categoryRouter.get('/:id', categoryController.get)
+// categoryRouter.get('/:id', categoryController.get)
 // categoryRouter.patch('/', authMiddleware, categoryController.post)
 categoryRouter.delete('/:id', authMiddleware, categoryController.delete)
 

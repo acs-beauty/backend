@@ -1,5 +1,6 @@
 'use strict'
 const ApiError = require('../errors/ApiError')
+const asyncErrorHandler = require('../errors/asyncErrorHandler')
 // const findAllPreviewProducts = require('../queries/findAllPreviewProducts')
 // const findByPkProduct = require('../queries/findByPkProduct')
 // const findAllSearchProduct = require('../queries/findAllSearchProduct')
@@ -8,64 +9,52 @@ const ApiError = require('../errors/ApiError')
 const { Product } = require('../models')
 
 class productController {
-  async post(req, res, next) {
+  post = asyncErrorHandler(async (req, res, next) => {
     const { name, description, price, discount, BrandId, novelty, hit, SubcategoryId } = req.body
-    try {
-      if (!name) {
-        return next(ApiError.badRequest('Не передано поле name'))
-      }
-      if (!SubcategoryId) {
-        return next(ApiError.badRequest('Не передано поле SubcategoryId'))
-      }
-
-      const product = await Product.create({ name, description, price, discount, BrandId, novelty, hit, SubcategoryId })
-      return res.json(product)
-    } catch {
-      return next(ApiError.badRequest(`Непредвиденная ошибка, возможно не существует подкатегории с id ${SubcategoryId}`))
+    if (!name) {
+      return next(ApiError.badRequest('Не передано поле name'))
     }
-  }
-
-  async get(req, res, next) {
-    try {
-      const { id } = req.params
-
-      if (!id) {
-        return next(ApiError.badRequest('Не передан параметр id'))
-      }
-
-      const product = await Product.findByPk(id)
-      return res.json(product)
-    } catch {
-      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
+    if (!SubcategoryId) {
+      return next(ApiError.badRequest('Не передано поле SubcategoryId'))
     }
-  }
 
-  async delete(req, res, next) {
-    try {
-      const { id } = req.params
+    const product = await Product.create({ name, description, price, discount, BrandId, novelty, hit, SubcategoryId })
+    return res.json(product)
+  })
 
-      if (!id) {
-        return next(ApiError.badRequest('Не передан параметр id'))
-      }
+  get = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
 
-      const product = await Product.findByPk(id)
-      if (!product) {
-        return next(ApiError.notFound(`продукт с id ${id} не найден`))
-      }
-      await product.destroy()
-
-      // await Category.destroy({
-      //   where: {
-      //     id,
-      //   },
-      // })
-
-      return res.status(204).json()
-      // return res.json('Категория была успешно удалена')
-    } catch {
-      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
     }
-  }
+
+    const product = await Product.findByPk(id)
+    return res.json(product)
+  })
+
+  delete = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
+
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
+    }
+
+    const product = await Product.findByPk(id)
+    if (!product) {
+      return next(ApiError.notFound(`продукт с id ${id} не найден`))
+    }
+    await product.destroy()
+
+    // await Category.destroy({
+    //   where: {
+    //     id,
+    //   },
+    // })
+
+    return res.status(204).json()
+    // return res.json('Категория была успешно удалена')
+  })
 }
 
 module.exports = new productController()

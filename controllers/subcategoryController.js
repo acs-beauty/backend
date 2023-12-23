@@ -1,88 +1,73 @@
 const ApiError = require('../errors/ApiError')
+const asyncErrorHandler = require('../errors/asyncErrorHandler')
 const { Subcategory } = require('../models')
 
 class subcategoryController {
-  async post(req, res, next) {
+  post = asyncErrorHandler(async (req, res, next) => {
     const { name, CategoryId } = req.body
-    try {
-      if (!name) {
-        return next(ApiError.badRequest('Не передано поле name'))
-      }
-      if (!CategoryId) {
-        return next(ApiError.badRequest('Не передано поле CategoryId'))
-      }
-
-      const subcategory = await Subcategory.create({ name, CategoryId })
-      return res.json(subcategory)
-    } catch {
-      return next(ApiError.badRequest(`Непредвиденная ошибка, возможно не существует родительской категории с id ${CategoryId}`))
+    if (!name) {
+      return next(ApiError.badRequest('Не передано поле name'))
     }
-  }
-
-  async patch(req, res, next) {
-    const { CategoryId } = req.body
-    try {
-      const { id } = req.params
-
-      if (!id) {
-        return next(ApiError.badRequest('Не передан параметр id'))
-      }
-
-      const subcategory = await Subcategory.update(req.body, {
-        where: {
-          id,
-        },
-      })
-      return res.json(subcategory)
-    } catch {
-      const msg = `Возможно в запросе не передан параметр id или${
-        CategoryId ? ` не существует категория с id ${CategoryId}` : ''
-      }`
-      return next(ApiError.badRequest(msg))
+    if (!CategoryId) {
+      return next(ApiError.badRequest('Не передано поле CategoryId'))
     }
-  }
 
-  async get(req, res, next) {
-    try {
-      const { id } = req.params
+    const subcategory = await Subcategory.create({ name, CategoryId })
+    return res.json(subcategory)
+  })
 
-      if (!id) {
-        return next(ApiError.badRequest('Не передан параметр id'))
-      }
+  patch = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
 
-      const subcategory = await Subcategory.findByPk(id)
-      return res.json(subcategory)
-    } catch {
-      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
     }
-  }
 
-  async delete(req, res, next) {
-    try {
-      const { id } = req.params
+    const subcategory = await Subcategory.update(req.body, {
+      where: {
+        id,
+      },
+    })
+    return res.json(subcategory)
+  })
 
-      if (!id) {
-        return next(ApiError.badRequest('Не передан параметр id'))
-      }
+  // async get(req, res, next) {
+  //   try {
+  //     const { id } = req.params
 
-      const subcategory = await Subcategory.findByPk(id)
-      if (!subcategory) {
-        return next(ApiError.notFound(`подкатегория с id ${id} не найдена`))
-      }
-      await subcategory.destroy()
+  //     if (!id) {
+  //       return next(ApiError.badRequest('Не передан параметр id'))
+  //     }
 
-      // await Category.destroy({
-      //   where: {
-      //     id,
-      //   },
-      // })
+  //     const subcategory = await Subcategory.findByPk(id)
+  //     return res.json(subcategory)
+  //   } catch {
+  //     return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
+  //   }
+  // }
 
-      return res.status(204).json()
-      // return res.json('Категория была успешно удалена')
-    } catch {
-      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
+  delete = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
+
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
     }
-  }
+
+    const subcategory = await Subcategory.findByPk(id)
+    if (!subcategory) {
+      return next(ApiError.notFound(`подкатегория с id ${id} не найдена`))
+    }
+    await subcategory.destroy()
+
+    // await Category.destroy({
+    //   where: {
+    //     id,
+    //   },
+    // })
+
+    return res.status(204).json()
+    // return res.json('Категория была успешно удалена')
+  })
 }
 
 module.exports = new subcategoryController()

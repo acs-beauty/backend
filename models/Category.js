@@ -32,12 +32,12 @@ module.exports = (sequelize, DataTypes) => {
       slug: {
         type: DataTypes.STRING(64),
         allowNull: false,
-        validate: {
-          is: {
-            args: validateLinkString,
-            msg: 'linkKey format is invalid',
-          },
-        },
+        // validate: {
+        //   is: {
+        //     args: validateLinkString,
+        //     msg: 'linkKey format is invalid',
+        //   },
+        // },
         unique: true,
       },
       // imageName: { // DELETE !!!

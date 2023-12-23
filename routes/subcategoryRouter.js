@@ -7,7 +7,7 @@ const subcategoryRouter = Router();
 
 subcategoryRouter.post('/', authMiddleware, subcategoryController.post)
 subcategoryRouter.patch('/:id', authMiddleware, subcategoryController.patch)
-subcategoryRouter.get('/:id', subcategoryController.get)
+// subcategoryRouter.get('/:id', subcategoryController.get)
 subcategoryRouter.delete('/:id', authMiddleware, subcategoryController.delete)
 
 module.exports = subcategoryRouter

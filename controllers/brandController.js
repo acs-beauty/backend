@@ -1,71 +1,59 @@
 const ApiError = require('../errors/ApiError')
+const asyncErrorHandler = require('../errors/asyncErrorHandler')
 const { Brand } = require('../models')
 
 class brandController {
-  async post(req, res, next) {
+  post = asyncErrorHandler(async (req, res, next) => {
     const { name } = req.body
-    try {
-      if (!name) {
-        return next(ApiError.badRequest('Не передано поле name'))
-      }
-
-      const brand = await Brand.create({ name })
-      return res.json(brand)
-    } catch(err) {
-      return next(ApiError.badRequest(err.message))
+    if (!name) {
+      return next(ApiError.badRequest('Не передано поле name'))
     }
-  }
 
-  async get(req, res, next) {
-    try {
-      const { id } = req.params
+    const brand = await Brand.create({ name })
+    return res.json(brand)
+  })
 
-      if (!id) {
-        return next(ApiError.badRequest('Не передан параметр id'))
-      }
+  // get = asyncErrorHandler(async (req, res, next) => {
+  //   const { id } = req.params
 
-      const brand = await Brand.findByPk(id)
-      return res.json(brand)
-    } catch {
-      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
+  //   if (!id) {
+  //     return next(ApiError.badRequest('Не передан параметр id'))
+  //   }
+
+  //   const brand = await Brand.findByPk(id)
+  //   if (!brand) {
+  //     return next(ApiError.notFound(`Брэнд с id ${id} не найден`))
+  //   }
+  //   return res.json(brand)
+  // })
+
+  getAll = asyncErrorHandler(async (req, res, next) => {
+    const brands = await Brand.findAll()
+    return res.json(brands)
+  })
+
+  delete = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
+
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
     }
-  }
 
-  async getAll(req, res, next) {
-    try {
-      const brands = await Brand.findAll()
-      return res.json(brands)
-    } catch (err) {
-      return next(ApiError.badRequest(err.message))
+    const brand = await Brand.findByPk(id)
+    if (!brand) {
+      return next(ApiError.notFound(`брэнд с id ${id} не найден`))
     }
-  }
+    await brand.destroy()
 
-  async delete(req, res, next) {
-    try {
-      const { id } = req.params
+    // await Category.destroy({
+    //   where: {
+    //     id,
+    //   },
+    // })
 
-      if (!id) {
-        return next(ApiError.badRequest('Не передан параметр id'))
-      }
-
-      const brand = await Brand.findByPk(id)
-      if (!brand) {
-        return next(ApiError.notFound(`брэнд с id ${id} не найден`))
-      }
-      await brand.destroy()
-
-      // await Category.destroy({
-      //   where: {
-      //     id,
-      //   },
-      // })
-
-      return res.status(204).json()
-      // return res.json('Категория была успешно удалена')
-    } catch {
-      return next(ApiError.badRequest('Возможно в запросе не передан параметр id или он имеет неправильный формат'))
-    }
-  }
+    return res.status(204).json()
+    // return res.json('Категория была успешно удалена')
+  })
 }
 
 module.exports = new brandController()

@@ -18,7 +18,8 @@ const userRouter = Router();
  *          200:
  *              description: to register
  */
-userRouter.post('/registration', adminAuthMiddleware, userController.registration)
+// userRouter.post('/registration', adminAuthMiddleware, userController.registration)
+userRouter.post('/registration', userController.registration)
 userRouter.post('/login', userController.login)
 userRouter.get("/me", authMiddleware, userController.me);
 
