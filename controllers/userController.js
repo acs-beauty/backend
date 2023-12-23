@@ -26,8 +26,8 @@ class UserController {
       const token = generateJWT(user.id, email, isAdmin)
 
       return res.json({ token })
-    } catch {
-      return next(ApiError.badRequest('Непредвиденная ошибка'))
+    } catch (err) {
+      return next(ApiError.badRequest(err.message))
     }
   }
 
@@ -45,8 +45,8 @@ class UserController {
       // const token = generateJWT(user.id, user.email, user.isAdmin)
       const token = generateJWT(user.id, user.email)
       return res.json({ token })
-    } catch {
-      return next(ApiError.badRequest('Непредвиденная ошибка'))
+    } catch (err) {
+      return next(ApiError.badRequest(err.message))
     }
   }
 
@@ -57,8 +57,8 @@ class UserController {
       const { password, isAdmin, ...info } = user.toJSON()
       // console.log("user = ", user.toJSON())
       return res.json(info)
-    } catch {
-      return next(ApiError.badRequest('Непредвиденная ошибка'))
+    } catch (err) {
+      return next(ApiError.badRequest(err.message))
     }
   }
 }

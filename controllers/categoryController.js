@@ -47,9 +47,8 @@ class CategoryController {
         ],
       })
       return res.json(categories)
-    } catch (error) {
-      console.log(error)
-      return next(ApiError.badRequest('Непредвиденная ошибка'))
+    } catch (err) {
+      return next(ApiError.badRequest(err.message))
     }
   }
 

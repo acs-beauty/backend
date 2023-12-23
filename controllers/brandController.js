@@ -11,8 +11,8 @@ class brandController {
 
       const brand = await Brand.create({ name })
       return res.json(brand)
-    } catch {
-      return next(ApiError.badRequest('Непредвиденная ошибка'))
+    } catch(err) {
+      return next(ApiError.badRequest(err.message))
     }
   }
 
@@ -35,8 +35,8 @@ class brandController {
     try {
       const brands = await Brand.findAll()
       return res.json(brands)
-    } catch {
-      return next(ApiError.badRequest('Непредвиденная ошибка'))
+    } catch (err) {
+      return next(ApiError.badRequest(err.message))
     }
   }
 
