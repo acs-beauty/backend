@@ -3,12 +3,42 @@ const express = require('express')
 const cors = require('cors')
 const router = require('./router.js')
 const cookieParser = require('cookie-parser')
+const errorHandlingMiddleware = require('./middleware/errorHandlingMiddleware')
+const swaggerUI = require('swagger-ui-express')
+const swaggerJSDoc = require('swagger-jsdoc')
+
+const app = express()
+
+app.use(cors())
+app.use(express.json())
+app.use(cookieParser())
+app.use('/api', router)
+// app.use(handlerError);
+app.use(errorHandlingMiddleware)
+app.use('/public', express.static('../public'))
+module.exports = app
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'ACS-beauty',
+      version: '1.0.0',
+    },
+    servers: [
+      {
+        url: 'http://localhost:5000/',
+      },
+    ],
+  },
+  apis: ['./app.js'],
+}
+const swaggerSpec = swaggerJSDoc(options)
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
+
 // const { initialize } = require('express-openapi')
 // const openapi = require('@wesleytodd/openapi')
 // const handlerError = require("./errors/handlerError");
-const errorHandlingMiddleware = require('./middleware/errorHandlingMiddleware')
-
-const app = express()
 
 // const apiDoc = {
 //   swagger: '2.0',
@@ -53,32 +83,6 @@ const app = express()
 // })
 // app.use(oapi)
 // app.use('/swaggerui', oapi.swaggerui)
-const swaggerJSDoc = require('swagger-jsdoc')
-const swaggerUI = require('swagger-ui-express')
-
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'ACS-beauty',
-      version: '1.0.0',
-    },
-    servers: [
-      {
-        url: 'http://localhost:5000/',
-      },
-    ],
-  },
-  apis: ['./app.js'],
-}
-
-const swaggerSpec = swaggerJSDoc(options)
-
-app.use(cors())
-app.use(express.json())
-app.use(cookieParser())
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
-app.use('/public', express.static('../public'))
 
 /**
  * @swagger
@@ -174,14 +178,14 @@ app.use('/public', express.static('../public'))
  *                      type: string
  *                  subcategories:
  *                      type: array
- *                      items: 
+ *                      items:
  *                        type: object
  *                        properties:
  *                          id:
  *                            type: integer
  *                          name:
  *                            type: string
- * 
+ *
  *          ReturnedSubcategory:
  *              type: object
  *              properties:
@@ -601,11 +605,3 @@ app.use('/public', express.static('../public'))
  *          204:
  *              description: deleted successfully
  */
-
-app.use('/api', router)
-// app.use(handlerError);
-app.use(errorHandlingMiddleware)
-
-module.exports = app
-
-// module.exports = { openapi }
