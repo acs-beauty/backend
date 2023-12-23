@@ -1,6 +1,7 @@
 'use strict'
 const express = require('express')
 const cors = require('cors')
+const ApiError = require('./errors/ApiError')
 const router = require('./router.js')
 const cookieParser = require('cookie-parser')
 const errorHandlingMiddleware = require('./middleware/errorHandlingMiddleware')
@@ -35,6 +36,11 @@ const options = {
 }
 const swaggerSpec = swaggerJSDoc(options)
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
+app.all('*', (req, res, next) => {
+  res.status(404).json({
+    message: `can't find ${req.originalUrl} path on the server!`,
+  })
+})
 
 // const { initialize } = require('express-openapi')
 // const openapi = require('@wesleytodd/openapi')
