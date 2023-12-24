@@ -5,7 +5,7 @@ const findUser = require('../queries/findUser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const generateJWT = (id, email, isAdmin) => jwt.sign({ id, email, isAdmin }, process.env.SECRET_KEY, { expiresIn: '24h' })
+const generateJWT = (id, email, isAdmin) => jwt.sign({ id, email, isAdmin }, process.env.SECRET_KEY, { expiresIn: '30d' })
 
 class UserController {
   registration = asyncErrorHandler(async (req, res, next) => {
@@ -25,7 +25,7 @@ class UserController {
     user = await User.create({ email, password: hashedPassword, isAdmin })
     const token = generateJWT(user.id, email, isAdmin)
 
-    return res.json({ token })
+    return res.status(201).json({ token })
   })
 
   login = asyncErrorHandler(async (req, res, next) => {
@@ -45,10 +45,10 @@ class UserController {
 
   me = asyncErrorHandler(async (req, res, next) => {
     const id = req.id
-    const user = await User.findOne({ where: { id } })
-    const { password, isAdmin, ...info } = user.toJSON()
+    const user = await User.findOne({ where: { id }, attributes: { exclude: ['password', 'isAdmin'] } })
+    // const { password, isAdmin, ...info } = user.toJSON()
     // console.log("user = ", user.toJSON())
-    return res.json(info)
+    return res.json(user)
   })
 }
 

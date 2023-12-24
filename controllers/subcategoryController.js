@@ -13,7 +13,7 @@ class subcategoryController {
     }
 
     const subcategory = await Subcategory.create({ name, CategoryId })
-    return res.json(subcategory)
+    return res.status(201).json(subcategory)
   })
 
   patch = asyncErrorHandler(async (req, res, next) => {
@@ -28,6 +28,9 @@ class subcategoryController {
         id,
       },
     })
+    if (!subcategory || subcategory[0] === 0) {
+      return next(ApiError.notFound(`подкатегория с id ${id} не найдена`))
+    }
     return res.json(subcategory)
   })
 

@@ -18,7 +18,7 @@ class CategoryController {
     // }
 
     const category = await Category.create({ name, slug: slugify(name, { lower: true }) })
-    return res.json(category)
+    return res.status(201).json(category)
   })
 
   getAll = asyncErrorHandler(async (req, res, next) => {
@@ -63,6 +63,9 @@ class CategoryController {
         id,
       },
     })
+    if (!category || category[0] === 0) {
+      return next(ApiError.notFound(`Категория с id ${id} не найдена`))
+    }
     return res.json(category)
   })
 

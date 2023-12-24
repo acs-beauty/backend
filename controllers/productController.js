@@ -19,7 +19,7 @@ class productController {
     }
 
     const product = await Product.create({ name, description, price, discount, BrandId, novelty, hit, SubcategoryId })
-    return res.json(product)
+    return res.status(201).json(product)
   })
 
   get = asyncErrorHandler(async (req, res, next) => {
@@ -30,6 +30,9 @@ class productController {
     }
 
     const product = await Product.findByPk(id)
+    if (!product) {
+      return next(ApiError.notFound(`Продукт с id ${id} не найден`))
+    }
     return res.json(product)
   })
 

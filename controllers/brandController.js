@@ -10,7 +10,7 @@ class brandController {
     }
 
     const brand = await Brand.create({ name })
-    return res.json(brand)
+    return res.status(201).json(brand)
   })
 
   // get = asyncErrorHandler(async (req, res, next) => {
