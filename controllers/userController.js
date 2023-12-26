@@ -19,7 +19,7 @@ class UserController {
 
     let user = await User.findOne({ where: { email } })
     if (user) {
-      return next(ApiError.badRequest('Пользователь с таким email уже существует'))
+      return next(ApiError.badRequest('Неверный email'))
     }
     const hashedPassword = await bcrypt.hash(password, 5)
     user = await User.create({ email, password: hashedPassword })
@@ -32,7 +32,7 @@ class UserController {
     const { email, password } = req.body
     const user = await User.findOne({ where: { email } })
     if (!user) {
-      return next(ApiError.notFound('Пользователь с таким email не найден'))
+      return next(ApiError.badRequest('Неверный email'))
     }
     let comparePassword = bcrypt.compareSync(password, user.password)
     if (!comparePassword) {
