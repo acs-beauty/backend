@@ -5,11 +5,11 @@ const findUser = require('../queries/findUser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const generateJWT = (id, email, isAdmin) => jwt.sign({ id, email, isAdmin }, process.env.SECRET_KEY, { expiresIn: '30d' })
+const generateJWT = (id, email) => jwt.sign({ id, email }, process.env.SECRET_KEY, { expiresIn: '30d' })
 
 class UserController {
   registration = asyncErrorHandler(async (req, res, next) => {
-    const { email, password, isAdmin } = req.body
+    const { email, password } = req.body
     if (!email) {
       return next(ApiError.badRequest('Не передан email'))
     }
@@ -22,8 +22,8 @@ class UserController {
       return next(ApiError.badRequest('Пользователь с таким email уже существует'))
     }
     const hashedPassword = await bcrypt.hash(password, 5)
-    user = await User.create({ email, password: hashedPassword, isAdmin })
-    const token = generateJWT(user.id, email, isAdmin)
+    user = await User.create({ email, password: hashedPassword })
+    const token = generateJWT(user.id, email)
 
     return res.status(201).json({ token })
   })
