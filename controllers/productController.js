@@ -1,4 +1,6 @@
 'use strict'
+const { Op } = require('sequelize')
+const PAGE_SIZE = require('../constants/product')
 const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
 // const findAllPreviewProducts = require('../queries/findAllPreviewProducts')
@@ -6,7 +8,7 @@ const asyncErrorHandler = require('../errors/asyncErrorHandler')
 // const findAllSearchProduct = require('../queries/findAllSearchProduct')
 // const findAllProductIds = require('../queries/findAllProductIds')
 // const findAllParameterNames = require('../queries/findAllParameterNames')
-const { Product } = require('../models')
+const { Product, Subcategory } = require('../models')
 
 class productController {
   post = asyncErrorHandler(async (req, res, next) => {
@@ -34,6 +36,41 @@ class productController {
       return next(ApiError.notFound(`Продукт с id ${id} не найден`))
     }
     return res.json(product)
+  })
+
+  getAll = asyncErrorHandler(async (req, res, next) => {
+    const { category, discount, availability, page } = req.query
+
+    // if (!id) {
+    //   return next(ApiError.badRequest('Не передан параметр id'))
+    // }
+    const filters = {}
+    if (discount) {
+      filters.discount = { [Op.gt]: 0 }
+    }
+    if (availability) {
+      filters.count = { [Op.gt]: 0 }
+    }
+    if (category) {
+      filters['$Subcategory.CategoryId$'] = category
+    }
+
+    const products = await Product.findAll({
+      // where: { count: { [Op.gt]: availability ? 0 : true}, ...filters },
+      where: filters,
+      limit: PAGE_SIZE,
+      offset: (page - 1) * PAGE_SIZE,
+      // attributes: ['id', 'firstName', 'lastName', 'email', 'phone', 'password', 'refreshToken'],
+      include: {
+        model: Subcategory,
+        // as: 'subcategory',
+        // attributes: ["role"],
+      },
+    })
+    // if (!product) {
+    //   return next(ApiError.notFound(`Продукт с id ${id} не найден`))
+    // }
+    return res.json(products)
   })
 
   delete = asyncErrorHandler(async (req, res, next) => {

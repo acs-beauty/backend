@@ -95,14 +95,14 @@ module.exports = (sequelize, DataTypes) => {
       //   type: DataTypes.STRING(60),
       //   defaultValue: '',
       // },
-      // quantity: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   validate: {
-      //     min: 0,
-      //   },
-      //   defaultValue: 0,
-      // },
+      count: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          min: 0,
+        },
+        defaultValue: 0,
+      },
       novelty: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -113,6 +113,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
+      // promotion: {
+      //   type: DataTypes.BOOLEAN,
+      //   allowNull: false,
+      //   defaultValue: false,
+      // },
       // disabled: {
       //   type: DataTypes.BOOLEAN,
       //   allowNull: false,
