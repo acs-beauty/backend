@@ -55,12 +55,16 @@ class productController {
       filters['$Subcategory.CategoryId$'] = category
     }
 
-    const products = await Product.findAll({
+    let products = await Product.findAll({
       // where: { count: { [Op.gt]: availability ? 0 : true}, ...filters },
       where: filters,
       limit: PAGE_SIZE,
       offset: (page - 1) * PAGE_SIZE,
       // attributes: ['id', 'firstName', 'lastName', 'email', 'phone', 'password', 'refreshToken'],
+      attributes: {
+        exclude: ['Subcategory'],
+      },
+      // exclude: ['Subcategory'],
       include: {
         model: Subcategory,
         // as: 'subcategory',
@@ -70,6 +74,16 @@ class productController {
     // if (!product) {
     //   return next(ApiError.notFound(`Продукт с id ${id} не найден`))
     // }
+    products = JSON.parse(JSON.stringify(products))
+    products = products.map(item => {
+      const { Subcategory, ...rest } = item
+      return rest
+    })
+    // console.log(products)
+    // return res.json(products.map(item) => {
+    //   const { Subcategory, ...other } = item
+    //   return other
+    // })
     return res.json(products)
   })
 

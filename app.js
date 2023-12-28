@@ -155,6 +155,8 @@ app.all('*', (req, res, next) => {
  *                      type: number
  *                  discount:
  *                      type: integer
+ *                  count: 
+ *                      type: number
  *                  novelty:
  *                      type: boolean
  *                  hit:
@@ -220,6 +222,8 @@ app.all('*', (req, res, next) => {
  *                  price:
  *                      type: integer
  *                  discount:
+ *                      type: integer
+ *                  count:
  *                      type: integer
  *                  novelty:
  *                      type: boolean
@@ -483,6 +487,28 @@ app.all('*', (req, res, next) => {
  * /api/product/{id}:
  *  get:
  *      summary: get product
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedProduct'
+ */
+
+/**
+ * @swagger
+ * /api/product?category=21&discount=false&availability=true&page=1:
+ *  get:
+ *      summary: get products
  *      parameters:
  *        - in: path
  *          name: id
