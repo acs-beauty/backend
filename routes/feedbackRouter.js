@@ -9,7 +9,7 @@ const feedbackRouter = Router()
 
 feedbackRouter.post('/', authMiddleware, feedbackController.post)
 feedbackRouter.delete('/:id', authMiddleware, feedbackController.delete)
-// feedbackRouter.get('/:productId', feedbackController.getByProduct)
-// feedbackRouter.get('/', authMiddleware, feedbackController.getPaginated)
+feedbackRouter.get('/:productId', feedbackController.get)
+feedbackRouter.get('/', authMiddleware, feedbackController.getPaginated)
 
 module.exports = feedbackRouter

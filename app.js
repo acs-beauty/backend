@@ -299,7 +299,73 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  BrandId:
  *                      type: integer
- *
+ *          PostedFeedback:
+ *              type: object
+ *              properties:
+ *                  review:
+ *                      type: string
+ *                  rating:
+ *                      type: integer
+ *                  status:
+ *                      type: string
+ *                  ProductId:
+ *                      type: integer
+ *                  UserId:
+ *                      type: integer
+ *          ReturnedFeedback:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  review:
+ *                      type: string
+ *                  rating:
+ *                      type: integer
+ *                  status:
+ *                      type: string
+ *                  ProductId:
+ *                      type: integer
+ *                  UserId:
+ *                      type: integer
+ *          ReturnedFeedbackWithUserName:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  review:
+ *                      type: string
+ *                  rating:
+ *                      type: integer
+ *                  status:
+ *                      type: string
+ *                  firstName:
+ *                      type: string
+ *                  lastName:
+ *                      type: string
+ *          ReturnedFeedbackWithUserNameAndProduct:
+ *              type: object
+ *              properties:
+ *                  count:
+ *                      type: integer
+ *                  products:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: integer
+ *                          review:
+ *                            type: string
+ *                          rating:
+ *                            type: integer
+ *                          status:
+ *                            type: string
+ *                          firstName:
+ *                            type: string
+ *                          lastName:
+ *                            type: string
+ *                          productName:
+ *                            type: string
  *          token:
  *              type: object
  *              properties:
@@ -411,7 +477,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/user?page=1&lookup=323&pageSize=25:
+ * /api/user?page=1&pageSize=25&lookup=id|firstName|lastName|email|phone:
  *  get:
  *      summary: get users
  *      parameters:
@@ -631,7 +697,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/product?page=1&pageSize=25&availability=true&discount=true&category=23&lookup=subcategory7:
+ * /api/product?page=1&pageSize=25&availability=true&discount=true&category=23&lookup=id|productName:
  *  get:
  *      summary: get products
  *      parameters:
@@ -761,4 +827,85 @@ app.all('*', (req, res, next) => {
  *      responses:
  *          204:
  *              description: deleted successfully
+ */
+
+/**
+ * @swagger
+ * /api/feedback:
+ *  post:
+ *      summary: add feedback
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedFeedback'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedFeedback'
+ */
+
+/**
+ * @swagger
+ * /api/feedback/{id}:
+ *  delete:
+ *      summary: delete feedback
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *      responses:
+ *          204:
+ *              description: deleted successfully
+ */
+
+/**
+ * @swagger
+ * /api/feedback/{productId}:
+ *  get:
+ *      summary: get feedbacks to concrete product
+ *      parameters:
+ *        - in: path
+ *          name: productId
+ *          schema:
+ *              type: integer
+ *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get feedbacks successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedFeedbackWithUserName'
+ */
+
+/**
+ * @swagger
+ * /api/feedback?page=1&pageSize=25&lookup=id|firstName|lastName|productName|review:
+ *  get:
+ *      summary: get paginated feedbacks
+ *      parameters:
+ *        - in: path
+ *          name: page
+ *          schema:
+ *              type: integer
+ *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get feedbacks successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedFeedbackWithUserNameAndProduct'
  */

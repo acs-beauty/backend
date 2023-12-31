@@ -2,8 +2,8 @@
 const { PAGE_SIZE } = require('../constants')
 const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
-const { Feedback } = require('../models')
-const { Op } = require('sequelize')
+const { Feedback, User, Product } = require('../models')
+const { Op, col } = require('sequelize')
 
 class FeedbackController {
   post = asyncErrorHandler(async (req, res, next) => {
@@ -35,84 +35,117 @@ class FeedbackController {
     // return res.json('Категория была успешно удалена')
   })
 
-  patch = asyncErrorHandler(async (req, res, next) => {
-    const { id } = req.params
-    const { password, isAdmin, createdAt, updatedAt } = req.body
+  get = asyncErrorHandler(async (req, res, next) => {
+    const { productId } = req.params
 
-    if (!id) {
+    if (!productId) {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    if (password || isAdmin || createdAt || updatedAt) {
-      return next(ApiError.badRequest('Невозможно выполнить запрос'))
-    }
-
-    let feedback = await Feedback.update(req.body, {
-      where: {
-        id,
+    const feedbacks = await Feedback.findAll({
+      where: { ProductId: productId },
+      attributes: {
+        include: [
+          [col('User.firstName'), 'firstName'],
+          [col('User.lastName'), 'lastName'],
+        ],
+        exclude: ['ProductId', 'UserId'],
       },
+      include: {
+        model: User,
+        attributes: [],
+      },
+      raw: true,
+      // nest: true,
     })
-    feedback = await Feedback.findOne({ where: { id }, raw: true, attributes: { exclude: ['password', 'isAdmin'] } })
-    if (!feedback) {
-      return next(ApiError.notFound(`Пользователь с id ${id} не найден`))
+    if (!feedbacks.length) {
+      return next(ApiError.notFound(`на продукт с id ${productId} не были оставлены отзывы`))
     }
-    return res.json(feedback)
+    return res.json(feedbacks)
   })
 
   getPaginated = asyncErrorHandler(async (req, res, next) => {
-    const { pageSize, page, lookup } = req.query
+    const { pageSize, page, lookup, status } = req.query
 
     if (!page) {
       return next(ApiError.badRequest('Не передан номер страницы пагинации'))
     }
 
-    let where = {
-      [Op.or]: [
-        {
-          firstName: {
-            [Op.like]: `%${lookup}%`,
+    let where = {}
+    if (lookup) {
+      where = {
+        [Op.or]: [
+          {
+            review: {
+              [Op.like]: `%${lookup}%`,
+            },
           },
-        },
-        {
-          lastName: {
-            [Op.like]: `%${lookup}%`,
+          {
+            ['$Product.name$']: {
+              [Op.like]: `%${lookup}%`,
+            },
           },
-        },
-        {
-          email: {
-            [Op.like]: `%${lookup}%`,
+          {
+            ['$User.firstName$']: {
+              [Op.like]: `%${lookup}%`,
+            },
           },
-        },
-        {
-          id:
-            typeof lookup === 'number'
+          {
+            ['$User.lastName$']: {
+              [Op.like]: `%${lookup}%`,
+            },
+          },
+          {
+            id: /^\d+$/.test(lookup)
               ? {
                   [Op.eq]: lookup,
                 }
               : { [Op.lt]: 0 },
-        },
-        {
-          phone: {
-            [Op.like]: `%${lookup}%`,
           },
-        },
-      ],
+        ],
+      }
+    }
+
+    if (status) {
+      where = { ...where, status }
     }
 
     // if (typeof lookup === 'number') {
     //   where = { ...where, [Op.or]: [...where[Op.or], { id: { [Op.eq]: lookup } }] }
     // }
 
-    let users = await Feedback.findAndCountAll({
+    let users = await Feedback.findAll({
       where,
-      attributes: { exclude: ['password', 'isAdmin'] },
+      attributes: {
+        include: [
+          [col('User.firstName'), 'firstName'],
+          [col('User.lastName'), 'lastName'],
+          [col('Product.name'), 'productName'],
+        ],
+        exclude: ['createdAt', 'ProductId', 'UserId'],
+      },
+      // attributes: ['id', 'review', 'rating', 'status', [col('User.firstName'), 'firstName'], [col('User.lastName'), 'lastName']],
+
+      // attributes: { exclude: ['password', 'isAdmin'] },
       limit: pageSize || PAGE_SIZE,
       offset: (page - 1) * (pageSize || PAGE_SIZE),
       raw: true,
+      include: [
+        {
+          model: Product,
+          attributes: [],
+        },
+        {
+          model: User,
+          attributes: [],
+        },
+      ],
       // nest: true,
     })
 
-    return res.json(users)
+    const count = await Feedback.count()
+
+    return res.json({ count, users })
   })
 }
 

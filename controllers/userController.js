@@ -137,12 +137,11 @@ class UserController {
           },
         },
         {
-          id:
-            typeof lookup === 'number'
-              ? {
-                  [Op.eq]: lookup,
-                }
-              : { [Op.lt]: 0 },
+          id: /^\d+$/.test(lookup)
+            ? {
+                [Op.eq]: lookup,
+              }
+            : { [Op.lt]: 0 },
         },
         {
           phone: {
