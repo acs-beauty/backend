@@ -1,4 +1,4 @@
-const PAGE_SIZE = require('../constants/product')
+const { PAGE_SIZE } = require('../constants')
 const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
 const { User } = require('../models')
@@ -48,8 +48,6 @@ class UserController {
   me = asyncErrorHandler(async (req, res, next) => {
     const id = req.id
     const user = await User.findOne({ where: { id }, attributes: { exclude: ['password', 'isAdmin'] } })
-    // const { password, isAdmin, ...info } = user.toJSON()
-    // console.log("user = ", user.toJSON())
     return res.json(user)
   })
 
@@ -60,17 +58,10 @@ class UserController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const user = await User.findByPk(id)
-    if (!user) {
+    const count = await User.destroy({ where: { id } })
+    if (!count) {
       return next(ApiError.notFound(`пользователь с id ${id} не найден`))
     }
-    await user.destroy()
-
-    // await Category.destroy({
-    //   where: {
-    //     id,
-    //   },
-    // })
 
     return res.status(204).json()
     // return res.json('Категория была успешно удалена')
@@ -78,7 +69,7 @@ class UserController {
 
   patch = asyncErrorHandler(async (req, res, next) => {
     const { id } = req.params
-    const { password, isAdmin, createdAt, updatedAt } = req.body
+    let { password, isAdmin, createdAt, updatedAt } = req.body
 
     if (!id) {
       return next(ApiError.badRequest('Не передан параметр id'))
@@ -95,20 +86,33 @@ class UserController {
     // user.save()
     // user = { ...user, ...req.body }
 
-    let user = await User.update(req.body, {
+    let [_, [user]] = await User.update(req.body, {
+      // attributes: { include: ['id', 'name'] },
       where: {
         id,
       },
+      raw: true,
+      returning: true,
     })
-    user = await User.findOne({ where: { id }, raw: true, attributes: { exclude: ['password', 'isAdmin'] } })
+    // user = await User.findOne({ where: { id }, raw: true, attributes: { exclude: ['password', 'isAdmin'] } })
     // console.log("user = ", user)
     if (!user) {
       return next(ApiError.notFound(`Пользователь с id ${id} не найден`))
     }
-    return res.json(user)
+    // let { password, isAdmin, ...rest } = user
+    return res.json({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      note: user.note,
+      email: user.email,
+      phone: user.phone,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    })
   })
 
-  getAll = asyncErrorHandler(async (req, res, next) => {
+  getPaginated = asyncErrorHandler(async (req, res, next) => {
     const { pageSize, page, lookup } = req.query
 
     if (!page) {

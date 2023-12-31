@@ -5,6 +5,6 @@
 //   QUANTITY: 10,
 //   MAX_PRICE: 9999999,
 // });
-const PAGE_SIZE = 10
+// const PAGE_SIZE = 10
 
-module.exports = PAGE_SIZE;
+// module.exports = { PAGE_SIZE }

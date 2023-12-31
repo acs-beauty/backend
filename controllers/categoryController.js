@@ -58,10 +58,11 @@ class CategoryController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const category = await Category.update(req.body, {
+    const [_, [category]] = await Category.update(req.body, {
       where: {
         id,
       },
+      returning: true,
     })
     if (!category || category[0] === 0) {
       return next(ApiError.notFound(`Категория с id ${id} не найдена`))
@@ -76,17 +77,10 @@ class CategoryController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const category = await Category.findByPk(id)
-    if (!category) {
+    const count = await Category.destroy({ where: { id } })
+    if (!count) {
       return next(ApiError.notFound(`категория с id ${id} не найдена`))
     }
-    await category.destroy()
-
-    // await Category.destroy({
-    //   where: {
-    //     id,
-    //   },
-    // })
 
     return res.status(204).json()
     // return res.json('Категория была успешно удалена')

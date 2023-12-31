@@ -1,7 +1,6 @@
 'use strict'
 const { Op } = require('sequelize')
 const { sequelize } = require('../models')
-const PAGE_SIZE = require('../constants/product')
 const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
 // const findAllPreviewProducts = require('../queries/findAllPreviewProducts')
@@ -10,10 +9,11 @@ const asyncErrorHandler = require('../errors/asyncErrorHandler')
 // const findAllProductIds = require('../queries/findAllProductIds')
 // const findAllParameterNames = require('../queries/findAllParameterNames')
 const { Product, Subcategory, Category } = require('../models')
+const { PAGE_SIZE } = require('../constants')
 
 class productController {
   post = asyncErrorHandler(async (req, res, next) => {
-    const { name, description, price, discount, BrandId, novelty, hit, SubcategoryId } = req.body
+    const { name, SubcategoryId } = req.body
     if (!name) {
       return next(ApiError.badRequest('Не передано поле name'))
     }
@@ -21,7 +21,7 @@ class productController {
       return next(ApiError.badRequest('Не передано поле SubcategoryId'))
     }
 
-    const product = await Product.create({ name, description, price, discount, BrandId, novelty, hit, SubcategoryId })
+    const product = await Product.create(req.body)
     return res.status(201).json(product)
   })
 
@@ -39,7 +39,7 @@ class productController {
     return res.json(product)
   })
 
-  getAll = asyncErrorHandler(async (req, res, next) => {
+  getPaginated = asyncErrorHandler(async (req, res, next) => {
     const { category, discount, availability, page, lookup, pageSize } = req.query
 
     // if (!id) {
@@ -198,17 +198,10 @@ class productController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const product = await Product.findByPk(id)
-    if (!product) {
+    const count = await Product.destroy({ where: { id } })
+    if (!count) {
       return next(ApiError.notFound(`продукт с id ${id} не найден`))
     }
-    await product.destroy()
-
-    // await Category.destroy({
-    //   where: {
-    //     id,
-    //   },
-    // })
 
     return res.status(204).json()
     // return res.json('Категория была успешно удалена')

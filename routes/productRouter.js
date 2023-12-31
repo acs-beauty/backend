@@ -15,7 +15,7 @@ const productRouter = Router()
 // )
 
 
-productRouter.get('/', productController.getAll)
+productRouter.get('/', productController.getPaginated)
 productRouter.post('/', authMiddleware, productController.post)
 productRouter.get('/:id', productController.get)
 productRouter.delete('/:id', authMiddleware, productController.delete)

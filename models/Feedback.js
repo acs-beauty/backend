@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
+      review: {
         type: DataTypes.STRING(256),
         allowNull: false,
       },
@@ -90,8 +90,8 @@ module.exports = (sequelize, DataTypes) => {
           fields: ['id'],
         },
         {
-          unique: true,
-          fields: ['name'],
+          // unique: true,
+          fields: ['review'],
         },
         {
           fields: ['status'],

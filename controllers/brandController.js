@@ -39,17 +39,10 @@ class brandController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const brand = await Brand.findByPk(id)
-    if (!brand) {
+    const count = await Feedback.destroy({ where: { id } })
+    if (!count) {
       return next(ApiError.notFound(`брэнд с id ${id} не найден`))
     }
-    await brand.destroy()
-
-    // await Category.destroy({
-    //   where: {
-    //     id,
-    //   },
-    // })
 
     return res.status(204).json()
     // return res.json('Категория была успешно удалена')

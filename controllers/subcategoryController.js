@@ -23,10 +23,11 @@ class subcategoryController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const subcategory = await Subcategory.update(req.body, {
+    const [_, [subcategory]] = await Subcategory.update(req.body, {
       where: {
         id,
       },
+      returning: true,
     })
     if (!subcategory || subcategory[0] === 0) {
       return next(ApiError.notFound(`подкатегория с id ${id} не найдена`))
@@ -56,17 +57,11 @@ class subcategoryController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const subcategory = await Subcategory.findByPk(id)
-    if (!subcategory) {
+    const count = await Subcategory.destroy({ where: { id } })
+
+    if (!count) {
       return next(ApiError.notFound(`подкатегория с id ${id} не найдена`))
     }
-    await subcategory.destroy()
-
-    // await Category.destroy({
-    //   where: {
-    //     id,
-    //   },
-    // })
 
     return res.status(204).json()
     // return res.json('Категория была успешно удалена')
