@@ -144,11 +144,24 @@ module.exports = (sequelize, DataTypes) => {
           unique: true,
           fields: ['id'],
         },
-        // {
-        //   unique: true,
-        //   using: 'gin',
-        //   fields: ['name'],
-        // },
+        {
+          // unique: true,
+          fields: ['price'],
+        },
+        {
+          // unique: true,
+          fields: ['discount'],
+        },
+        {
+          // unique: true,
+          fields: ['count'],
+        },
+        {
+          // unique: true,
+          // using: 'gin',
+          // operator: 'jsonb_ops',
+          fields: ['name'],
+        },
       ],
     }
   )
