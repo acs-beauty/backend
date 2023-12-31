@@ -1,9 +1,11 @@
+const PAGE_SIZE = require('../constants/product')
 const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
 const { User } = require('../models')
 const findUser = require('../queries/findUser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { Op } = require('sequelize')
 
 const generateJWT = (id, email) => jwt.sign({ id, email }, process.env.SECRET_KEY, { expiresIn: '30d' })
 
@@ -50,25 +52,117 @@ class UserController {
     // console.log("user = ", user.toJSON())
     return res.json(user)
   })
+
+  delete = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
+
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
+    }
+
+    const user = await User.findByPk(id)
+    if (!user) {
+      return next(ApiError.notFound(`пользователь с id ${id} не найден`))
+    }
+    await user.destroy()
+
+    // await Category.destroy({
+    //   where: {
+    //     id,
+    //   },
+    // })
+
+    return res.status(204).json()
+    // return res.json('Категория была успешно удалена')
+  })
+
+  patch = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
+    const { password, isAdmin, createdAt, updatedAt } = req.body
+
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
+    }
+
+    if (password || isAdmin || createdAt || updatedAt) {
+      return next(ApiError.badRequest('Невозможно выполнить запрос'))
+    }
+
+    // let user = await User.findOne({ where: { id }, attributes: { exclude: ['password', 'isAdmin'] } })
+    // await user.update(req.body)
+    // user = await user.save()
+    // console.log(user)
+    // user.save()
+    // user = { ...user, ...req.body }
+
+    let user = await User.update(req.body, {
+      where: {
+        id,
+      },
+    })
+    user = await User.findOne({ where: { id }, raw: true, attributes: { exclude: ['password', 'isAdmin'] } })
+    // console.log("user = ", user)
+    if (!user) {
+      return next(ApiError.notFound(`Пользователь с id ${id} не найден`))
+    }
+    return res.json(user)
+  })
+
+  getAll = asyncErrorHandler(async (req, res, next) => {
+    const { pageSize, page, lookup } = req.query
+
+    if (!page) {
+      return next(ApiError.badRequest('Не передан номер страницы пагинации'))
+    }
+
+    let where = {
+      [Op.or]: [
+        {
+          firstName: {
+            [Op.like]: `%${lookup}%`,
+          },
+        },
+        {
+          lastName: {
+            [Op.like]: `%${lookup}%`,
+          },
+        },
+        {
+          email: {
+            [Op.like]: `%${lookup}%`,
+          },
+        },
+        {
+          id:
+            typeof lookup === 'number'
+              ? {
+                  [Op.eq]: lookup,
+                }
+              : { [Op.lt]: 0 },
+        },
+        {
+          phone: {
+            [Op.like]: `%${lookup}%`,
+          },
+        },
+      ],
+    }
+
+    // if (typeof lookup === 'number') {
+    //   where = { ...where, [Op.or]: [...where[Op.or], { id: { [Op.eq]: lookup } }] }
+    // }
+
+    let users = await User.findAndCountAll({
+      where,
+      attributes: { exclude: ['password', 'isAdmin'] },
+      limit: pageSize || PAGE_SIZE,
+      offset: (page - 1) * (pageSize || PAGE_SIZE),
+      raw: true,
+      // nest: true,
+    })
+
+    return res.json(users)
+  })
 }
 
 module.exports = new UserController()
-
-// module.exports.getProfile = async (req, res, next) => {
-//   try {
-//     const user = await findUser({ id: req.tokenData.id })
-
-//     const userData = {
-//       id: user.id,
-//       firstName: user.firstName,
-//       lastName: user.lastName,
-//       email: user.email,
-//       phone: user.phone,
-//       roles: user.roles.map(({ role }) => role),
-//     }
-
-//     res.status(200).send(userData)
-//   } catch (err) {
-//     next(err)
-//   }
-// }

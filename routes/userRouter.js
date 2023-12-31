@@ -1,28 +1,17 @@
-"use strict";
-const { Router } = require("express");
-const checkToken = require("../middleware/checkToken");
+'use strict'
+const { Router } = require('express')
 // const controllers = require("../controllers/userController");
-const userController = require("../controllers/userController");
-const authMiddleware = require("../middleware/authMiddleware");
-const adminAuthMiddleware = require("../middleware/adminAuthMiddleware");
+const userController = require('../controllers/userController')
+const authMiddleware = require('../middleware/authMiddleware')
+// const adminAuthMiddleware = require('../middleware/adminAuthMiddleware')
 
-const userRouter = Router();
+const userRouter = Router()
 
-// userRouter.get("/", checkToken.checkToken, userController.get);
-/**
- * @swagger
- * /:
- *  get:
- *      summary: register user
- *      responses: 
- *          200:
- *              description: to register
- */
-// userRouter.post('/registration', adminAuthMiddleware, userController.registration)
 userRouter.post('/registration', userController.registration)
 userRouter.post('/login', userController.login)
-userRouter.get("/me", authMiddleware, userController.me);
+userRouter.get('/me', authMiddleware, userController.me)
+userRouter.patch('/:id', authMiddleware, userController.patch)
+userRouter.delete('/:id', authMiddleware, userController.delete)
+userRouter.get('/', authMiddleware, userController.getAll)
 
-// userRouter.patch('/', checkToken.checkToken, userController.patch)
-
-module.exports = userRouter;
+module.exports = userRouter

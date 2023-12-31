@@ -3,7 +3,7 @@ const ApiError = require('../errors/ApiError')
 const { User } = require('../models')
 
 module.exports = async (req, res, next) => {
-  console.log("req.body.isAdmin = ", req.body.isAdmin)
+  // console.log("req.body.isAdmin = ", req.body.isAdmin)
   if (req.method === 'OPTIONS') {
     next()
   }
@@ -27,7 +27,7 @@ module.exports = async (req, res, next) => {
       return next(ApiError.forbidden('У вас недостаточно прав или вы пытаетесь получить защищённую информацию'))
     }
 
-    console.log('decoded.isAdmin = ', decoded.isAdmin)
+    // console.log('decoded.isAdmin = ', decoded.isAdmin)
     req.id = decoded.id
     next()
   } catch (e) {

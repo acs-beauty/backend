@@ -28,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: '',
         // allowNull: false,
       },
+      note: {
+        type: DataTypes.STRING(64),
+        defaultValue: '',
+        // allowNull: false,
+      },
       email: {
         type: DataTypes.STRING(128),
         allowNull: false,

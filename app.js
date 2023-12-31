@@ -105,6 +105,8 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  email:
  *                      type: string
+ *                  note:
+ *                      type: string
  *                  phone:
  *                      type: string
  *                  createdAt:
@@ -113,6 +115,19 @@ app.all('*', (req, res, next) => {
  *                  updatedAt:
  *                      type: string
  *                      format: date
+ *          PatchingUser:
+ *              type: object
+ *              properties:
+ *                  firstName:
+ *                      type: string
+ *                  lastName:
+ *                      type: string
+ *                  email:
+ *                      type: string
+ *                  note:
+ *                      type: string
+ *                  phone:
+ *                      type: string
  *          UserForRegistration:
  *              type: object
  *              properties:
@@ -120,6 +135,30 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  password:
  *                      type: string
+ *          ReturnedUsers:
+ *              type: object
+ *              properties:
+ *                  count:
+ *                      type: integer
+ *                  rows:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: number
+ *                          firstName:
+ *                            type: string
+ *                          lastName:
+ *                            type: string
+ *                          email:
+ *                            type: string
+ *                          phone: 
+ *                            type: string
+ *                          createdAt:
+ *                            type: string
+ *                          updatedAt:
+ *                            type: string
  *          PostedCategory:
  *              type: object
  *              properties:
@@ -165,7 +204,34 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  BrandId:
  *                      type: integer
- *
+ *          ReturnedProducts:
+ *              type: object
+ *              properties:
+ *                  count:
+ *                      type: integer
+ *                  products:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          name:
+ *                            type: string
+ *                          description:
+ *                            type: string
+ *                          price:
+ *                            type: number
+ *                          discount:
+ *                            type: integer
+ *                          count: 
+ *                            type: number
+ *                          novelty:
+ *                            type: boolean
+ *                          hit:
+ *                            type: boolean
+ *                          SubcategoryId:
+ *                            type: integer
+ *                          BrandId:
+ *                            type: integer
  *          ReturnedCategory:
  *              type: object
  *              properties:
@@ -304,6 +370,65 @@ app.all('*', (req, res, next) => {
  *                      schema:
  *                          items:
  *                              $ref: '#components/schema/token'
+ */
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *  delete:
+ *      summary: delete user
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *      responses:
+ *          204:
+ *              description: deleted successfully
+ */
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *  patch:
+ *      summary: patch user
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PatchingUser'
+ *      responses:
+ *          200:
+ *              description: patched successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/User'
+ */
+
+/**
+ * @swagger
+ * /api/user?page=1&search=323&pageSize=25:
+ *  get:
+ *      summary: get users
+ *      parameters:
+ *        - in: path
+ *          name: page
+ *          schema:
+ *              type: integer
+ *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedUsers'
  */
 
 /**
@@ -506,7 +631,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/product?category=21&discount=false&availability=true&page=1:
+ * /api/product?page=1&pageSize=25&availability=true&discount=true&category=23&lookup=subcategory7:
  *  get:
  *      summary: get products
  *      parameters:
@@ -523,7 +648,7 @@ app.all('*', (req, res, next) => {
  *                  application/json:
  *                      schema:
  *                          items:
- *                              $ref: '#components/schema/ReturnedProduct'
+ *                              $ref: '#components/schema/ReturnedProducts'
  */
 
 /**

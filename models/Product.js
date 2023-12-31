@@ -123,22 +123,22 @@ module.exports = (sequelize, DataTypes) => {
       //   allowNull: false,
       //   defaultValue: false,
       // },
-      // createdAt: {
-      //   type: DataTypes.DATE,
-      //   allowNull: false,
-      //   defaultValue: DataTypes.NOW,
-      // },
-      // updatedAt: {
-      //   type: DataTypes.DATE,
-      //   allowNull: false,
-      //   defaultValue: DataTypes.NOW,
-      // },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,
       modelName: 'Product',
       tableName: 'Product',
-      timestamps: false,
+      timestamps: true,
       indexes: [
         {
           unique: true,

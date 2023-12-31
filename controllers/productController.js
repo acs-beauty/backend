@@ -1,5 +1,6 @@
 'use strict'
 const { Op } = require('sequelize')
+const { sequelize } = require('../models')
 const PAGE_SIZE = require('../constants/product')
 const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
@@ -8,7 +9,7 @@ const asyncErrorHandler = require('../errors/asyncErrorHandler')
 // const findAllSearchProduct = require('../queries/findAllSearchProduct')
 // const findAllProductIds = require('../queries/findAllProductIds')
 // const findAllParameterNames = require('../queries/findAllParameterNames')
-const { Product, Subcategory } = require('../models')
+const { Product, Subcategory, Category } = require('../models')
 
 class productController {
   post = asyncErrorHandler(async (req, res, next) => {
@@ -39,52 +40,155 @@ class productController {
   })
 
   getAll = asyncErrorHandler(async (req, res, next) => {
-    const { category, discount, availability, page } = req.query
+    const { category, discount, availability, page, lookup, pageSize } = req.query
 
     // if (!id) {
     //   return next(ApiError.badRequest('Не передан параметр id'))
     // }
-    const filters = {}
-    if (discount) {
-      filters.discount = { [Op.gt]: 0 }
-    }
-    if (availability) {
-      filters.count = { [Op.gt]: 0 }
-    }
-    if (category) {
-      filters['$Subcategory.CategoryId$'] = category
+    // const where = {}
+    // if (discount) {
+    //   where.discount = { [Op.gt]: 0 }
+    // }
+    // if (availability) {
+    //   where.count = { [Op.gt]: 0 }
+    // }
+    // if (category) {
+    //   where['$Subcategory.CategoryId$'] = category
+    // }
+
+    let where = {
+      [Op.and]: [
+        // {
+        //   ['$Subcategory.CategoryId$']: category
+        //     ? {
+        //         [Op.eq]: category,
+        //       }
+        //     : { [Op.eq]: this['$Subcategory.CategoryId$'] },
+        // },
+        {
+          discount: discount
+            ? {
+                [Op.gt]: 0,
+              }
+            : { [Op.eq]: this.discount },
+        },
+        {
+          count: availability
+            ? {
+                [Op.gt]: 0,
+              }
+            : { [Op.eq]: this.count },
+        },
+      ],
     }
 
+    if (category) {
+      where = {
+        ...where,
+        [Op.and]: [
+          ...where[Op.and],
+          {
+            ['$Subcategory.CategoryId$']: {
+              [Op.eq]: category,
+            },
+          },
+        ],
+      }
+    }
+
+    // let where = {}
+    // if (availability) {
+    //   where = {
+    //     // [Op.and]: [
+    //     // {
+    //     //   ['$Subcategory.CategoryId$']: category
+    //     //     ? {
+    //     //         [Op.eq]: category,
+    //     //       }
+    //     //     : { [Op.eq]: undefined },
+    //     // },
+    //     // {
+    //     //   discount: discount
+    //     //     ? {
+    //     //         [Op.gt]: 0,
+    //     //       }
+    //     //     : { [Op.eq]: undefined },
+    //     // },
+    //     // {
+    //     count: { [Op.gt]: 0 },
+    //     //   },
+    //     // ],
+    //   }
+    //   // where = { ...where, [Op.and]: [...where[Op.and], { count: { [Op.gt]: 0 } }] }
+    // }
+
+    if (lookup) {
+      where = {
+        ...where,
+        [Op.and]: [
+          ...where[Op.and],
+          {
+            [Op.or]: [
+              {
+                id: /^\d+$/.test(lookup)
+                  ? {
+                      [Op.eq]: Number(lookup),
+                    }
+                  : { [Op.lt]: 0 },
+              },
+              {
+                name: {
+                  [Op.like]: `%${lookup}%`,
+                },
+              },
+            ],
+          },
+        ],
+      }
+    }
+
+    // const where = {
+    //   [Op.or]: [
+    //     {
+    //       id: /^\d+$/.test(lookup)
+    //         ? {
+    //             [Op.eq]: Number(lookup),
+    //           }
+    //         : { [Op.lt]: 0 },
+    //     },
+    //     {
+    //       name: {
+    //         [Op.like]: `%${lookup}%`,
+    //       },
+    //     },
+    //   ],
+    // }
+
     let products = await Product.findAll({
-      // where: { count: { [Op.gt]: availability ? 0 : true}, ...filters },
-      where: filters,
-      limit: PAGE_SIZE,
-      offset: (page - 1) * PAGE_SIZE,
-      // attributes: ['id', 'firstName', 'lastName', 'email', 'phone', 'password', 'refreshToken'],
-      attributes: {
-        exclude: ['Subcategory'],
-      },
-      // exclude: ['Subcategory'],
+      where: where,
+      limit: pageSize || PAGE_SIZE,
+      offset: (page - 1) * (pageSize || PAGE_SIZE),
+      raw: true,
+      // nest: true,
       include: {
         model: Subcategory,
+        // separate: true,
+        attributes: [],
+
+        // include: {
+        //   model: Category,
+        // },
+
+        // through: {
+        //   attributes: [],
+        // },
         // as: 'subcategory',
         // attributes: ["role"],
       },
     })
-    // if (!product) {
-    //   return next(ApiError.notFound(`Продукт с id ${id} не найден`))
-    // }
-    products = JSON.parse(JSON.stringify(products))
-    products = products.map(item => {
-      const { Subcategory, ...rest } = item
-      return rest
-    })
-    // console.log(products)
-    // return res.json(products.map(item) => {
-    //   const { Subcategory, ...other } = item
-    //   return other
-    // })
-    return res.json(products)
+    const count = await Product.count()
+
+    return res.json({ count, products })
   })
 
   delete = asyncErrorHandler(async (req, res, next) => {

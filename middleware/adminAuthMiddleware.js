@@ -3,7 +3,7 @@ const ApiError = require('../errors/ApiError')
 const { User } = require('../models')
 
 module.exports = async (req, res, next) => {
-  console.log('req.body.isAdmin = ', req.body.isAdmin)
+  // console.log('req.body.isAdmin = ', req.body.isAdmin)
   if (req.method === 'OPTIONS') {
     next()
   }
@@ -22,7 +22,7 @@ module.exports = async (req, res, next) => {
     // req.id = decoded.id
     next()
   } catch (e) {
-    console.log(e.message)
+    // console.log(e.message)
     return next(ApiError.notAuthorized('Пользователь не авторизован'))
   }
 }
