@@ -411,7 +411,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/user?page=1&search=323&pageSize=25:
+ * /api/user?page=1&lookup=323&pageSize=25:
  *  get:
  *      summary: get users
  *      parameters:
