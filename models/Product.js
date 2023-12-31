@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         // foreignKey: 'brandId',
         // targetKey: 'id',
       })
+      Product.hasMany(models.Feedback, {
+        // as: 'products',
+        // foreignKey: 'productId',
+        // targetKey: 'subcategoryId',
+      })
       // Product.hasOne(models.Parameter, {
       //   as: 'parameter',
       //   foreignKey: 'parameterId',
