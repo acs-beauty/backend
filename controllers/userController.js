@@ -119,36 +119,39 @@ class UserController {
       return next(ApiError.badRequest('Не передан номер страницы пагинации'))
     }
 
-    let where = {
-      [Op.or]: [
-        {
-          firstName: {
-            [Op.like]: `%${lookup}%`,
+    let where = {}
+    if (lookup) {
+      where = {
+        [Op.or]: [
+          {
+            firstName: {
+              [Op.like]: `%${lookup}%`,
+            },
           },
-        },
-        {
-          lastName: {
-            [Op.like]: `%${lookup}%`,
+          {
+            lastName: {
+              [Op.like]: `%${lookup}%`,
+            },
           },
-        },
-        {
-          email: {
-            [Op.like]: `%${lookup}%`,
+          {
+            email: {
+              [Op.like]: `%${lookup}%`,
+            },
           },
-        },
-        {
-          id: /^\d+$/.test(lookup)
-            ? {
-                [Op.eq]: lookup,
-              }
-            : { [Op.lt]: 0 },
-        },
-        {
-          phone: {
-            [Op.like]: `%${lookup}%`,
+          {
+            id: /^\d+$/.test(lookup)
+              ? {
+                  [Op.eq]: lookup,
+                }
+              : { [Op.lt]: 0 },
           },
-        },
-      ],
+          {
+            phone: {
+              [Op.like]: `%${lookup}%`,
+            },
+          },
+        ],
+      }
     }
 
     // if (typeof lookup === 'number') {
