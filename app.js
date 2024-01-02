@@ -209,7 +209,7 @@ app.all('*', (req, res, next) => {
  *              properties:
  *                  count:
  *                      type: integer
- *                  products:
+ *                  rows:
  *                      type: array
  *                      items:
  *                        type: object
@@ -347,7 +347,7 @@ app.all('*', (req, res, next) => {
  *              properties:
  *                  count:
  *                      type: integer
- *                  products:
+ *                  rows:
  *                      type: array
  *                      items:
  *                        type: object

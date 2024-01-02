@@ -114,7 +114,7 @@ class FeedbackController {
     //   where = { ...where, [Op.or]: [...where[Op.or], { id: { [Op.eq]: lookup } }] }
     // }
 
-    let users = await Feedback.findAll({
+    let users = await Feedback.findAndCountAll({
       where,
       attributes: {
         include: [
@@ -143,9 +143,9 @@ class FeedbackController {
       // nest: true,
     })
 
-    const count = await Feedback.count()
+    // const count = await Feedback.count()
 
-    return res.json({ count, users })
+    return res.json(users)
   })
 }
 

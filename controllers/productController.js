@@ -56,47 +56,49 @@ class productController {
     //   where['$Subcategory.CategoryId$'] = category
     // }
 
-    let where = {
-      [Op.and]: [
-        // {
-        //   ['$Subcategory.CategoryId$']: category
-        //     ? {
-        //         [Op.eq]: category,
-        //       }
-        //     : { [Op.eq]: this['$Subcategory.CategoryId$'] },
-        // },
-        {
-          discount: discount
-            ? {
-                [Op.gt]: 0,
-              }
-            : { [Op.eq]: this.discount },
-        },
-        {
-          count: availability
-            ? {
-                [Op.gt]: 0,
-              }
-            : { [Op.eq]: this.count },
-        },
-      ],
-    }
-
-    if (category) {
+    let where = {}
+    if (discount || availability) {
       where = {
-        ...where,
         [Op.and]: [
-          ...where[Op.and],
+          // {
+          //   ['$Subcategory.CategoryId$']: category
+          //     ? {
+          //         [Op.eq]: category,
+          //       }
+          //     : { [Op.eq]: this['$Subcategory.CategoryId$'] },
+          // },
           {
-            ['$Subcategory.CategoryId$']: {
-              [Op.eq]: category,
-            },
+            discount: discount
+              ? {
+                  [Op.gt]: 0,
+                }
+              : { [Op.eq]: this.discount },
+          },
+          {
+            count: availability
+              ? {
+                  [Op.gt]: 0,
+                }
+              : { [Op.eq]: this.count },
           },
         ],
       }
     }
 
-    // let where = {}
+    // if (category) {
+    //   where = {
+    //     ...where,
+    //     [Op.and]: [
+    //       ...where[Op.and],
+    //       {
+    //         ['$Subcategory.CategoryId$']: {
+    //           [Op.eq]: category,
+    //         },
+    //       },
+    //     ],
+    //   }
+    // }
+
     // if (availability) {
     //   where = {
     //     // [Op.and]: [
@@ -164,8 +166,8 @@ class productController {
     //   ],
     // }
 
-    let products = await Product.findAll({
-      where: where,
+    let products = await Product.findAndCountAll({
+      where,
       limit: pageSize || PAGE_SIZE,
       offset: (page - 1) * (pageSize || PAGE_SIZE),
       raw: true,
@@ -186,9 +188,9 @@ class productController {
         // attributes: ["role"],
       },
     })
-    const count = await Product.count()
+    // const count = await Product.count()
 
-    return res.json({ count, products })
+    return res.json(products)
   })
 
   delete = asyncErrorHandler(async (req, res, next) => {
