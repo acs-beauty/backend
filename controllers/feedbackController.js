@@ -94,14 +94,11 @@ class FeedbackController {
             [Op.like]: `%${lookup}%`,
           },
         },
-        {
-          id: /^\d+$/.test(lookup)
-            ? {
-                [Op.eq]: lookup,
-              }
-            : { [Op.lt]: 0 },
-        },
       ]
+
+      if (/^\d+$/.test(lookup)) {
+        where[Op.or].push({ id: { [Op.eq]: lookup } })
+      }
     }
 
     if (status) {
