@@ -121,37 +121,35 @@ class UserController {
 
     let where = {}
     if (lookup) {
-      where = {
-        [Op.or]: [
-          {
-            firstName: {
-              [Op.like]: `%${lookup}%`,
-            },
+      where[Op.or] = [
+        {
+          firstName: {
+            [Op.like]: `%${lookup}%`,
           },
-          {
-            lastName: {
-              [Op.like]: `%${lookup}%`,
-            },
+        },
+        {
+          lastName: {
+            [Op.like]: `%${lookup}%`,
           },
-          {
-            email: {
-              [Op.like]: `%${lookup}%`,
-            },
+        },
+        {
+          email: {
+            [Op.like]: `%${lookup}%`,
           },
-          {
-            id: /^\d+$/.test(lookup)
-              ? {
-                  [Op.eq]: lookup,
-                }
-              : { [Op.lt]: 0 },
+        },
+        {
+          id: /^\d+$/.test(lookup)
+            ? {
+                [Op.eq]: lookup,
+              }
+            : { [Op.lt]: 0 },
+        },
+        {
+          phone: {
+            [Op.like]: `%${lookup}%`,
           },
-          {
-            phone: {
-              [Op.like]: `%${lookup}%`,
-            },
-          },
-        ],
-      }
+        },
+      ]
     }
 
     // if (typeof lookup === 'number') {
@@ -164,6 +162,7 @@ class UserController {
       limit: pageSize || PAGE_SIZE,
       offset: (page - 1) * (pageSize || PAGE_SIZE),
       raw: true,
+      order: [['id', 'ASC']],
       // nest: true,
     })
 

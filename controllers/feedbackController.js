@@ -73,46 +73,40 @@ class FeedbackController {
 
     let where = {}
     if (lookup) {
-      where = {
-        [Op.or]: [
-          {
-            review: {
-              [Op.like]: `%${lookup}%`,
-            },
+      where[Op.or] = [
+        {
+          review: {
+            [Op.like]: `%${lookup}%`,
           },
-          {
-            ['$Product.name$']: {
-              [Op.like]: `%${lookup}%`,
-            },
+        },
+        {
+          ['$Product.name$']: {
+            [Op.like]: `%${lookup}%`,
           },
-          {
-            ['$User.firstName$']: {
-              [Op.like]: `%${lookup}%`,
-            },
+        },
+        {
+          ['$User.firstName$']: {
+            [Op.like]: `%${lookup}%`,
           },
-          {
-            ['$User.lastName$']: {
-              [Op.like]: `%${lookup}%`,
-            },
+        },
+        {
+          ['$User.lastName$']: {
+            [Op.like]: `%${lookup}%`,
           },
-          {
-            id: /^\d+$/.test(lookup)
-              ? {
-                  [Op.eq]: lookup,
-                }
-              : { [Op.lt]: 0 },
-          },
-        ],
-      }
+        },
+        {
+          id: /^\d+$/.test(lookup)
+            ? {
+                [Op.eq]: lookup,
+              }
+            : { [Op.lt]: 0 },
+        },
+      ]
     }
 
     if (status) {
-      where = { ...where, status }
+      where.status = status
     }
-
-    // if (typeof lookup === 'number') {
-    //   where = { ...where, [Op.or]: [...where[Op.or], { id: { [Op.eq]: lookup } }] }
-    // }
 
     let users = await Feedback.findAndCountAll({
       where,

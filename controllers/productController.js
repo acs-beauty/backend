@@ -42,129 +42,38 @@ class productController {
   getPaginated = asyncErrorHandler(async (req, res, next) => {
     const { category, discount, availability, page, lookup, pageSize } = req.query
 
-    // if (!id) {
-    //   return next(ApiError.badRequest('Не передан параметр id'))
-    // }
-    // const where = {}
-    // if (discount) {
-    //   where.discount = { [Op.gt]: 0 }
-    // }
-    // if (availability) {
-    //   where.count = { [Op.gt]: 0 }
-    // }
-    // if (category) {
-    //   where['$Subcategory.CategoryId$'] = category
-    // }
-
     let where = {}
-    if (discount || availability) {
-      where = {
-        [Op.and]: [
-          // {
-          //   ['$Subcategory.CategoryId$']: category
-          //     ? {
-          //         [Op.eq]: category,
-          //       }
-          //     : { [Op.eq]: this['$Subcategory.CategoryId$'] },
-          // },
-          {
-            discount: discount
-              ? {
-                  [Op.gt]: 0,
-                }
-              : { [Op.eq]: this.discount },
-          },
-          {
-            count: availability
-              ? {
-                  [Op.gt]: 0,
-                }
-              : { [Op.eq]: this.count },
-          },
-        ],
+    if (discount) {
+      where.discount = { [Op.gt]: 0 }
+    }
+    if (availability) {
+      where.count = { [Op.gt]: 0 }
+    }
+
+    if (category) {
+      where['$Subcategory.CategoryId$'] = {
+        [Op.eq]: category,
       }
     }
 
-    // if (category) {
-    //   where = {
-    //     ...where,
-    //     [Op.and]: [
-    //       ...where[Op.and],
-    //       {
-    //         ['$Subcategory.CategoryId$']: {
-    //           [Op.eq]: category,
-    //         },
-    //       },
-    //     ],
-    //   }
-    // }
-
-    // if (availability) {
-    //   where = {
-    //     // [Op.and]: [
-    //     // {
-    //     //   ['$Subcategory.CategoryId$']: category
-    //     //     ? {
-    //     //         [Op.eq]: category,
-    //     //       }
-    //     //     : { [Op.eq]: undefined },
-    //     // },
-    //     // {
-    //     //   discount: discount
-    //     //     ? {
-    //     //         [Op.gt]: 0,
-    //     //       }
-    //     //     : { [Op.eq]: undefined },
-    //     // },
-    //     // {
-    //     count: { [Op.gt]: 0 },
-    //     //   },
-    //     // ],
-    //   }
-    //   // where = { ...where, [Op.and]: [...where[Op.and], { count: { [Op.gt]: 0 } }] }
-    // }
-
-    if (lookup) {
-      where = {
-        ...where,
-        [Op.and]: [
-          ...where[Op.and],
-          {
-            [Op.or]: [
-              {
-                id: /^\d+$/.test(lookup)
-                  ? {
-                      [Op.eq]: Number(lookup),
-                    }
-                  : { [Op.lt]: 0 },
-              },
-              {
-                name: {
-                  [Op.like]: `%${lookup}%`,
-                },
-              },
-            ],
+    if (/^\d+$/.test(lookup)) {
+      where[Op.or] = [
+        {
+          name: {
+            [Op.like]: `%${lookup}%`,
           },
-        ],
+        },
+        {
+          id: {
+            [Op.eq]: Number(lookup),
+          },
+        },
+      ]
+    } else if (lookup) {
+      where.name = {
+        [Op.like]: `%${lookup}%`,
       }
     }
-
-    // const where = {
-    //   [Op.or]: [
-    //     {
-    //       id: /^\d+$/.test(lookup)
-    //         ? {
-    //             [Op.eq]: Number(lookup),
-    //           }
-    //         : { [Op.lt]: 0 },
-    //     },
-    //     {
-    //       name: {
-    //         [Op.like]: `%${lookup}%`,
-    //       },
-    //     },
-    //   ],
-    // }
 
     let products = await Product.findAndCountAll({
       where,
@@ -211,66 +120,3 @@ class productController {
 }
 
 module.exports = new productController()
-
-// module.exports.getPreviewProducts = async (req, res, next) => {
-//   const { whereColumn, minPrice, maxPrice, limit, offset, sorting } = req.queryData
-
-//   try {
-//     const [totalProducts, products] = await findAllPreviewProducts({
-//       ...whereColumn,
-//       minPrice,
-//       maxPrice,
-//       limit,
-//       offset,
-//       sorting,
-//     })
-
-//     res.send({ totalProducts, products })
-//   } catch (error) {
-//     next(error)
-//   }
-// }
-
-// module.exports.getProductId = async (req, res, next) => {
-//   try {
-//     const product = await findByPkProduct(req.params.id)
-//     product.images = product.images.map(el => el.imageName)
-
-//     const allParameterName = await findAllParameterNames()
-
-//     const rebuildParameters = allParameterName
-//       .map(item => {
-//         const value = product.parameter[item.nameKey]
-//         return value ? { title: item.value || '', value: value || '' } : null
-//       })
-//       .filter(item => item)
-
-//     res.send({ ...product, parameter: rebuildParameters })
-//   } catch (error) {
-//     next(error)
-//   }
-// }
-
-// module.exports.searchProducts = async (req, res, next) => {
-//   const limit = req.query.limit || 8
-//   const offset = req.query.offset || 0
-//   try {
-//     const searchWords = req.query.searchWords.split(',') || []
-
-//     const [totalProducts, products] = await findAllSearchProduct(searchWords, limit, offset)
-
-//     res.send({ totalProducts, products })
-//   } catch (error) {
-//     next(error)
-//   }
-// }
-
-// module.exports.getAllProductIds = async (req, res, next) => {
-//   try {
-//     const allProductIds = await findAllProductIds()
-
-//     res.send(allProductIds)
-//   } catch (error) {
-//     next(error)
-//   }
-// }
