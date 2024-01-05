@@ -1,16 +1,38 @@
 const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
 const { Brand } = require('../models')
+const AWS = require('aws-sdk')
+
+console.log('ACCESS_KEY = ', process.env.ACCESS_KEY)
+const s3 = new AWS.S3({
+  accessKeyId: process.env.ACCESS_KEY,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  region: 'eu-north-1',
+  signatureVersion: 'v4',
+})
 
 class brandController {
   post = asyncErrorHandler(async (req, res, next) => {
-    const { name } = req.body
-    if (!name) {
-      return next(ApiError.badRequest('Не передано поле name'))
-    }
+    const { name, description } = req.body
+    console.log(req.body)
+    console.log(req.files)
+    // const { name } = req.body
+    // if (!name) {
+    //   return next(ApiError.badRequest('Не передано поле name'))
+    // }
 
-    const brand = await Brand.create({ name })
-    return res.status(201).json(brand)
+    const params = {
+      Body: req.files[0].buffer,
+      Bucket: 'acs-beauty-bucket',
+      Key: req.files[0].originalname,
+    }
+    s3.upload(params, async (err, data) => {
+      console.log('err = ', err)
+      console.log('data = ', data)
+      console.log('data.Location = ', data.Location)
+      const brand = await Brand.create({ name, description, logo: data.Location })
+      return res.status(201).json(brand)
+    })
   })
 
   // get = asyncErrorHandler(async (req, res, next) => {

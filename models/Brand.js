@@ -21,49 +21,24 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
-        type: DataTypes.STRING(64),
+      logo: {
+        type: DataTypes.STRING(120),
         allowNull: false,
+        defaultValue: '',
       },
-      // redirectUrl: {
-      //   type: DataTypes.STRING(256),
-      //   allowNull: true,
-      //   validate: {
-      //     isUrl: {
-      //       args: true,
-      //       msg: 'redirectUrl format is invalid',
-      //     },
-      //   },
-      // },
-      // linkKey: {
-      //   type: DataTypes.STRING(64),
-      //   allowNull: false,
-      //   validate: {
-      //     is: {
-      //       args: validateLinkString,
-      //       msg: "linkKey format is invalid",
-      //     },
-      //   },
-      //   unique: true,
-      // },
-      // country: {
-      //   type: DataTypes.STRING(32),
-      //   allowNull: false,
-      // },
-      // description: {
-      //   type: DataTypes.TEXT,
-      //   allowNull: false,
-      // },
-      // imageName: {
-      //   type: DataTypes.STRING(128),
-      //   allowNull: false,
-      //   defaultValue: "brand_no_image.png",
-      // },
-      // imageBannerName: {
-      //   type: DataTypes.STRING(128),
-      //   allowNull: false,
-      //   defaultValue: "brand_no_image_banner.png",
-      // },
+      name: {
+        type: DataTypes.STRING(30),
+        defaultValue: '',
+      },
+      description: {
+        type: DataTypes.STRING(500),
+        defaultValue: '',
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,
@@ -74,6 +49,10 @@ module.exports = (sequelize, DataTypes) => {
         {
           unique: true,
           fields: ['id'],
+        },
+        {
+          type: 'fulltext',
+          fields: ['name'],
         },
       ],
     }
