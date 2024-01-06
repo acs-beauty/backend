@@ -65,7 +65,7 @@ class FeedbackController {
   })
 
   getPaginated = asyncErrorHandler(async (req, res, next) => {
-    const { pageSize, page, lookup, status } = req.query
+    const { pageSize, page, rating, lookup, status } = req.query
 
     if (!page) {
       return next(ApiError.badRequest('Не передан номер страницы пагинации'))
@@ -105,6 +105,10 @@ class FeedbackController {
       where.status = status
     }
 
+    if (rating) {
+      where.rating = rating
+    }
+
     let users = await Feedback.findAndCountAll({
       where,
       attributes: {
@@ -113,7 +117,7 @@ class FeedbackController {
           [col('User.lastName'), 'lastName'],
           [col('Product.name'), 'productName'],
         ],
-        exclude: ['createdAt', 'productId', 'userId'],
+        exclude: ['productId', 'userId'],
       },
       // attributes: ['id', 'review', 'rating', 'status', [col('User.firstName'), 'firstName'], [col('User.lastName'), 'lastName']],
 
