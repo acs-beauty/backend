@@ -327,6 +327,8 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  userId:
  *                      type: integer
+ *                  createdAt:
+ *                      string: integer
  *          ReturnedFeedbackWithUserName:
  *              type: object
  *              properties:
@@ -342,6 +344,8 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  lastName:
  *                      type: string
+ *                  createdAt:
+ *                      string: integer
  *          ReturnedFeedbackWithUserNameAndProduct:
  *              type: object
  *              properties:
@@ -366,6 +370,8 @@ app.all('*', (req, res, next) => {
  *                            type: string
  *                          productName:
  *                            type: string
+ *                          createdAt:
+ *                            string: integer
  *          token:
  *              type: object
  *              properties:
@@ -890,7 +896,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/feedback?page=1&pageSize=25&lookup=id|firstName|lastName|productName|review:
+ * /api/feedback?page=1&pageSize=25&status=pending|published&rating=2&lookup=id|firstName|lastName|productName|review:
  *  get:
  *      summary: get paginated feedbacks
  *      parameters:
