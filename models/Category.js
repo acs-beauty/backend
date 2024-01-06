@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         // inverse: {
         //   as: 'categoryId',
         // },
-        // foreignKey: "categoryId",
+        foreignKey: "categoryId",
         // targetKey: "categoryId",
       })
     }

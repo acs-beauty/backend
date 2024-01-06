@@ -6,17 +6,17 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Product.belongsTo(models.Subcategory, {
         // as: 'subcategory',
-        // foreignKey: 'subcategoryId',
+        foreignKey: 'id',
         // targetKey: 'subcategoryId',
       })
       Product.belongsTo(models.Brand, {
         // as: 'brand',
-        // foreignKey: 'brandId',
+        foreignKey: 'id',
         // targetKey: 'id',
       })
       Product.hasMany(models.Feedback, {
         // as: 'products',
-        // foreignKey: 'productId',
+        foreignKey: 'productId',
         // targetKey: 'subcategoryId',
       })
       // Product.hasOne(models.Parameter, {
@@ -142,7 +142,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Product',
-      tableName: 'Product',
+      tableName: 'product',
       timestamps: true,
       indexes: [
         {

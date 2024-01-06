@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Brand.hasMany(models.Product, {
         // as: "products",
-        // foreignKey: "brandId",
+        foreignKey: "brandId",
         // targetKey: "brandId",
       })
     }
@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'Brand',
-      tableName: 'Brand',
+      tableName: 'brand',
       timestamps: false,
       indexes: [
         {

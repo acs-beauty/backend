@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       // })
       User.hasMany(models.Feedback, {
         // as: 'products',
-        // foreignKey: 'productId',
+        foreignKey: 'userId',
         // targetKey: 'subcategoryId',
       })
     }

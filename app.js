@@ -153,7 +153,7 @@ app.all('*', (req, res, next) => {
  *                            type: string
  *                          email:
  *                            type: string
- *                          phone: 
+ *                          phone:
  *                            type: string
  *                          createdAt:
  *                            type: string
@@ -176,7 +176,7 @@ app.all('*', (req, res, next) => {
  *              properties:
  *                  name:
  *                      type: string
- *                  CategoryId:
+ *                  categoryId:
  *                      type: string
  *          PostedBrand:
  *              type: object
@@ -194,15 +194,15 @@ app.all('*', (req, res, next) => {
  *                      type: number
  *                  discount:
  *                      type: integer
- *                  count: 
+ *                  count:
  *                      type: number
  *                  novelty:
  *                      type: boolean
  *                  hit:
  *                      type: boolean
- *                  SubcategoryId:
+ *                  subcategoryId:
  *                      type: integer
- *                  BrandId:
+ *                  brandId:
  *                      type: integer
  *          ReturnedProducts:
  *              type: object
@@ -222,15 +222,15 @@ app.all('*', (req, res, next) => {
  *                            type: number
  *                          discount:
  *                            type: integer
- *                          count: 
+ *                          count:
  *                            type: number
  *                          novelty:
  *                            type: boolean
  *                          hit:
  *                            type: boolean
- *                          SubcategoryId:
+ *                          subcategoryId:
  *                            type: integer
- *                          BrandId:
+ *                          brandId:
  *                            type: integer
  *          ReturnedCategory:
  *              type: object
@@ -267,7 +267,7 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  name:
  *                      type: string
- *                  CategoryId:
+ *                  categoryId:
  *                      type: string
  *          ReturnedBrand:
  *              type: object
@@ -295,9 +295,9 @@ app.all('*', (req, res, next) => {
  *                      type: boolean
  *                  hit:
  *                      type: boolean
- *                  SubcategoryId:
+ *                  subcategoryId:
  *                      type: integer
- *                  BrandId:
+ *                  brandId:
  *                      type: integer
  *          PostedFeedback:
  *              type: object
@@ -308,9 +308,9 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  status:
  *                      type: string
- *                  ProductId:
+ *                  productId:
  *                      type: integer
- *                  UserId:
+ *                  userId:
  *                      type: integer
  *          ReturnedFeedback:
  *              type: object
@@ -323,9 +323,9 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  status:
  *                      type: string
- *                  ProductId:
+ *                  productId:
  *                      type: integer
- *                  UserId:
+ *                  userId:
  *                      type: integer
  *          ReturnedFeedbackWithUserName:
  *              type: object

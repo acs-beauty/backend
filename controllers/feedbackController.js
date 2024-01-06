@@ -7,12 +7,12 @@ const { Op, col } = require('sequelize')
 
 class FeedbackController {
   post = asyncErrorHandler(async (req, res, next) => {
-    const { ProductId, UserId } = req.body
-    if (!ProductId) {
-      return next(ApiError.badRequest('Не передано поле ProductId'))
+    const { productId, userId } = req.body
+    if (!productId) {
+      return next(ApiError.badRequest('Не передано поле productId'))
     }
-    if (!UserId) {
-      return next(ApiError.badRequest('Не передано поле UserId'))
+    if (!userId) {
+      return next(ApiError.badRequest('Не передано поле userId'))
     }
 
     const feedback = await Feedback.create(req.body)
@@ -43,13 +43,13 @@ class FeedbackController {
     }
 
     const feedbacks = await Feedback.findAll({
-      where: { ProductId: productId },
+      where: { productId: productId },
       attributes: {
         include: [
           [col('User.firstName'), 'firstName'],
           [col('User.lastName'), 'lastName'],
         ],
-        exclude: ['ProductId', 'UserId'],
+        exclude: ['productId', 'userId'],
       },
       include: {
         model: User,
@@ -113,7 +113,7 @@ class FeedbackController {
           [col('User.lastName'), 'lastName'],
           [col('Product.name'), 'productName'],
         ],
-        exclude: ['createdAt', 'ProductId', 'UserId'],
+        exclude: ['createdAt', 'productId', 'userId'],
       },
       // attributes: ['id', 'review', 'rating', 'status', [col('User.firstName'), 'firstName'], [col('User.lastName'), 'lastName']],
 

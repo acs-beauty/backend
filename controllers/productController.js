@@ -13,12 +13,12 @@ const { PAGE_SIZE } = require('../constants')
 
 class productController {
   post = asyncErrorHandler(async (req, res, next) => {
-    const { name, SubcategoryId } = req.body
+    const { name, subcategoryId } = req.body
     if (!name) {
       return next(ApiError.badRequest('Не передано поле name'))
     }
-    if (!SubcategoryId) {
-      return next(ApiError.badRequest('Не передано поле SubcategoryId'))
+    if (!subcategoryId) {
+      return next(ApiError.badRequest('Не передано поле subcategoryId'))
     }
 
     const product = await Product.create(req.body)
@@ -51,7 +51,7 @@ class productController {
     }
 
     if (category) {
-      where['$Subcategory.CategoryId$'] = {
+      where['$Subcategory.categoryId$'] = {
         [Op.eq]: category,
       }
     }

@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Feedback.belongsTo(models.Product, {
         // as: 'brand',
-        // foreignKey: 'brandId',
+        foreignKey: 'id',
         // targetKey: 'id',
       })
       Feedback.belongsTo(models.User, {
         // as: 'brand',
-        // foreignKey: 'brandId',
+        foreignKey: 'id',
         // targetKey: 'id',
       })
     }
@@ -26,8 +26,14 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
+      // userId: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   // autoIncrement: true,
+      //   primaryKey: true,
+      // },
       review: {
-        type: DataTypes.STRING(256),
+        type: DataTypes.STRING(250),
         allowNull: false,
       },
       rating: {
@@ -95,6 +101,9 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
           fields: ['status'],
+        },
+        {
+          fields: ['rating'],
         },
       ],
     }

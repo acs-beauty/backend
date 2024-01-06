@@ -4,15 +4,15 @@ const { Subcategory } = require('../models')
 
 class subcategoryController {
   post = asyncErrorHandler(async (req, res, next) => {
-    const { name, CategoryId } = req.body
+    const { name, categoryId } = req.body
     if (!name) {
       return next(ApiError.badRequest('Не передано поле name'))
     }
-    if (!CategoryId) {
-      return next(ApiError.badRequest('Не передано поле CategoryId'))
+    if (!categoryId) {
+      return next(ApiError.badRequest('Не передано поле categoryId'))
     }
 
-    const subcategory = await Subcategory.create({ name, CategoryId })
+    const subcategory = await Subcategory.create({ name, categoryId })
     return res.status(201).json(subcategory)
   })
 
