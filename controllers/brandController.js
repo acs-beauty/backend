@@ -3,7 +3,6 @@ const asyncErrorHandler = require('../errors/asyncErrorHandler')
 const { Brand } = require('../models')
 const AWS = require('aws-sdk')
 
-console.log('ACCESS_KEY = ', process.env.ACCESS_KEY)
 const s3 = new AWS.S3({
   accessKeyId: process.env.ACCESS_KEY,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
