@@ -8,9 +8,7 @@ const s3 = require('../utils/s3')
 
 class brandController {
   post = asyncErrorHandler(async (req, res, next) => {
-    const { name, description } = req.body
-
-    let brand = await Brand.create({ name, description })
+    let brand = await Brand.create(req.body)
 
     const params = {
       Body: req.files[0].buffer,

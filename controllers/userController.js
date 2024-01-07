@@ -70,16 +70,16 @@ class UserController {
       return next(ApiError.badRequest('Неверный запрос'))
     }
 
-    if (!req.files.length) {
-      const [_, [user]] = await User.update(req.body, {
-        where: {
-          id,
-        },
-        returning: true,
-        raw: true,
-      })
+    const [_, [user1]] = await User.update(req.body, {
+      where: {
+        id,
+      },
+      returning: true,
+      // raw: true,
+    })
 
-      const { isAdmin, password, note, createdAt, ...rest } = user
+    if (!req.files.length) {
+      const { isAdmin, password, note, createdAt, ...rest } = user1.get({ plain: true })
       return res.json(rest)
     }
 
@@ -87,36 +87,24 @@ class UserController {
 
     if (avatar) {
       const params = {
-        Bucket: 'acs-beauty-user',
+        Bucket: 'acs-beauty-bucket',
         Key: `user/${avatar.slice(avatar.lastIndexOf('/') + 1)}`,
       }
-      s3.deleteObject(params, (err, data) => {})
+      s3.deleteObject(params).promise()
     }
 
     const params = {
       Body: req.files[0].buffer,
-      Bucket: 'acs-beauty-user',
+      Bucket: 'acs-beauty-bucket',
       Key: `user/${unifyPath(req)}`,
     }
-    s3.upload(params, async (err, data) => {
-      const [count, [user]] = await User.update(
-        { ...req.body, avatar: decodeURI(data.Location) },
-        {
-          where: {
-            id,
-          },
-          raw: true,
-          // attributes: { exclude: ['password', 'isAdmin'] },
-          returning: true,
-        }
-      )
+    const data = await s3.upload(params).promise()
 
-      if (!count) {
-        return next(ApiError.badRequest('Неверный запрос'))
-      }
-      const { isAdmin, password, note, createdAt, ...rest } = user
-      return res.json(rest)
-    })
+    user1.avatar = decodeURI(data.Location)
+    user1.save()
+
+    const { isAdmin: userIsAdmin, password: userPassword, note, createdAt, ...rest } = user1.get({ plain: true })
+    return res.json(rest)
   })
 
   delete = asyncErrorHandler(async (req, res, next) => {
@@ -126,9 +114,19 @@ class UserController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const count = await User.destroy({ where: { id } })
-    if (!count) {
-      return next(ApiError.notFound(`пользователь с id ${id} не найден`))
+    const user = await User.findByPk(id)
+    if (!user) {
+      return next(ApiError.notFound(`Брэнд с id ${id} не найден`))
+    }
+
+    await user.destroy()
+    let avatar = decodeURI(user.dataValues.avatar)
+    if (avatar) {
+      const params = {
+        Bucket: 'acs-beauty-bucket',
+        Key: `brand/${avatar.slice(avatar.lastIndexOf('/') + 1)}`,
+      }
+      s3.deleteObject(params).promise()
     }
 
     return res.status(204).json()
