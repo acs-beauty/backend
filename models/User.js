@@ -24,17 +24,17 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       avatar: {
-        type: DataTypes.STRING(250),
+        type: DataTypes.STRING(120),
         allowNull: false,
         defaultValue: '',
       },
       firstName: {
-        type: DataTypes.STRING(64),
+        type: DataTypes.STRING(50),
         defaultValue: '',
         // allowNull: false,
       },
       lastName: {
-        type: DataTypes.STRING(64),
+        type: DataTypes.STRING(50),
         defaultValue: '',
         // allowNull: false,
       },
@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
         // allowNull: false,
       },
       email: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(50),
         allowNull: false,
         unique: true,
         validate: {
@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       password: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(100),
         // allowNull: false,
         defaultValue: '',
       },
