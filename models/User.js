@@ -79,12 +79,17 @@ module.exports = (sequelize, DataTypes) => {
       //   type: DataTypes.TEXT,
       //   allowNull: true,
       // },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,
       modelName: 'User',
       tableName: 'User',
-      timestamps: true,
+      timestamps: false,
       indexes: [
         {
           unique: true,

@@ -51,7 +51,7 @@ class UserController {
     const id = req.id
     const user = await User.findOne({
       where: { id },
-      attributes: { exclude: ['password', 'isAdmin', 'note', 'createdAt', 'updatedAt'] },
+      attributes: { exclude: ['password', 'isAdmin', 'note', 'createdAt'] },
     })
     return res.json(user)
   })
@@ -100,7 +100,7 @@ class UserController {
       if (!count) {
         return next(ApiError.badRequest('Неверный запрос'))
       }
-      const { isAdmin, password, note, createdAt, updatedAt, ...rest } = user
+      const { isAdmin, password, note, createdAt, ...rest } = user
       return res.json(rest)
     })
   })
@@ -123,13 +123,13 @@ class UserController {
 
   patch = asyncErrorHandler(async (req, res, next) => {
     const { id } = req.params
-    let { password, isAdmin, createdAt, updatedAt } = req.body
+    let { password, isAdmin, createdAt } = req.body
 
     if (!id) {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    if (password || isAdmin || createdAt || updatedAt) {
+    if (password || isAdmin || createdAt) {
       return next(ApiError.badRequest('Невозможно выполнить запрос'))
     }
 
@@ -195,7 +195,7 @@ class UserController {
 
     let users = await User.findAndCountAll({
       where,
-      attributes: { exclude: ['password', 'isAdmin', 'avatar', 'updatedAt'] },
+      attributes: { exclude: ['password', 'isAdmin', 'avatar'] },
       limit: pageSize || PAGE_SIZE,
       offset: (page - 1) * (pageSize || PAGE_SIZE),
       raw: true,

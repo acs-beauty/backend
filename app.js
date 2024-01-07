@@ -112,9 +112,6 @@ app.all('*', (req, res, next) => {
  *                  createdAt:
  *                      type: string
  *                      format: date
- *                  updatedAt:
- *                      type: string
- *                      format: date
  *          PatchedMeUser:
  *              type: object
  *              properties:
@@ -185,6 +182,7 @@ app.all('*', (req, res, next) => {
  *                            type: string
  *                          createdAt:
  *                            type: string
+ *                            format: date
  *          PostedCategory:
  *              type: object
  *              properties:
@@ -282,6 +280,7 @@ app.all('*', (req, res, next) => {
  *                            type: string
  *                          createdAt:
  *                            type: string
+ *                            format: date
  *          ReturnedCategory:
  *              type: object
  *              properties:
@@ -332,6 +331,7 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  createdAt:
  *                      type: string
+ *                      format: date
  *          ReturnedProduct:
  *              type: object
  *              properties:
@@ -385,6 +385,7 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  createdAt:
  *                      string: integer
+ *                      format: date
  *          ReturnedFeedbackWithUserName:
  *              type: object
  *              properties:
@@ -402,6 +403,7 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  createdAt:
  *                      string: integer
+ *                      format: date
  *          ReturnedFeedbackWithUserNameAndProduct:
  *              type: object
  *              properties:
@@ -428,6 +430,7 @@ app.all('*', (req, res, next) => {
  *                            type: string
  *                          createdAt:
  *                            string: integer
+ *                            format: date
  *          token:
  *              type: object
  *              properties:
