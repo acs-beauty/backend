@@ -853,7 +853,7 @@ app.all('*', (req, res, next) => {
  * @swagger
  * /api/brand:
  *  patch:
- *      summary: add brand
+ *      summary: patch brand
  *      requestBody:
  *          required: true
  *          content:
@@ -862,7 +862,7 @@ app.all('*', (req, res, next) => {
  *                      $ref: '#components/schema/PostedBrand'
  *      responses:
  *          200:
- *              description: added successfully
+ *              description: patched successfully
  *              content:
  *                  application/json:
  *                      schema:
