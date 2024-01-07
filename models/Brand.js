@@ -1,5 +1,5 @@
 'use strict'
-// const { validateLinkString } = require('../regex')
+// const { validateSlug } = require('../regex')
 const { Model } = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Brand.hasMany(models.Product, {
         // as: "products",
-        foreignKey: "brandId",
+        foreignKey: 'brandId',
         // targetKey: "brandId",
       })
     }

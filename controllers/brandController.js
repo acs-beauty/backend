@@ -4,7 +4,7 @@ const asyncErrorHandler = require('../errors/asyncErrorHandler')
 const { Brand } = require('../models')
 const { Op } = require('sequelize')
 const AWS = require('aws-sdk')
-const crypto = require('crypto')
+const unifyPath = require('../utils/unifyPath')
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.ACCESS_KEY,
@@ -13,12 +13,6 @@ const s3 = new AWS.S3({
   signatureVersion: 'v4',
 })
 
-const changePath = req => {
-  let path = req.files[0].originalname
-  path = path.slice(0, -4) + crypto.randomBytes(2).toString('hex') + path.slice(-4)
-  return path
-}
-
 class brandController {
   post = asyncErrorHandler(async (req, res, next) => {
     const { name, description } = req.body
@@ -26,7 +20,7 @@ class brandController {
     const params = {
       Body: req.files[0].buffer,
       Bucket: 'acs-beauty-bucket',
-      Key: changePath(req),
+      Key: unifyPath(req),
     }
     s3.upload(params, async (err, data) => {
       const brand = await Brand.create({ name, description, logo: decodeURI(data.Location) })
@@ -56,7 +50,7 @@ class brandController {
     params = {
       Body: req.files[0].buffer,
       Bucket: 'acs-beauty-bucket',
-      Key: changePath(req),
+      Key: unifyPath(req),
     }
     s3.upload(params, async (err, data) => {
       // obj = { ...req.body }

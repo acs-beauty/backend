@@ -1,5 +1,5 @@
 'use strict'
-const { validateLinkString } = require('../regex')
+const { validateSlug } = require('../regex')
 const { Model } = require('sequelize')
 const { IMAGE_BANNER_NAME } = require('../constants')
 
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         // inverse: {
         //   as: 'categoryId',
         // },
-        foreignKey: "categoryId",
+        foreignKey: 'categoryId',
         // targetKey: "categoryId",
       })
     }
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         // validate: {
         //   is: {
-        //     args: validateLinkString,
+        //     args: validateSlug,
         //     msg: 'linkKey format is invalid',
         //   },
         // },

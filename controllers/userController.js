@@ -6,6 +6,7 @@ const findUser = require('../queries/findUser')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
+const unifyPath = require('../utils/unifyPath')
 
 const generateJWT = (id, email) => jwt.sign({ id, email }, process.env.SECRET_KEY, { expiresIn: '30d' })
 
@@ -49,6 +50,53 @@ class UserController {
     const id = req.id
     const user = await User.findOne({ where: { id }, attributes: { exclude: ['password', 'isAdmin'] } })
     return res.json(user)
+  })
+
+  patchMe = asyncErrorHandler(async (req, res, next) => {
+    const id = req.id
+
+    // const { id } = req.params
+
+    // if (!id) {
+    //   return next(ApiError.badRequest('Не передан параметр id'))
+    // }
+
+    const user = await User.findByPk(id)
+    if (!user) {
+      return next(ApiError.badRequest('Неверный запрос'))
+    }
+    const avatar = decodeURI(user.dataValues.avatar)
+
+    let params = {
+      Bucket: 'acs-beauty-bucket',
+      Key: avatar.slice(avatar.lastIndexOf('/') + 1),
+    }
+    s3.deleteObject(params, (err, data) => {})
+
+    params = {
+      Body: req.files[0].buffer,
+      Bucket: 'acs-beauty-bucket',
+      Key: unifyPath(req),
+    }
+    s3.upload(params, async (err, data) => {
+      const [_, [user]] = await User.update(
+        { ...req.body, avatar: decodeURI(data.Location) },
+        {
+          where: {
+            id,
+          },
+          returning: true,
+        }
+      )
+
+      if (!user || user[0] === 0) {
+        return next(ApiError.notFound(`Брэнд с id ${id} не найден`))
+      }
+      return res.json(user)
+      // return res.status(201).json(user)
+    })
+    // const user = await User.findOne({ where: { id }, attributes: { exclude: ['password', 'isAdmin'] } })
+    // return res.json(user)
   })
 
   delete = asyncErrorHandler(async (req, res, next) => {

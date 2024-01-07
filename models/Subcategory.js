@@ -1,5 +1,5 @@
 'use strict'
-const { validateLinkString } = require('../regex')
+const { validateSlug } = require('../regex')
 const { Model } = require('sequelize')
 // const { IMAGE_BANNER_NAME } = require('../constants')
 
@@ -8,9 +8,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Subcategory.belongsTo(models.Category, {
         // as: "category",
-        foreignKey: "id",
+        foreignKey: 'id',
         // targetKey: "subcategoryId",
-      });
+      })
       Subcategory.hasMany(models.Product, {
         // as: 'products',
         foreignKey: 'subcategoryId',
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(64),
         allowNull: false,
         // unique: true,
-        defaultValue: "",
+        defaultValue: '',
       },
       // parentId: {
       //   allowNull: true,
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       //   allowNull: false,
       //   validate: {
       //     is: {
-      //       args: validateLinkString,
+      //       args: validateSlug,
       //       msg: "linkKey format is invalid",
       //     },
       //   },

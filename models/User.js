@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
+      avatar: {
+        type: DataTypes.STRING(250),
+        allowNull: false,
+        defaultValue: '',
+      },
       firstName: {
         type: DataTypes.STRING(64),
         defaultValue: '',
