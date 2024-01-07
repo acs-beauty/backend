@@ -181,7 +181,11 @@ app.all('*', (req, res, next) => {
  *          PostedBrand:
  *              type: object
  *              properties:
+ *                  logo:
+ *                      type: string
  *                  name:
+ *                      type: string
+ *                  description:
  *                      type: string
  *          PostedProduct:
  *              type: object
@@ -232,6 +236,26 @@ app.all('*', (req, res, next) => {
  *                            type: integer
  *                          brandId:
  *                            type: integer
+ *          ReturnedBrands:
+ *              type: object
+ *              properties:
+ *                  count:
+ *                      type: integer
+ *                  rows:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: integer
+ *                          logo:
+ *                            type: string
+ *                          name:
+ *                            type: string
+ *                          description:
+ *                            type: string
+ *                          createdAt:
+ *                            type: string
  *          ReturnedCategory:
  *              type: object
  *              properties:
@@ -274,7 +298,13 @@ app.all('*', (req, res, next) => {
  *              properties:
  *                  id:
  *                      type: integer
+ *                  logo:
+ *                      type: string
  *                  name:
+ *                      type: string
+ *                  description:
+ *                      type: string
+ *                  createdAt:
  *                      type: string
  *          ReturnedProduct:
  *              type: object
@@ -784,7 +814,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/brand/:
+ * /api/brand?page=1&pageSize=12&lookup=name:
  *  get:
  *      summary: get brands
  *
@@ -795,13 +825,34 @@ app.all('*', (req, res, next) => {
  *                  application/json:
  *                      schema:
  *                          items:
- *                              $ref: '#components/schema/ReturnedBrand'
+ *                              $ref: '#components/schema/ReturnedBrands'
  */
 
 /**
  * @swagger
  * /api/brand:
  *  post:
+ *      summary: add brand
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedBrand'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedBrand'
+ */
+
+/**
+ * @swagger
+ * /api/brand:
+ *  patch:
  *      summary: add brand
  *      requestBody:
  *          required: true

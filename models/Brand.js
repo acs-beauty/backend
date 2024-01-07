@@ -22,13 +22,15 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       logo: {
-        type: DataTypes.STRING(120),
+        type: DataTypes.STRING(250),
         allowNull: false,
         defaultValue: '',
       },
       name: {
         type: DataTypes.STRING(30),
-        defaultValue: '',
+        allowNull: false,
+        unique: true,
+        // defaultValue: '',
       },
       description: {
         type: DataTypes.STRING(500),
@@ -51,6 +53,7 @@ module.exports = (sequelize, DataTypes) => {
           fields: ['id'],
         },
         {
+          unique: true,
           type: 'fulltext',
           fields: ['name'],
         },
