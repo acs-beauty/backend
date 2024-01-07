@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 const unifyPath = require('../utils/unifyPath')
+const s3 = require('../utils/s3')
 
 const generateJWT = (id, email) => jwt.sign({ id, email }, process.env.SECRET_KEY, { expiresIn: '30d' })
 
@@ -48,18 +49,21 @@ class UserController {
 
   me = asyncErrorHandler(async (req, res, next) => {
     const id = req.id
-    const user = await User.findOne({ where: { id }, attributes: { exclude: ['password', 'isAdmin'] } })
+    const user = await User.findOne({
+      where: { id },
+      attributes: { exclude: ['password', 'isAdmin', 'note', 'createdAt', 'updatedAt'] },
+    })
     return res.json(user)
   })
 
   patchMe = asyncErrorHandler(async (req, res, next) => {
     const id = req.id
 
-    // const { id } = req.params
+    const { isAdmin, password } = req.body
 
-    // if (!id) {
-    //   return next(ApiError.badRequest('Не передан параметр id'))
-    // }
+    if (isAdmin || password) {
+      return next(ApiError.badRequest('Неверный запрос'))
+    }
 
     const user = await User.findByPk(id)
     if (!user) {
@@ -67,36 +71,38 @@ class UserController {
     }
     const avatar = decodeURI(user.dataValues.avatar)
 
-    let params = {
-      Bucket: 'acs-beauty-bucket',
-      Key: avatar.slice(avatar.lastIndexOf('/') + 1),
+    if (avatar) {
+      const params = {
+        Bucket: 'acs-beauty-bucket',
+        Key: avatar.slice(avatar.lastIndexOf('/') + 1),
+      }
+      s3.deleteObject(params, (err, data) => {})
     }
-    s3.deleteObject(params, (err, data) => {})
 
-    params = {
+    const params = {
       Body: req.files[0].buffer,
       Bucket: 'acs-beauty-bucket',
       Key: unifyPath(req),
     }
     s3.upload(params, async (err, data) => {
-      const [_, [user]] = await User.update(
+      const [count, [user]] = await User.update(
         { ...req.body, avatar: decodeURI(data.Location) },
         {
           where: {
             id,
           },
+          raw: true,
+          // attributes: { exclude: ['password', 'isAdmin'] },
           returning: true,
         }
       )
 
-      if (!user || user[0] === 0) {
-        return next(ApiError.notFound(`Брэнд с id ${id} не найден`))
+      if (!count) {
+        return next(ApiError.badRequest('Неверный запрос'))
       }
-      return res.json(user)
-      // return res.status(201).json(user)
+      const { isAdmin, password, note, createdAt, updatedAt, ...rest } = user
+      return res.json(rest)
     })
-    // const user = await User.findOne({ where: { id }, attributes: { exclude: ['password', 'isAdmin'] } })
-    // return res.json(user)
   })
 
   delete = asyncErrorHandler(async (req, res, next) => {
@@ -127,14 +133,7 @@ class UserController {
       return next(ApiError.badRequest('Невозможно выполнить запрос'))
     }
 
-    // let user = await User.findOne({ where: { id }, attributes: { exclude: ['password', 'isAdmin'] } })
-    // await user.update(req.body)
-    // user = await user.save()
-    // console.log(user)
-    // user.save()
-    // user = { ...user, ...req.body }
-
-    let [_, [user]] = await User.update(req.body, {
+    let [count, [user]] = await User.update(req.body, {
       // attributes: { include: ['id', 'name'] },
       where: {
         id,
@@ -142,22 +141,12 @@ class UserController {
       raw: true,
       returning: true,
     })
-    // user = await User.findOne({ where: { id }, raw: true, attributes: { exclude: ['password', 'isAdmin'] } })
-    // console.log("user = ", user)
-    if (!user) {
+
+    if (!count) {
       return next(ApiError.notFound(`Пользователь с id ${id} не найден`))
     }
-    // let { password, isAdmin, ...rest } = user
-    return res.json({
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      note: user.note,
-      email: user.email,
-      phone: user.phone,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    })
+    let { password: userPassword, isAdmin: userIsAdmin, ...rest } = user
+    return res.json(rest)
   })
 
   getPaginated = asyncErrorHandler(async (req, res, next) => {
@@ -206,7 +195,7 @@ class UserController {
 
     let users = await User.findAndCountAll({
       where,
-      attributes: { exclude: ['password', 'isAdmin'] },
+      attributes: { exclude: ['password', 'isAdmin', 'avatar', 'updatedAt'] },
       limit: pageSize || PAGE_SIZE,
       offset: (page - 1) * (pageSize || PAGE_SIZE),
       raw: true,

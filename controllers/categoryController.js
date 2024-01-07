@@ -58,13 +58,13 @@ class CategoryController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const [_, [category]] = await Category.update(req.body, {
+    const [count, [category]] = await Category.update(req.body, {
       where: {
         id,
       },
       returning: true,
     })
-    if (!category || category[0] === 0) {
+    if (!count) {
       return next(ApiError.notFound(`Категория с id ${id} не найдена`))
     }
     return res.json(category)

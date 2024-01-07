@@ -23,14 +23,14 @@ class subcategoryController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const [_, [subcategory]] = await Subcategory.update(req.body, {
+    const [count, [subcategory]] = await Subcategory.update(req.body, {
       where: {
         id,
       },
       returning: true,
     })
-    if (!subcategory || subcategory[0] === 0) {
-      return next(ApiError.notFound(`подкатегория с id ${id} не найдена`))
+    if (!count) {
+      return next(ApiError.notFound(`Подкатегория с id ${id} не найдена`))
     }
     return res.json(subcategory)
   })

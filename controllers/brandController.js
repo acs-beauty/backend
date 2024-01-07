@@ -3,15 +3,8 @@ const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
 const { Brand } = require('../models')
 const { Op } = require('sequelize')
-const AWS = require('aws-sdk')
 const unifyPath = require('../utils/unifyPath')
-
-const s3 = new AWS.S3({
-  accessKeyId: process.env.ACCESS_KEY,
-  secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  region: 'eu-north-1',
-  signatureVersion: 'v4',
-})
+const s3 = require('../utils/s3')
 
 class brandController {
   post = asyncErrorHandler(async (req, res, next) => {
@@ -57,7 +50,7 @@ class brandController {
       // obj.logo = data.Location
       // obj.save()
 
-      const [_, [brand]] = await Brand.update(
+      const [count, [brand]] = await Brand.update(
         { ...req.body, logo: decodeURI(data.Location) },
         {
           where: {
@@ -67,7 +60,7 @@ class brandController {
         }
       )
 
-      if (!brand || brand[0] === 0) {
+      if (!count) {
         return next(ApiError.notFound(`Брэнд с id ${id} не найден`))
       }
       return res.json(brand)

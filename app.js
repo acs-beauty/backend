@@ -115,6 +115,21 @@ app.all('*', (req, res, next) => {
  *                  updatedAt:
  *                      type: string
  *                      format: date
+ *          PatchedMeUser:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  firstName:
+ *                      type: string
+ *                  lastName:
+ *                      type: string
+ *                  email:
+ *                      type: string
+ *                  avatar:
+ *                      type: string
+ *                  phone:
+ *                      type: string
  *          PatchingUser:
  *              type: object
  *              properties:
@@ -127,6 +142,19 @@ app.all('*', (req, res, next) => {
  *                  note:
  *                      type: string
  *                  phone:
+ *                      type: string
+ *          PatchingUserWithAvatar:
+ *              type: object
+ *              properties:
+ *                  firstName:
+ *                      type: string
+ *                  lastName:
+ *                      type: string
+ *                  email:
+ *                      type: string
+ *                  phone:
+ *                      type: string
+ *                  avatar:
  *                      type: string
  *          UserForRegistration:
  *              type: object
@@ -156,8 +184,6 @@ app.all('*', (req, res, next) => {
  *                          phone:
  *                            type: string
  *                          createdAt:
- *                            type: string
- *                          updatedAt:
  *                            type: string
  *          PostedCategory:
  *              type: object
@@ -429,7 +455,29 @@ app.all('*', (req, res, next) => {
  *                  application/json:
  *                      schema:
  *                          items:
- *                              $ref: '#components/schema/User'
+ *                              $ref: '#components/schema/PatchedMeUser'
+ */
+
+
+/**
+ * @swagger
+ * /api/user/me:
+ *  patch:
+ *      summary: patch my account with avatar
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PatchingUserWithAvatar'
+ *      responses:
+ *          200:
+ *              description: patched successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/PatchedMeUser'
  */
 
 /**
@@ -452,6 +500,7 @@ app.all('*', (req, res, next) => {
  *                          items:
  *                              $ref: '#components/schema/token'
  */
+
 
 /**
  * @swagger
