@@ -10,15 +10,19 @@ class brandController {
   post = asyncErrorHandler(async (req, res, next) => {
     const { name, description } = req.body
 
+    let brand = await Brand.create({ name, description })
+
     const params = {
       Body: req.files[0].buffer,
       Bucket: 'acs-beauty-bucket',
-      Key: unifyPath(req),
+      Key: `brand/${unifyPath(req)}`,
     }
-    s3.upload(params, async (err, data) => {
-      const brand = await Brand.create({ name, description, logo: decodeURI(data.Location) })
-      return res.status(201).json(brand)
-    })
+    const data = await s3.upload(params).promise()
+
+    brand.logo = decodeURI(data.Location)
+    brand.save()
+    // const brand = await Brand.create({ name, description, logo: decodeURI(data.Location) })
+    return res.status(201).json(brand)
   })
 
   patch = asyncErrorHandler(async (req, res, next) => {
@@ -32,40 +36,39 @@ class brandController {
     if (!brand) {
       return next(ApiError.notFound(`Брэнд с id ${id} не найден`))
     }
-    const logo = decodeURI(brand.dataValues.logo)
+
+    const [_, [brand1]] = await Brand.update(req.body, {
+      where: {
+        id,
+      },
+      returning: true,
+    })
+
+    if (!req.files.length) {
+      return res.json(brand1)
+    }
+
+    const logo = decodeURI(brand1.dataValues.logo)
+    // console.log('logo = ', logo)
 
     let params = {
       Bucket: 'acs-beauty-bucket',
-      Key: logo.slice(logo.lastIndexOf('/') + 1),
+      Key: `brand/${logo.slice(logo.lastIndexOf('/') + 1)}`,
     }
-    s3.deleteObject(params, (err, data) => {})
+    // console.log('deleted brand = ', `brand/${logo.slice(logo.lastIndexOf('/') + 1)}`)
+    s3.deleteObject(params).promise()
 
     params = {
       Body: req.files[0].buffer,
       Bucket: 'acs-beauty-bucket',
-      Key: unifyPath(req),
+      Key: `brand/${unifyPath(req)}`,
     }
-    s3.upload(params, async (err, data) => {
-      // obj = { ...req.body }
-      // obj.logo = data.Location
-      // obj.save()
+    const data = await s3.upload(params).promise()
 
-      const [count, [brand]] = await Brand.update(
-        { ...req.body, logo: decodeURI(data.Location) },
-        {
-          where: {
-            id,
-          },
-          returning: true,
-        }
-      )
+    brand1.logo = decodeURI(data.Location)
+    brand1.save()
 
-      if (!count) {
-        return next(ApiError.notFound(`Брэнд с id ${id} не найден`))
-      }
-      return res.json(brand)
-      // return res.status(201).json(brand)
-    })
+    return res.json(brand1)
   })
 
   // get = asyncErrorHandler(async (req, res, next) => {
@@ -118,20 +121,16 @@ class brandController {
     }
 
     const count = await brand.destroy()
-    if (!count) {
-      return next(ApiError.notFound(`брэнд с id ${id} не найден`))
-    }
+    // if (!count) {
+    //   return next(ApiError.notFound(`брэнд с id ${id} не найден`))
+    // }
     const logo = decodeURI(brand.dataValues.logo)
 
     const params = {
       Bucket: 'acs-beauty-bucket',
-      Key: logo.slice(logo.lastIndexOf('/') + 1),
+      Key: `brand/${logo.slice(logo.lastIndexOf('/') + 1)}`,
     }
-    try {
-      s3.deleteObject(params, (err, data) => {})
-    } catch {
-      return next(ApiError.notFound(`Ошибка при удалении логотипа брэнда`))
-    }
+    s3.deleteObject(params).promise()
 
     return res.status(204).json()
     // return res.json('Категория была успешно удалена')

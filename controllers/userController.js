@@ -69,20 +69,34 @@ class UserController {
     if (!user) {
       return next(ApiError.badRequest('Неверный запрос'))
     }
+
+    if (!req.files.length) {
+      const [_, [user]] = await User.update(req.body, {
+        where: {
+          id,
+        },
+        returning: true,
+        raw: true,
+      })
+
+      const { isAdmin, password, note, createdAt, ...rest } = user
+      return res.json(rest)
+    }
+
     const avatar = decodeURI(user.dataValues.avatar)
 
     if (avatar) {
       const params = {
-        Bucket: 'acs-beauty-bucket',
-        Key: avatar.slice(avatar.lastIndexOf('/') + 1),
+        Bucket: 'acs-beauty-user',
+        Key: `user/${avatar.slice(avatar.lastIndexOf('/') + 1)}`,
       }
       s3.deleteObject(params, (err, data) => {})
     }
 
     const params = {
       Body: req.files[0].buffer,
-      Bucket: 'acs-beauty-bucket',
-      Key: unifyPath(req),
+      Bucket: 'acs-beauty-user',
+      Key: `user/${unifyPath(req)}`,
     }
     s3.upload(params, async (err, data) => {
       const [count, [user]] = await User.update(
