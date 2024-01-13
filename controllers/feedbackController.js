@@ -19,6 +19,25 @@ class FeedbackController {
     return res.status(201).json(feedback)
   })
 
+  patch = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
+
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
+    }
+
+    const [count, [feedback]] = await Feedback.update(req.body, {
+      where: {
+        id,
+      },
+      returning: true,
+    })
+    if (!count) {
+      return next(ApiError.notFound(`Отзыв с id ${id} не найден`))
+    }
+    return res.json(feedback)
+  })
+
   delete = asyncErrorHandler(async (req, res, next) => {
     const { id } = req.params
 

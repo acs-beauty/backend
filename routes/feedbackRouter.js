@@ -8,6 +8,7 @@ const feedbackController = require('../controllers/feedbackController')
 const feedbackRouter = Router()
 
 feedbackRouter.post('/', authMiddleware, feedbackController.post)
+feedbackRouter.patch('/:id', authMiddleware, feedbackController.patch)
 feedbackRouter.delete('/:id', authMiddleware, feedbackController.delete)
 feedbackRouter.get('/:productId', feedbackController.get)
 feedbackRouter.get('/', authMiddleware, feedbackController.getPaginated)

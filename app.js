@@ -962,6 +962,27 @@ app.all('*', (req, res, next) => {
 /**
  * @swagger
  * /api/feedback/{id}:
+ *  patch:
+ *      summary: patch feedback
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedFeedback'
+ *      responses:
+ *          200:
+ *              description: patched successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedFeedback'
+ */
+
+/**
+ * @swagger
+ * /api/feedback/{id}:
  *  delete:
  *      summary: delete feedback
  *      parameters:
