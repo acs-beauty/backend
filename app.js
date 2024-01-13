@@ -901,9 +901,10 @@ app.all('*', (req, res, next) => {
  *                              $ref: '#components/schema/ReturnedBrand'
  */
 
+
 /**
  * @swagger
- * /api/brand:
+ * /api/brand/{id}:
  *  patch:
  *      summary: patch brand
  *      requestBody:

@@ -91,7 +91,7 @@ class brandController {
     // if (/^\d+$/.test(lookup)) {
     if (lookup) {
       where.name = {
-        [Op.like]: `%${lookup}%`,
+        [Op.iLike]: `%${lookup}%`,
       }
     }
 
