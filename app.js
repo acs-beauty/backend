@@ -188,12 +188,7 @@ app.all('*', (req, res, next) => {
  *              properties:
  *                  name:
  *                      type: string
- *          PatchedCategory:
- *              type: object
- *              properties:
- *                  name:
- *                      type: string
- *                  slug:
+ *                  image:
  *                      type: string
  *          PostedSubcategory:
  *              type: object
@@ -350,6 +345,8 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  slug:
  *                      type: string
+ *                  image:
+ *                      type: string
  *          ReturnedCategories:
  *              type: object
  *              properties:
@@ -358,6 +355,8 @@ app.all('*', (req, res, next) => {
  *                  name:
  *                      type: string
  *                  slug:
+ *                      type: string
+ *                  image:
  *                      type: string
  *                  subcategories:
  *                      type: array
@@ -742,7 +741,7 @@ app.all('*', (req, res, next) => {
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#components/schema/PatchedCategory'
+ *                      $ref: '#components/schema/PostedCategory'
  *      responses:
  *          200:
  *              description: patched successfully

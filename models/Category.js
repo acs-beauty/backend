@@ -40,21 +40,11 @@ module.exports = (sequelize, DataTypes) => {
         // },
         unique: true,
       },
-      // imageName: { // DELETE !!!
-      //   type: DataTypes.STRING(128),
-      //   allowNull: false,
-      //   defaultValue: "category_no_image.png",
-      // },
-      // imageBannerName: {
-      //   type: DataTypes.STRING(128),
-      //   allowNull: false,
-      //   defaultValue: IMAGE_BANNER_NAME,
-      // },
-      // disabled: {
-      //   type: DataTypes.BOOLEAN,
-      //   allowNull: false,
-      //   defaultValue: false,
-      // },
+      image: {
+        type: DataTypes.STRING(250),
+        allowNull: false,
+        defaultValue: '',
+      },
     },
     {
       sequelize,
