@@ -211,6 +211,15 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  description:
  *                      type: string
+ *          PostedNews:
+ *              type: object
+ *              properties:
+ *                  banner:
+ *                      type: string
+ *                  title:
+ *                      type: string
+ *                  text:
+ *                      type: string
  *          PostedProduct:
  *              type: object
  *              properties:
@@ -281,6 +290,27 @@ app.all('*', (req, res, next) => {
  *                          createdAt:
  *                            type: string
  *                            format: date
+ *          FindedNews:
+ *              type: object
+ *              properties:
+ *                  count:
+ *                      type: integer
+ *                  rows:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: integer
+ *                          banner:
+ *                            type: string
+ *                          title:
+ *                            type: string
+ *                          text:
+ *                            type: string
+ *                          createdAt:
+ *                            type: string
+ *                            format: date
  *          ReturnedCategory:
  *              type: object
  *              properties:
@@ -328,6 +358,20 @@ app.all('*', (req, res, next) => {
  *                  name:
  *                      type: string
  *                  description:
+ *                      type: string
+ *                  createdAt:
+ *                      type: string
+ *                      format: date
+ *          ReturnedNews:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  banner:
+ *                      type: string
+ *                  title:
+ *                      type: string
+ *                  text:
  *                      type: string
  *                  createdAt:
  *                      type: string
@@ -1039,4 +1083,80 @@ app.all('*', (req, res, next) => {
  *                      schema:
  *                          items:
  *                              $ref: '#components/schema/ReturnedFeedbackWithUserNameAndProduct'
+ */
+
+
+/**
+ * @swagger
+ * /api/news?page=1&pageSize=12&lookup=name:
+ *  get:
+ *      summary: get news
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/FindedNews'
+ */
+
+/**
+ * @swagger
+ * /api/news:
+ *  post:
+ *      summary: add news
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedNews'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedNews'
+ */
+
+
+/**
+ * @swagger
+ * /api/news/{id}:
+ *  patch:
+ *      summary: patch news
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedNews'
+ *      responses:
+ *          200:
+ *              description: patched successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedNews'
+ */
+
+/**
+ * @swagger
+ * /api/news/{id}:
+ *  delete:
+ *      summary: delete news
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *      responses:
+ *          204:
+ *              description: deleted successfully
  */
