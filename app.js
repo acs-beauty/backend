@@ -220,6 +220,15 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  text:
  *                      type: string
+ *          PostedSlide:
+ *              type: object
+ *              properties:
+ *                  desktopBanner:
+ *                      type: string
+ *                  mobileBanner:
+ *                      type: string
+ *                  priority:
+ *                      type: number
  *          PostedProduct:
  *              type: object
  *              properties:
@@ -311,6 +320,27 @@ app.all('*', (req, res, next) => {
  *                          createdAt:
  *                            type: string
  *                            format: date
+ *          FindedSlides:
+ *              type: object
+ *              properties:
+ *                  count:
+ *                      type: integer
+ *                  rows:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: integer
+ *                          desktopBanner:
+ *                            type: string
+ *                          mobileBanner:
+ *                            type: string
+ *                          priority:
+ *                            type: number
+ *                          createdAt:
+ *                            type: string
+ *                            format: date
  *          ReturnedCategory:
  *              type: object
  *              properties:
@@ -372,6 +402,20 @@ app.all('*', (req, res, next) => {
  *                  title:
  *                      type: string
  *                  text:
+ *                      type: string
+ *                  createdAt:
+ *                      type: string
+ *                      format: date
+ *          ReturnedSlide:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  desktopBanner:
+ *                      type: string
+ *                  mobileBanner:
+ *                      type: string
+ *                  priority:
  *                      type: string
  *                  createdAt:
  *                      type: string
@@ -1085,7 +1129,6 @@ app.all('*', (req, res, next) => {
  *                              $ref: '#components/schema/ReturnedFeedbackWithUserNameAndProduct'
  */
 
-
 /**
  * @swagger
  * /api/news?page=1&pageSize=12&lookup=name:
@@ -1150,6 +1193,81 @@ app.all('*', (req, res, next) => {
  * /api/news/{id}:
  *  delete:
  *      summary: delete news
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *      responses:
+ *          204:
+ *              description: deleted successfully
+ */
+
+/**
+ * @swagger
+ * /api/slide?page=1&pageSize=12:
+ *  get:
+ *      summary: get slides
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/FindedSlides'
+ */
+
+/**
+ * @swagger
+ * /api/slide:
+ *  post:
+ *      summary: add slide
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedSlide'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedSlide'
+ */
+
+
+/**
+ * @swagger
+ * /api/slide/{id}:
+ *  patch:
+ *      summary: patch slide
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedSlide'
+ *      responses:
+ *          200:
+ *              description: patched successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedSlide'
+ */
+
+/**
+ * @swagger
+ * /api/slide/{id}:
+ *  delete:
+ *      summary: delete slide
  *      parameters:
  *        - in: path
  *          name: id

@@ -54,8 +54,8 @@ class brandController {
       return res.json(slide1)
     }
 
-    deleteAndUploadNew(slide1, 'desktopBanner', 0)
-    deleteAndUploadNew(slide1, 'mobileBanner', 1)
+    await deleteAndUploadNew(slide1, 'desktopBanner', req, 0)
+    await deleteAndUploadNew(slide1, 'mobileBanner', req, 1)
 
     slide1.save()
 

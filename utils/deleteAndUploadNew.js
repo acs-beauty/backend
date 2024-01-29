@@ -1,4 +1,7 @@
-const deleteAndUploadNew = async (slide1, bannerField, index) => {
+const s3 = require("./s3")
+const unifyPath = require("./unifyPath")
+
+const deleteAndUploadNew = async (slide1, bannerField, req, index) => {
   const banner = decodeURI(slide1.dataValues[bannerField])
   let params = {
     Bucket: 'acs-beauty-bucket',
@@ -10,7 +13,7 @@ const deleteAndUploadNew = async (slide1, bannerField, index) => {
   params = {
     Body: req.files[index].buffer,
     Bucket: 'acs-beauty-bucket',
-    Key: `slide/${unifyPath(req)}`,
+    Key: `slide/${unifyPath(req, index)}`,
   }
   const data = await s3.upload(params).promise()
 
