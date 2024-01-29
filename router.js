@@ -21,6 +21,9 @@ router.use('/brand', brandRouter)
 const newsRouter = require('./routes/newsRouter')
 router.use('/news', newsRouter)
 
+const slideRouter = require('./routes/slideRouter')
+router.use('/slide', slideRouter)
+
 const userRouter = require('./routes/userRouter')
 router.use('/user', userRouter)
 
