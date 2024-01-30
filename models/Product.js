@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'productId',
         // targetKey: 'subcategoryId',
       })
-      // Product.hasOne(models.Parameter, {
-      //   as: 'parameter',
-      //   foreignKey: 'parameterId',
-      //   targetKey: 'id',
-      // })
+      Product.belongsToMany(models.Order, {
+        // as: 'products',
+        through: models.OrderProduct,
+        foreignKey: 'productId',
+      })
       // Product.belongsToMany(models.User, {
       //   through: 'UserFavorite',
       //   foreignKey: 'id',
@@ -34,11 +34,6 @@ module.exports = (sequelize, DataTypes) => {
       //   foreignKey: 'productImageId',
       //   targetKey: 'id',
       // })
-      // Product.hasMany(models.OrderDetail, {
-      //   as: "orderDetails",
-      //   foreignKey: "id",
-      //   targetKey: "id",
-      // });
     }
   }
 
@@ -76,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
       },
       discount: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(10, 1),
         // allowNull: true,
         defaultValue: 0,
         validate: {
@@ -101,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
       //   defaultValue: '',
       // },
       count: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.SMALLINT,
         allowNull: false,
         validate: {
           min: 0,

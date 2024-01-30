@@ -245,6 +245,22 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  brandId:
  *                      type: integer
+ *          PostedOrder:
+ *              type: object
+ *              properties:
+ *                firstName:
+ *                  type: string
+ *                lastName:
+ *                  type: string
+ *                status:
+ *                  type: string
+ *                  enum: ['pending', 'paid']
+ *                deliveryType:
+ *                  type: string
+ *                tth:
+ *                  type: number
+ *                comment:
+ *                  type: string
  *          ReturnedProducts:
  *              type: object
  *              properties:
@@ -273,6 +289,47 @@ app.all('*', (req, res, next) => {
  *                            type: integer
  *                          brandId:
  *                            type: integer
+ *          ReturnedOrders:
+ *              type: object
+ *              properties:
+ *                  count:
+ *                      type: integer
+ *                  rows:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: number
+ *                          firstName:
+ *                            type: string
+ *                          lastName:
+ *                            type: string
+ *                          status:
+ *                            type: string
+ *                            enum: ['pending', 'paid']
+ *                          deliveryType:
+ *                            type: string
+ *                          tth:
+ *                            type: number
+ *                          comment:
+ *                            type: string
+ *                          createdAt:
+ *                            type: string
+ *                            format: date
+ *                          products:
+ *                            type: array
+ *                            items:
+ *                              type: object
+ *                              properties:
+ *                                name:
+ *                                  type: string
+ *                                price:
+ *                                  type: number
+ *                                discount:
+ *                                  type: number
+ *                                count:
+ *                                  type: number
  *          ReturnedBrands:
  *              type: object
  *              properties:
@@ -442,6 +499,27 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  brandId:
  *                      type: integer
+ *          ReturnedOrder:
+ *              type: object
+ *              properties:
+ *                id:
+ *                  type: number
+ *                firstName:
+ *                  type: string
+ *                lastName:
+ *                  type: string
+ *                status:
+ *                  type: string
+ *                  enum: ['pending', 'paid']
+ *                deliveryType:
+ *                  type: string
+ *                tth:
+ *                  type: number
+ *                comment:
+ *                  type: string
+ *                createdAt:
+ *                  type: string
+ *                  format: date
  *          PostedFeedback:
  *              type: object
  *              properties:
@@ -548,7 +626,6 @@ app.all('*', (req, res, next) => {
  *                              $ref: '#components/schema/PatchedMeUser'
  */
 
-
 /**
  * @swagger
  * /api/user/me:
@@ -590,7 +667,6 @@ app.all('*', (req, res, next) => {
  *                          items:
  *                              $ref: '#components/schema/token'
  */
-
 
 /**
  * @swagger
@@ -950,6 +1026,65 @@ app.all('*', (req, res, next) => {
  *              description: deleted successfully
  */
 
+/**
+ * @swagger
+ * /api/order?page=1&pageSize=25&lookup=firstName|lastName|tth:
+ *  get:
+ *      summary: get orders
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedOrders'
+ */
+
+/**
+ * @swagger
+ * /api/order:
+ *  post:
+ *      summary: add order
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedOrder'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedOrder'
+ */
+
+/**
+ * @swagger
+ * /api/order/{id}:
+ *  delete:
+ *      summary: delete order
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *      responses:
+ *          204:
+ *              description: deleted successfully
+ */
+
 // /**
 //  * @swagger
 //  * /api/brand/{id}:
@@ -1008,7 +1143,6 @@ app.all('*', (req, res, next) => {
  *                          items:
  *                              $ref: '#components/schema/ReturnedBrand'
  */
-
 
 /**
  * @swagger
@@ -1186,7 +1320,6 @@ app.all('*', (req, res, next) => {
  *                              $ref: '#components/schema/ReturnedNews'
  */
 
-
 /**
  * @swagger
  * /api/news/{id}:
@@ -1260,7 +1393,6 @@ app.all('*', (req, res, next) => {
  *                          items:
  *                              $ref: '#components/schema/ReturnedSlide'
  */
-
 
 /**
  * @swagger
