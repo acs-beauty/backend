@@ -916,6 +916,27 @@ app.all('*', (req, res, next) => {
 /**
  * @swagger
  * /api/product/{id}:
+ *  patch:
+ *      summary: patch product
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedProduct'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedProduct'
+ */
+
+/**
+ * @swagger
+ * /api/product/{id}:
  *  delete:
  *      summary: delete product
  *      parameters:

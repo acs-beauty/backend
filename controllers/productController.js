@@ -25,6 +25,25 @@ class productController {
     return res.status(201).json(product)
   })
 
+  patch = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
+
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
+    }
+
+    const [count, [product]] = await Product.update(req.body, {
+      where: {
+        id,
+      },
+      returning: true,
+    })
+    if (!count) {
+      return next(ApiError.notFound(`Товар с id ${id} не найден`))
+    }
+    return res.json(product)
+  })
+
   get = asyncErrorHandler(async (req, res, next) => {
     const { id } = req.params
 
