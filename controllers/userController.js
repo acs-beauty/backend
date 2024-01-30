@@ -186,19 +186,30 @@ class UserController {
             [Op.like]: `%${lookup}%`,
           },
         },
-        {
-          id: /^\d+$/.test(lookup)
-            ? {
-                [Op.eq]: lookup,
-              }
-            : { [Op.lt]: 0 },
-        },
+        // {
+        //   id: /^\d+$/.test(lookup)
+        //     ? {
+        //         [Op.eq]: lookup,
+        //       }
+        //     : { [Op.lt]: 0 },
+        // },
         {
           phone: {
             [Op.like]: `%${lookup}%`,
           },
         },
       ]
+    }
+
+    if (/^\d+$/.test(lookup)) {
+      where = {
+        [Op.or]: [
+          ...where[Op.or],
+          {
+            id: { [Op.eq]: lookup },
+          },
+        ],
+      }
     }
 
     // if (typeof lookup === 'number') {
