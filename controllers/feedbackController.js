@@ -95,22 +95,22 @@ class FeedbackController {
       where[Op.or] = [
         {
           review: {
-            [Op.like]: `%${lookup}%`,
+            [Op.iLike]: `%${lookup}%`,
           },
         },
         {
           ['$Product.name$']: {
-            [Op.like]: `%${lookup}%`,
+            [Op.iLike]: `%${lookup}%`,
           },
         },
         {
           ['$User.firstName$']: {
-            [Op.like]: `%${lookup}%`,
+            [Op.iLike]: `%${lookup}%`,
           },
         },
         {
           ['$User.lastName$']: {
-            [Op.like]: `%${lookup}%`,
+            [Op.iLike]: `%${lookup}%`,
           },
         },
       ]

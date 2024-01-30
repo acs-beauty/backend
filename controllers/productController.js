@@ -79,7 +79,7 @@ class productController {
       where[Op.or] = [
         {
           name: {
-            [Op.like]: `%${lookup}%`,
+            [Op.iLike]: `%${lookup}%`,
           },
         },
         {
@@ -90,7 +90,7 @@ class productController {
       ]
     } else if (lookup) {
       where.name = {
-        [Op.like]: `%${lookup}%`,
+        [Op.iLike]: `%${lookup}%`,
       }
     }
 

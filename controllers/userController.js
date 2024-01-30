@@ -173,17 +173,17 @@ class UserController {
       where[Op.or] = [
         {
           firstName: {
-            [Op.like]: `%${lookup}%`,
+            [Op.iLike]: `%${lookup}%`,
           },
         },
         {
           lastName: {
-            [Op.like]: `%${lookup}%`,
+            [Op.iLike]: `%${lookup}%`,
           },
         },
         {
           email: {
-            [Op.like]: `%${lookup}%`,
+            [Op.iLike]: `%${lookup}%`,
           },
         },
         // {
@@ -195,7 +195,7 @@ class UserController {
         // },
         {
           phone: {
-            [Op.like]: `%${lookup}%`,
+            [Op.iLike]: `%${lookup}%`,
           },
         },
       ]
