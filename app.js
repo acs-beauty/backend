@@ -1263,7 +1263,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/feedback?page=1&pageSize=25&status=pending|published&rating=2&lookup=id|firstName|lastName|productName|review:
+ * /api/feedback?page=1&pageSize=25&status=pending|published&rating=positive|neutral|negative&lookup=id|firstName|lastName|productName|review:
  *  get:
  *      summary: get paginated feedbacks
  *      parameters:

@@ -124,8 +124,13 @@ class FeedbackController {
       where.status = status
     }
 
-    if (rating) {
-      where.rating = rating
+    if (['positive', 'neutral', 'negative'].includes(rating)) {
+      const ratingToCondition = {
+        positive: { [Op.gt]: 2 },
+        neutral: 2,
+        negative: { [Op.lt]: 2 },
+      }
+      where.rating = ratingToCondition[rating]
     }
 
     let users = await Feedback.findAndCountAll({
