@@ -196,7 +196,7 @@ app.all('*', (req, res, next) => {
  *                  name:
  *                      type: string
  *                  categoryId:
- *                      type: string
+ *                      type: number
  *          PostedBrand:
  *              type: object
  *              properties:
@@ -433,7 +433,7 @@ app.all('*', (req, res, next) => {
  *                  name:
  *                      type: string
  *                  categoryId:
- *                      type: string
+ *                      type: number
  *          ReturnedBrand:
  *              type: object
  *              properties:
@@ -750,7 +750,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/category:
+ * /api/category/{id}:
  *  get:
  *      summary: get categories
  *

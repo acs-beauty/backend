@@ -29,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(64),
         allowNull: false,
       },
+      // description: {
+      //   type: DataTypes.STRING(500),
+      //   defaultValue: '',
+      // },
       slug: {
         type: DataTypes.STRING(64),
         allowNull: false,
