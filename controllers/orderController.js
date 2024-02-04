@@ -38,7 +38,7 @@ class subcategoryController {
   })
 
   getPaginated = asyncErrorHandler(async (req, res, next) => {
-    const { pageSize, page, lookup } = req.query
+    const { pageSize, page, lookup, status, deliveryType } = req.query
 
     if (!page) {
       return next(ApiError.badRequest('Не передан номер страницы пагинации'))
@@ -69,6 +69,14 @@ class subcategoryController {
           },
         ],
       }
+    }
+
+    if (deliveryType) {
+      where.deliveryType = deliveryType
+    }
+
+    if (status) {
+      where.status = status
     }
 
     let result = await Order.findAndCountAll({

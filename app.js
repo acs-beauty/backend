@@ -1028,7 +1028,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/order?page=1&pageSize=25&lookup=firstName|lastName|tth:
+ * /api/order?page=1&pageSize=25&lookup=firstName|lastName|tth&status=paid|pending&deliveryType=ukrPoshta|novaPoshta|selfDelivery:
  *  get:
  *      summary: get orders
  *      parameters:
