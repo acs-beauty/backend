@@ -49,6 +49,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM('pending', 'published'),
         allowNull: false,
         defaultValue: 'pending',
+        validate: {
+          isIn: {
+            args: [['pending', 'published']],
+            msg: 'Must be pending or published',
+          },
+        },
       },
       createdAt: {
         type: DataTypes.DATE,

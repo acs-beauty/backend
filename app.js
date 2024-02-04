@@ -1072,6 +1072,27 @@ app.all('*', (req, res, next) => {
 /**
  * @swagger
  * /api/order/{id}:
+ *  patch:
+ *      summary: patch order
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/PostedOrder'
+ *      responses:
+ *          200:
+ *              description: added successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedOrder'
+ */
+
+/**
+ * @swagger
+ * /api/order/{id}:
  *  delete:
  *      summary: delete order
  *      parameters:

@@ -34,11 +34,23 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM('pending', 'paid'),
         allowNull: false,
         defaultValue: 'pending',
+        validate: {
+          isIn: {
+            args: [['pending', 'paid']],
+            msg: 'Must be pending or paid',
+          },
+        },
       },
       deliveryType: {
         type: DataTypes.ENUM('novaPoshta', 'ukrPoshta', 'selfDelivery'),
         allowNull: false,
         defaultValue: 'novaPoshta',
+        validate: {
+          isIn: {
+            args: [['novaPoshta', 'ukrPoshta', 'selfDelivery']],
+            msg: 'Must be novaPoshta, ukrPoshta or selfDelivery',
+          },
+        },
       },
       tth: {
         type: DataTypes.BIGINT,

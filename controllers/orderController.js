@@ -18,6 +18,25 @@ class subcategoryController {
     return res.status(201).json(order)
   })
 
+  patch = asyncErrorHandler(async (req, res, next) => {
+    const { id } = req.params
+
+    if (!id) {
+      return next(ApiError.badRequest('Не передан параметр id'))
+    }
+
+    const [count, [order]] = await Order.update(req.body, {
+      where: {
+        id,
+      },
+      returning: true,
+    })
+    if (!count) {
+      return next(ApiError.notFound(`Заказ с id ${id} не найден`))
+    }
+    return res.json(order)
+  })
+
   getPaginated = asyncErrorHandler(async (req, res, next) => {
     const { pageSize, page, lookup } = req.query
 
