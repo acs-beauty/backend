@@ -289,6 +289,17 @@ app.all('*', (req, res, next) => {
  *                            type: integer
  *                          brandId:
  *                            type: integer
+ *                          images:
+ *                            type: array
+ *                            items:
+ *                              type: object
+ *                              properties:
+ *                                id:
+ *                                  type: integer
+ *                                url:
+ *                                  type: string
+ *                                productId:
+ *                                  type: number
  *          ReturnedOrders:
  *              type: object
  *              properties:
@@ -499,6 +510,17 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  brandId:
  *                      type: integer
+ *                  images:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: integer
+ *                          url:
+ *                            type: string
+ *                          productId:
+ *                            type: number
  *          ReturnedOrder:
  *              type: object
  *              properties:

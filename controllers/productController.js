@@ -1,15 +1,11 @@
 'use strict'
 const { Op } = require('sequelize')
-const { sequelize } = require('../models')
 const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
-// const findAllPreviewProducts = require('../queries/findAllPreviewProducts')
-// const findByPkProduct = require('../queries/findByPkProduct')
-// const findAllSearchProduct = require('../queries/findAllSearchProduct')
-// const findAllProductIds = require('../queries/findAllProductIds')
-// const findAllParameterNames = require('../queries/findAllParameterNames')
-const { Product, Subcategory, Category } = require('../models')
+const { Product, Subcategory, Image } = require('../models')
 const { PAGE_SIZE } = require('../constants')
+const unifyPath = require('../utils/unifyPath')
+const s3 = require('../utils/s3')
 
 class productController {
   post = asyncErrorHandler(async (req, res, next) => {
@@ -21,7 +17,24 @@ class productController {
       return next(ApiError.badRequest('Не передано поле subcategoryId'))
     }
 
-    const product = await Product.create(req.body)
+    let product = await Product.create(req.body)
+
+    product = product.toJSON()
+    const images = []
+    for (const file of req.files) {
+      const params = {
+        Body: file.buffer,
+        Bucket: 'acs-beauty-bucket',
+        Key: `product/${unifyPath(req)}`,
+      }
+      const data = await s3.upload(params).promise()
+
+      const image = await Image.create({ url: data.Location, productId: product.id })
+      images.push(image)
+    }
+
+    product = { ...product, images }
+
     return res.status(201).json(product)
   })
 
@@ -32,16 +45,46 @@ class productController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const [count, [product]] = await Product.update(req.body, {
-      where: {
-        id,
-      },
-      returning: true,
-    })
-    if (!count) {
+    let item = await Product.findByPk(id)
+    if (!item) {
       return next(ApiError.notFound(`Товар с id ${id} не найден`))
     }
-    return res.json(product)
+
+    let result = null
+    if (req.body.length) {
+      let [_, [product]] = await Product.update(req.body, {
+        where: {
+          id,
+        },
+        returning: true,
+      })
+
+      if (!req.files.length) {
+        return res.json(product)
+      }
+      result = product
+    }
+
+    item = result ? result.toJSON() : item.toJSON()
+    const images = []
+    for (const file of req.files) {
+      const params = {
+        Body: file.buffer,
+        Bucket: 'acs-beauty-bucket',
+        Key: `product/${unifyPath(req)}`,
+      }
+      const data = await s3.upload(params).promise()
+
+      const image = await Image.create({ url: decodeURI(data.Location), productId: item.id })
+      images.push(image)
+    }
+
+    item = { ...item, images }
+
+    // if (!count) {
+    //   return next(ApiError.notFound(`Товар с id ${id} не найден`))
+    // }
+    return res.json(item)
   })
 
   get = asyncErrorHandler(async (req, res, next) => {
@@ -51,7 +94,12 @@ class productController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const product = await Product.findByPk(id)
+    const product = await Product.findByPk(id, {
+      include: {
+        model: Image,
+        as: 'images',
+      },
+    })
     if (!product) {
       return next(ApiError.notFound(`Продукт с id ${id} не найден`))
     }
@@ -60,6 +108,10 @@ class productController {
 
   getPaginated = asyncErrorHandler(async (req, res, next) => {
     const { category, discount, availability, page, lookup, pageSize } = req.query
+
+    if (!page) {
+      return next(ApiError.badRequest('Нужно передать страницу пагинации'))
+    }
 
     let where = {}
     if (discount) {
@@ -98,23 +150,30 @@ class productController {
       where,
       limit: pageSize || PAGE_SIZE,
       offset: (page - 1) * (pageSize || PAGE_SIZE),
-      raw: true,
+      order: [['id', 'ASC']],
+      // raw: true,
       // nest: true,
-      include: {
-        model: Subcategory,
-        // separate: true,
-        attributes: [],
+      include: [
+        {
+          model: Subcategory,
+          // separate: true,
+          attributes: [],
 
-        // include: {
-        //   model: Category,
-        // },
+          // include: {
+          //   model: Category,
+          // },
 
-        // through: {
-        //   attributes: [],
-        // },
-        // as: 'subcategory',
-        // attributes: ["role"],
-      },
+          // through: {
+          //   attributes: [],
+          // },
+          // as: 'subcategory',
+          // attributes: ["role"],
+        },
+        {
+          model: Image,
+          as: 'images',
+        },
+      ],
     })
     // const count = await Product.count()
 

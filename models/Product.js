@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'productId',
         // targetKey: 'subcategoryId',
       })
+      Product.hasMany(models.Image, {
+        as: 'images',
+        foreignKey: 'productId',
+      })
       Product.belongsToMany(models.Order, {
         // as: 'products',
         through: models.OrderProduct,
@@ -53,16 +57,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      // composition: {
-      //   type: DataTypes.TEXT,
-      //   allowNull: true,
-      //   defaultValue: null,
-      // },
-      // mainImageName: {
-      //   type: DataTypes.STRING(128),
-      //   allowNull: false,
-      //   defaultValue: 'product_no_image.png',
-      // },
       price: {
         type: DataTypes.DECIMAL(10, 2),
         validate: {
