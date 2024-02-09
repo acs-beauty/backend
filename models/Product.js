@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       Product.hasMany(models.Image, {
         as: 'images',
         foreignKey: 'productId',
+        onDelete: 'CASCADE',
       })
       Product.belongsToMany(models.Order, {
         // as: 'products',
@@ -58,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       price: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(20, 2),
         validate: {
           min: 0,
         },
@@ -66,29 +67,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       discount: {
         type: DataTypes.DECIMAL(10, 1),
-        // allowNull: true,
         defaultValue: 0,
         validate: {
           min: 0,
         },
       },
-      // subcategoryId: {
-      //   allowNull: false,
-      //   type: DataTypes.INTEGER,
-      // },
-      // parameterId: {
-      //   allowNull: false,
-      //   type: DataTypes.INTEGER,
-      // },
-      // productImageId: {
-      //   allowNull: false,
-      //   type: DataTypes.INTEGER,
-      // },
-      // brand: {
-      //   allowNull: false,
-      //   type: DataTypes.STRING(60),
-      //   defaultValue: '',
-      // },
       count: {
         type: DataTypes.SMALLINT,
         allowNull: false,
@@ -107,26 +90,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
-      // promotion: {
-      //   type: DataTypes.BOOLEAN,
-      //   allowNull: false,
-      //   defaultValue: false,
-      // },
-      // disabled: {
-      //   type: DataTypes.BOOLEAN,
-      //   allowNull: false,
-      //   defaultValue: false,
-      // },
-      // createdAt: {
-      //   type: DataTypes.DATE,
-      //   allowNull: true,
-      //   defaultValue: DataTypes.NOW,
-      // },
-      // updatedAt: {
-      //   type: DataTypes.DATE,
-      //   allowNull: true,
-      //   defaultValue: DataTypes.NOW,
-      // },
     },
     {
       sequelize,

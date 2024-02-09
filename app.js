@@ -28,7 +28,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:5000/',
+        url: 'http://13.50.16.182:5000/',
       },
     ],
   },
@@ -112,7 +112,7 @@ app.all('*', (req, res, next) => {
  *                  createdAt:
  *                      type: string
  *                      format: date
- *          PatchedMeUser:
+ *          UserMe:
  *              type: object
  *              properties:
  *                  id:
@@ -123,9 +123,9 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  email:
  *                      type: string
- *                  avatar:
- *                      type: string
  *                  phone:
+ *                      type: string
+ *                  avatar:
  *                      type: string
  *          PatchingUser:
  *              type: object
@@ -140,19 +140,9 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  phone:
  *                      type: string
- *          PatchingUserWithAvatar:
- *              type: object
- *              properties:
- *                  firstName:
- *                      type: string
- *                  lastName:
- *                      type: string
- *                  email:
- *                      type: string
- *                  phone:
- *                      type: string
  *                  avatar:
  *                      type: string
+ *                      example: byte, formData
  *          UserForRegistration:
  *              type: object
  *              properties:
@@ -190,6 +180,7 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  image:
  *                      type: string
+ *                      example: byte, formData
  *          PostedSubcategory:
  *              type: object
  *              properties:
@@ -202,6 +193,7 @@ app.all('*', (req, res, next) => {
  *              properties:
  *                  logo:
  *                      type: string
+ *                      example: byte, formData
  *                  name:
  *                      type: string
  *                  description:
@@ -211,6 +203,7 @@ app.all('*', (req, res, next) => {
  *              properties:
  *                  banner:
  *                      type: string
+ *                      example: byte, formData
  *                  title:
  *                      type: string
  *                  text:
@@ -220,8 +213,10 @@ app.all('*', (req, res, next) => {
  *              properties:
  *                  desktopBanner:
  *                      type: string
+ *                      example: byte, formData
  *                  mobileBanner:
  *                      type: string
+ *                      example: byte, formData
  *                  priority:
  *                      type: number
  *          PostedProduct:
@@ -245,6 +240,12 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  brandId:
  *                      type: integer
+ *                  imageIds:
+ *                      type: string
+ *                      example: 1, 2, 3, 4, 5
+ *                  images:
+ *                      type: string
+ *                      example: byte, formData
  *          PostedOrder:
  *              type: object
  *              properties:
@@ -261,6 +262,19 @@ app.all('*', (req, res, next) => {
  *                  type: number
  *                comment:
  *                  type: string
+ *          PostedFeedback:
+ *              type: object
+ *              properties:
+ *                  review:
+ *                      type: string
+ *                  rating:
+ *                      type: integer
+ *                  status:
+ *                      type: string
+ *                  productId:
+ *                      type: integer
+ *                  userId:
+ *                      type: integer
  *          ReturnedProducts:
  *              type: object
  *              properties:
@@ -542,19 +556,6 @@ app.all('*', (req, res, next) => {
  *                createdAt:
  *                  type: string
  *                  format: date
- *          PostedFeedback:
- *              type: object
- *              properties:
- *                  review:
- *                      type: string
- *                  rating:
- *                      type: integer
- *                  status:
- *                      type: string
- *                  productId:
- *                      type: integer
- *                  userId:
- *                      type: integer
  *          ReturnedFeedback:
  *              type: object
  *              properties:
@@ -645,7 +646,7 @@ app.all('*', (req, res, next) => {
  *                  application/json:
  *                      schema:
  *                          items:
- *                              $ref: '#components/schema/PatchedMeUser'
+ *                              $ref: '#components/schema/UserMe'
  */
 
 /**
@@ -658,7 +659,7 @@ app.all('*', (req, res, next) => {
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#components/schema/PatchingUserWithAvatar'
+ *                      $ref: '#components/schema/PatchingUser'
  *      responses:
  *          200:
  *              description: patched successfully
@@ -666,7 +667,7 @@ app.all('*', (req, res, next) => {
  *                  application/json:
  *                      schema:
  *                          items:
- *                              $ref: '#components/schema/PatchedMeUser'
+ *                              $ref: '#components/schema/UserMe'
  */
 
 /**

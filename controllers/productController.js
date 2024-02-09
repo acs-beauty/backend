@@ -20,18 +20,25 @@ class productController {
     let product = await Product.create(req.body)
 
     product = product.toJSON()
-    const images = []
-    for (const file of req.files) {
+    const promises = []
+    const length = req.files.length <= 10 ? req.files.length : 10
+    for (let i = 0; i < length; i++) {
       const params = {
-        Body: file.buffer,
+        Body: req.files[i].buffer,
         Bucket: 'acs-beauty-bucket',
-        Key: `product/${unifyPath(req)}`,
+        Key: `product/${unifyPath(req, i)}`,
       }
-      const data = await s3.upload(params).promise()
-
-      const image = await Image.create({ url: data.Location, productId: product.id })
-      images.push(image)
+      promises.push(s3.upload(params).promise())
     }
+
+    const results = await Promise.all(promises)
+
+    const objects = []
+    for (const result of results) {
+      objects.push({ url: decodeURI(result.Location), productId: product.id })
+    }
+
+    const images = await Image.bulkCreate(objects)
 
     product = { ...product, images }
 
@@ -40,51 +47,74 @@ class productController {
 
   patch = asyncErrorHandler(async (req, res, next) => {
     const { id } = req.params
+    const { imageIds } = req.body
 
     if (!id) {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    let item = await Product.findByPk(id)
-    if (!item) {
+    let product = await Product.findByPk(id)
+    if (!product) {
       return next(ApiError.notFound(`Товар с id ${id} не найден`))
     }
 
-    let result = null
-    if (req.body.length) {
-      let [_, [product]] = await Product.update(req.body, {
-        where: {
-          id,
-        },
-        returning: true,
-      })
+    let ids = imageIds.split(',')
+    ids = ids.map(id => +id)
 
-      if (!req.files.length) {
-        return res.json(product)
+    let items = await Image.findAll({ where: { productId: id }, raw: true })
+    const imagesForDeleting = items.filter(image => !ids.includes(image.id))
+    const existImages = items.filter(image => ids.includes(image.id))
+
+    for (const image of imagesForDeleting) {
+      await Image.destroy({ where: { id: image.id } })
+      const params = {
+        Bucket: 'acs-beauty-bucket',
+        Key: `product/${image.url.slice(image.url.lastIndexOf('/') + 1)}`,
       }
-      result = product
+      s3.deleteObject(params).promise()
     }
 
-    item = result ? result.toJSON() : item.toJSON()
-    const images = []
-    for (const file of req.files) {
+    const { imageIds: excludedField, ...rest } = req.body
+
+    await Product.update(rest, {
+      where: {
+        id,
+      },
+      returning: true,
+    })
+
+    if (!req.files.length) {
+      product = await Product.findByPk(id, {
+        include: {
+          model: Image,
+          as: 'images',
+        },
+      })
+      return res.json(product)
+    }
+
+    const objects = []
+
+    const length = req.files.length + ids.length > 10 ? 10 - ids.length : req.files.length
+    for (let i = 0; i < length; i++) {
       const params = {
-        Body: file.buffer,
+        Body: req.files[i].buffer,
         Bucket: 'acs-beauty-bucket',
-        Key: `product/${unifyPath(req)}`,
+        Key: `product/${unifyPath(req, i)}`,
       }
       const data = await s3.upload(params).promise()
 
-      const image = await Image.create({ url: decodeURI(data.Location), productId: item.id })
-      images.push(image)
+      // const image = await Image.create({ url: decodeURI(data.Location), productId: id })
+      // images.push(image.toJSON())
+      objects.push({ url: decodeURI(data.Location), productId: id })
     }
 
-    item = { ...item, images }
+    let images = await Image.bulkCreate(objects)
+    images = images.map(image => image.toJSON())
 
-    // if (!count) {
-    //   return next(ApiError.notFound(`Товар с id ${id} не найден`))
-    // }
-    return res.json(item)
+    product = { ...product.toJSON(), images: [...existImages, ...images] }
+
+    return res.json(product)
   })
 
   get = asyncErrorHandler(async (req, res, next) => {
@@ -175,7 +205,6 @@ class productController {
         },
       ],
     })
-    // const count = await Product.count()
 
     return res.json(products)
   })
@@ -187,13 +216,24 @@ class productController {
       return next(ApiError.badRequest('Не передан параметр id'))
     }
 
-    const count = await Product.destroy({ where: { id } })
-    if (!count) {
-      return next(ApiError.notFound(`продукт с id ${id} не найден`))
+    const product = await Product.findByPk(id)
+    if (!product) {
+      return next(ApiError.notFound(`Товар с id ${id} не найден`))
+    }
+
+    const images = await Image.findAll({ where: { productId: id }, raw: true })
+
+    await product.destroy()
+
+    for (const image of images) {
+      const params = {
+        Bucket: 'acs-beauty-bucket',
+        Key: `product/${image.url.slice(image.url.lastIndexOf('/') + 1)}`,
+      }
+      s3.deleteObject(params).promise()
     }
 
     return res.status(204).json()
-    // return res.json('Категория была успешно удалена')
   })
 }
 
