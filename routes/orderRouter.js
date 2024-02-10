@@ -7,7 +7,7 @@ const orderRouter = Router();
 
 orderRouter.post('/', authMiddleware, orderController.post)
 orderRouter.patch('/:id', authMiddleware, orderController.patch)
-// orderRouter.get('/:id', orderController.get)
+orderRouter.get('/:id', orderController.get)
 orderRouter.get('/', orderController.getPaginated)
 orderRouter.delete('/:id', authMiddleware, orderController.delete)
 

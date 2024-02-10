@@ -254,15 +254,31 @@ app.all('*', (req, res, next) => {
  *                  type: string
  *                lastName:
  *                  type: string
+ *                email:
+ *                  type: string
+ *                phone:
+ *                  type: string
  *                status:
  *                  type: string
  *                  enum: ['pending', 'paid']
  *                deliveryType:
  *                  type: string
+ *                  enum: ['novaPoshta', 'ukrPoshta', 'selfDelivery']
+ *                address:
+ *                  type: string
+ *                paymentType:
+ *                  type: string
+ *                  enum: ['card', 'cash']
  *                tth:
  *                  type: number
  *                comment:
  *                  type: string
+ *                productIds:
+ *                  type: string
+ *                  example: 1, 2, 3, 23
+ *                productCounts:
+ *                  type: string
+ *                  example: 1, 2, 3, 23
  *          PostedFeedback:
  *              type: object
  *              properties:
@@ -341,19 +357,8 @@ app.all('*', (req, res, next) => {
  *                          createdAt:
  *                            type: string
  *                            format: date
- *                          products:
- *                            type: array
- *                            items:
- *                              type: object
- *                              properties:
- *                                name:
- *                                  type: string
- *                                price:
- *                                  type: number
- *                                discount:
- *                                  type: number
- *                                count:
- *                                  type: number
+ *                          total:
+ *                            type: number
  *          ReturnedBrands:
  *              type: object
  *              properties:
@@ -604,11 +609,21 @@ app.all('*', (req, res, next) => {
  *                  type: string
  *                lastName:
  *                  type: string
+ *                email:
+ *                  type: string
+ *                phone:
+ *                  type: string
  *                status:
  *                  type: string
  *                  enum: ['pending', 'paid']
  *                deliveryType:
  *                  type: string
+ *                  enum: ['novaPoshta', 'ukrPoshta', 'selfDelivery']
+ *                address:
+ *                  type: string
+ *                paymentType:
+ *                  type: string
+ *                  enum: ['card', 'cash']
  *                tth:
  *                  type: number
  *                comment:
@@ -616,6 +631,27 @@ app.all('*', (req, res, next) => {
  *                createdAt:
  *                  type: string
  *                  format: date
+ *                products:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      name:
+ *                        type: string
+ *                      price:
+ *                        type: number
+ *                      discount:
+ *                        type: number
+ *                      count:
+ *                        type: number
+ *                      images:
+ *                        type: array
+ *                        items:
+ *                          type: object
+ *                          properties:
+ *                            url:
+ *                              type: string
+ *                              example: https://acs-beauty-bucket.s3.eu-north-1.amazonaws.com/product/images (4)c3b4.jpg
  *          ReturnedFeedback:
  *              type: object
  *              properties:
@@ -1129,6 +1165,28 @@ app.all('*', (req, res, next) => {
  *                      schema:
  *                          items:
  *                              $ref: '#components/schema/ReturnedOrders'
+ */
+
+/**
+ * @swagger
+ * /api/order/{id}:
+ *  get:
+ *      summary: get order by id
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          schema:
+ *              type: integer
+ *          required: true
+ *
+ *      responses:
+ *          200:
+ *              description: get successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          items:
+ *                              $ref: '#components/schema/ReturnedOrder'
  */
 
 /**

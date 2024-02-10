@@ -65,8 +65,9 @@ class productController {
     const imagesForDeleting = items.filter(image => !ids.includes(image.id))
     const existImages = items.filter(image => ids.includes(image.id))
 
+    await Image.destroy({ where: { id: { [Op.in]: imagesForDeleting.map(item => item.id) } } })
     for (const image of imagesForDeleting) {
-      await Image.destroy({ where: { id: image.id } })
+      // await Image.destroy({ where: { id: image.id } })
       const params = {
         Bucket: 'acs-beauty-bucket',
         Key: `product/${image.url.slice(image.url.lastIndexOf('/') + 1)}`,

@@ -22,13 +22,30 @@ module.exports = (sequelize, DataTypes) => {
       },
       firstName: {
         type: DataTypes.STRING(64),
-        allowNull: false,
-        defaultValue: '',
+        allowNull: true,
+        defaultValue: null,
       },
       lastName: {
         type: DataTypes.STRING(64),
-        allowNull: false,
-        defaultValue: '',
+        allowNull: true,
+        defaultValue: null,
+      },
+      email: {
+        type: DataTypes.STRING(50),
+        allowNull: true,
+        unique: true,
+        validate: {
+          isEmail: {
+            args: true,
+            msg: 'email is in an invalid format',
+          },
+        },
+      },
+      phone: {
+        type: DataTypes.STRING(13),
+        unique: true,
+        allowNull: true,
+        // defaultValue: null,
       },
       status: {
         type: DataTypes.ENUM('pending', 'paid'),
@@ -49,6 +66,22 @@ module.exports = (sequelize, DataTypes) => {
           isIn: {
             args: [['novaPoshta', 'ukrPoshta', 'selfDelivery']],
             msg: 'Must be novaPoshta, ukrPoshta or selfDelivery',
+          },
+        },
+      },
+      address: {
+        type: DataTypes.STRING(64),
+        allowNull: false,
+        defaultValue: '',
+      },
+      paymentType: {
+        type: DataTypes.ENUM('card', 'cash'),
+        allowNull: false,
+        defaultValue: 'card',
+        validate: {
+          isIn: {
+            args: [['card', 'cash']],
+            msg: 'Must be card or cash',
           },
         },
       },
@@ -109,6 +142,20 @@ module.exports = (sequelize, DataTypes) => {
           unique: true,
           type: 'fulltext',
           fields: ['tth'],
+        },
+        {
+          // type: 'fulltext',
+          fields: ['status'],
+        },
+        {
+          // type: 'fulltext',
+          unique: true,
+          fields: ['phone'],
+        },
+        {
+          unique: true,
+          // type: 'fulltext',
+          fields: ['email'],
         },
       ],
     }
