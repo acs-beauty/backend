@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     static associate(models) {
       Product.belongsTo(models.Subcategory, {
-        // as: 'subcategory',
-        foreignKey: 'id',
+        as: 'subcategory',
+        foreignKey: 'subcategoryId',
         // targetKey: 'subcategoryId',
       })
       Product.belongsTo(models.Brand, {
-        // as: 'brand',
+        as: 'brand',
         foreignKey: 'id',
         // targetKey: 'id',
       })

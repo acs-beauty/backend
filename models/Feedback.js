@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Feedback.belongsTo(models.Product, {
         // as: 'brand',
-        foreignKey: 'id',
+        foreignKey: 'productId',
         // targetKey: 'id',
       })
       Feedback.belongsTo(models.User, {
         // as: 'brand',
-        foreignKey: 'id',
+        foreignKey: 'userId',
         // targetKey: 'id',
       })
     }

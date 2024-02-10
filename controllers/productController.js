@@ -1,8 +1,8 @@
 'use strict'
-const { Op } = require('sequelize')
+const { Op, col } = require('sequelize')
 const ApiError = require('../errors/ApiError')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
-const { Product, Subcategory, Image } = require('../models')
+const { Product, Subcategory, Category, Image, Brand } = require('../models')
 const { PAGE_SIZE } = require('../constants')
 const unifyPath = require('../utils/unifyPath')
 const s3 = require('../utils/s3')
@@ -125,10 +125,29 @@ class productController {
     }
 
     const product = await Product.findByPk(id, {
-      include: {
-        model: Image,
-        as: 'images',
-      },
+      attributes: { exclude: ['createdAt', 'updatedAt', 'brandId', 'subcategoryId'] },
+      include: [
+        {
+          model: Subcategory,
+          as: 'subcategory',
+          attributes: { exclude: ['categoryId'] },
+          include: {
+            model: Category,
+            as: 'category',
+            attributes: ['id', 'name'],
+          },
+        },
+        {
+          model: Brand,
+          as: 'brand',
+          attributes: ['id', 'name'],
+        },
+        {
+          model: Image,
+          as: 'images',
+          attributes: { exclude: ['productId'] },
+        },
+      ],
     })
     if (!product) {
       return next(ApiError.notFound(`Продукт с id ${id} не найден`))
@@ -183,11 +202,29 @@ class productController {
       order: [['id', 'ASC']],
       // raw: true,
       // nest: true,
+      // attributes: { exclude: 'subcategoryId', include: [[col('subcategory.name'), 'categoryName']] },
+      attributes: [
+        'id',
+        'name',
+        'price',
+        'discount',
+        'count',
+        'novelty',
+        'hit',
+        'createdAt',
+        [col('subcategory.name'), 'subcategoryName'],
+      ],
+      // attributes: { exclude: ['subcategoryId', 'brandId', 'createdAt', 'updatedAt'] },
       include: [
         {
           model: Subcategory,
+          // association: 'subcategory',
+          as: 'subcategory',
           // separate: true,
+          // attributes: ['id', 'name'],
           attributes: [],
+          // attributes: ['name'],
+          // required: true,
 
           // include: {
           //   model: Category,
@@ -202,6 +239,8 @@ class productController {
         {
           model: Image,
           as: 'images',
+          attributes: ['url'],
+          limit: 1,
         },
       ],
     })

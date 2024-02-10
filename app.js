@@ -127,6 +127,7 @@ app.all('*', (req, res, next) => {
  *                      type: string
  *                  avatar:
  *                      type: string
+ *                      example: https://acs-beauty-bucket.s3.eu-north-1.amazonaws.com/user/user1c3b4.jpg
  *          PatchingUser:
  *              type: object
  *              properties:
@@ -285,9 +286,9 @@ app.all('*', (req, res, next) => {
  *                      items:
  *                        type: object
  *                        properties:
- *                          name:
+ *                          id:
  *                            type: string
- *                          description:
+ *                          name:
  *                            type: string
  *                          price:
  *                            type: number
@@ -299,21 +300,19 @@ app.all('*', (req, res, next) => {
  *                            type: boolean
  *                          hit:
  *                            type: boolean
- *                          subcategoryId:
- *                            type: integer
- *                          brandId:
- *                            type: integer
+ *                          createdAt:
+ *                            type: string
+ *                            format: date
+ *                          subcategoryName:
+ *                            type: string
  *                          images:
  *                            type: array
  *                            items:
  *                              type: object
  *                              properties:
- *                                id:
- *                                  type: integer
  *                                url:
  *                                  type: string
- *                                productId:
- *                                  type: number
+ *                                  example: https://acs-beauty-bucket.s3.eu-north-1.amazonaws.com/product/images (4)c3b4.jpg
  *          ReturnedOrders:
  *              type: object
  *              properties:
@@ -369,6 +368,7 @@ app.all('*', (req, res, next) => {
  *                            type: integer
  *                          logo:
  *                            type: string
+ *                            example: https://acs-beauty-bucket.s3.eu-north-1.amazonaws.com/brand/brand1c3b4.jpg
  *                          name:
  *                            type: string
  *                          description:
@@ -390,6 +390,7 @@ app.all('*', (req, res, next) => {
  *                            type: integer
  *                          banner:
  *                            type: string
+ *                            example: https://acs-beauty-bucket.s3.eu-north-1.amazonaws.com/news/news1c3b4.jpg
  *                          title:
  *                            type: string
  *                          text:
@@ -466,6 +467,7 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  logo:
  *                      type: string
+ *                      example: https://acs-beauty-bucket.s3.eu-north-1.amazonaws.com/brand/brand1c3b4.jpg
  *                  name:
  *                      type: string
  *                  description:
@@ -480,6 +482,7 @@ app.all('*', (req, res, next) => {
  *                      type: integer
  *                  banner:
  *                      type: string
+ *                      example: https://acs-beauty-bucket.s3.eu-north-1.amazonaws.com/news/news1c3b4.jpg
  *                  title:
  *                      type: string
  *                  text:
@@ -520,10 +523,16 @@ app.all('*', (req, res, next) => {
  *                      type: boolean
  *                  hit:
  *                      type: boolean
- *                  subcategoryId:
- *                      type: integer
+ *                  createdAt:
+ *                      type: string
+ *                      format: date
+ *                  updatedAt:
+ *                      type: string
+ *                      format: date
  *                  brandId:
- *                      type: integer
+ *                      type: number
+ *                  subcategoryId:
+ *                      type: number
  *                  images:
  *                      type: array
  *                      items:
@@ -533,8 +542,59 @@ app.all('*', (req, res, next) => {
  *                            type: integer
  *                          url:
  *                            type: string
+ *                            example: https://acs-beauty-bucket.s3.eu-north-1.amazonaws.com/product/images (4)c3b4.jpg
  *                          productId:
- *                            type: number
+ *                            type: integer
+ *          ReturnedProductById:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                  name:
+ *                      type: string
+ *                  description:
+ *                      type: string
+ *                  price:
+ *                      type: integer
+ *                  discount:
+ *                      type: integer
+ *                  count:
+ *                      type: integer
+ *                  novelty:
+ *                      type: boolean
+ *                  hit:
+ *                      type: boolean
+ *                  subcategory:
+ *                      type: object
+ *                      properties:
+ *                        id:
+ *                          type: integer
+ *                        name:
+ *                          type: string
+ *                        category:
+ *                          type: object
+ *                          properties:
+ *                            id:
+ *                              type: integer
+ *                            name:
+ *                              type: string
+ *                  brand:
+ *                      type: object
+ *                      properties:
+ *                        id:
+ *                          type: integer
+ *                        name:
+ *                          type: string
+ *                  images:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          id:
+ *                            type: integer
+ *                          url:
+ *                            type: string
+ *                            example: https://acs-beauty-bucket.s3.eu-north-1.amazonaws.com/product/images (4)c3b4.jpg
  *          ReturnedOrder:
  *              type: object
  *              properties:
@@ -966,7 +1026,7 @@ app.all('*', (req, res, next) => {
  *                  application/json:
  *                      schema:
  *                          items:
- *                              $ref: '#components/schema/ReturnedProduct'
+ *                              $ref: '#components/schema/ReturnedProductById'
  */
 
 /**

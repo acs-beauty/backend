@@ -137,15 +137,16 @@ class FeedbackController {
       where,
       attributes: {
         include: [
-          [col('User.firstName'), 'firstName'],
-          [col('User.lastName'), 'lastName'],
-          [col('Product.name'), 'productName'],
+        [col('User.firstName'), 'firstName'],
+        [col('User.lastName'), 'lastName'],
+        [col('Product.name'), 'productName'],
         ],
         exclude: ['productId', 'userId'],
       },
       // attributes: ['id', 'review', 'rating', 'status', [col('User.firstName'), 'firstName'], [col('User.lastName'), 'lastName']],
 
       // attributes: { exclude: ['password', 'isAdmin'] },
+      order: [['id', 'ASC']],
       limit: pageSize || PAGE_SIZE,
       offset: (page - 1) * (pageSize || PAGE_SIZE),
       raw: true,
