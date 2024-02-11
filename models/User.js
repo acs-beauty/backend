@@ -59,11 +59,16 @@ module.exports = (sequelize, DataTypes) => {
         // allowNull: false,
         defaultValue: '',
       },
+      // activationLink: {
+      //   type: DataTypes.STRING(100),
+      //   // allowNull: false,
+      //   defaultValue: '',
+      // },
       phone: {
         type: DataTypes.STRING(13),
-        // allowNull: false,
-        defaultValue: '',
-        // unique: true,
+        allowNull: true,
+        // defaultValue: '',
+        unique: true,
         // validate: {
         //   len: {
         //     args: [12, 13],
@@ -72,6 +77,10 @@ module.exports = (sequelize, DataTypes) => {
         // },
       },
       isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      activated: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
@@ -96,6 +105,7 @@ module.exports = (sequelize, DataTypes) => {
           fields: ['id'],
         },
         {
+          unique: true,
           fields: ['phone'],
         },
         {

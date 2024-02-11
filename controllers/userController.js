@@ -8,8 +8,10 @@ const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 const unifyPath = require('../utils/unifyPath')
 const s3 = require('../utils/s3')
+const sendActivationEmail = require('../utils/sendActivationEmail')
+const setTokens = require('../utils/setTokens')
 
-const generateJWT = (id, email) => jwt.sign({ id, email }, process.env.SECRET_KEY, { expiresIn: '30d' })
+// const generateJWT = (id, email, expiresIn) => jwt.sign({ id, email }, process.env.ACCESS_SECRET, { expiresIn })
 
 class UserController {
   registration = asyncErrorHandler(async (req, res, next) => {
@@ -26,32 +28,73 @@ class UserController {
       return next(ApiError.badRequest('Неверный email'))
     }
     const hashedPassword = await bcrypt.hash(password, 5)
-    user = await User.create({ email, password: hashedPassword })
-    const token = generateJWT(user.id, email)
 
-    return res.status(201).json({ token })
+    user = await User.create({ email, password: hashedPassword })
+    const emailToken = jwt.sign({ id: user.id }, process.env.ACCESS_SECRET, { expiresIn: '3d' })
+    sendActivationEmail(email, `${process.env.API_URL}/api/user/activate/${emailToken}`)
+
+    // return res.status(201).json({ token })
+    return res.status(201).json()
   })
 
   login = asyncErrorHandler(async (req, res, next) => {
     const { email, password } = req.body
     const user = await User.findOne({ where: { email } })
+
     if (!user) {
       return next(ApiError.badRequest('Неверный email'))
     }
+
     let comparePassword = bcrypt.compareSync(password, user.password)
     if (!comparePassword) {
       return next(ApiError.badRequest('Указан неверный пароль'))
     }
-    // const token = generateJWT(user.id, user.email, user.isAdmin)
-    const token = generateJWT(user.id, user.email)
-    return res.json({ token })
+
+    setTokens(res, user.id)
+
+    return res.status(200).json()
+  })
+
+  activate = asyncErrorHandler(async (req, res, next) => {
+    const { token } = req.params
+
+    const decoded = jwt.verify(token, process.env.ACCESS_SECRET)
+    const user = await User.findByPk(decoded.id)
+    if (!user) {
+      return next(ApiError.badRequest('Некорректная ссылка активации'))
+    }
+    user.activated = true
+    await user.save()
+
+    return res.redirect(process.env.CLIENT_URL)
+  })
+
+  logout = asyncErrorHandler(async (req, res, next) => {
+    res.clearCookie('accessToken')
+    // res.clearCookie('refreshToken')
+
+    return res.status(200).json()
+  })
+
+  refresh = asyncErrorHandler(async (req, res, next) => {
+    const { refreshToken } = req.cookies
+
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET)
+    const user = await User.findByPk(decoded.id)
+    if (!user) {
+      return next(ApiError.notAuthorized('Пользователь не авторизован'))
+    }
+
+    setTokens(res, user.id)
+
+    return res.status(200).json()
   })
 
   me = asyncErrorHandler(async (req, res, next) => {
     const id = req.id
     const user = await User.findOne({
       where: { id },
-      attributes: { exclude: ['password', 'isAdmin', 'note', 'createdAt'] },
+      attributes: { exclude: ['password', 'isAdmin', 'note', 'createdAt', 'activated'] },
     })
     return res.json(user)
   })
@@ -218,7 +261,7 @@ class UserController {
 
     let users = await User.findAndCountAll({
       where,
-      attributes: { exclude: ['password', 'isAdmin', 'avatar'] },
+      attributes: { exclude: ['password', 'isAdmin', 'avatar', 'activated'] },
       limit: pageSize || PAGE_SIZE,
       offset: (page - 1) * (pageSize || PAGE_SIZE),
       raw: true,

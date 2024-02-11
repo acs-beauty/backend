@@ -119,7 +119,7 @@ class subcategoryController {
     if (!order) {
       return next(ApiError.notFound(`Заказ с id ${id} не найден`))
     }
-    console.log('order = ', order.toJSON())
+    
     order = formatOrder(order.toJSON())
     return res.json(order)
   })

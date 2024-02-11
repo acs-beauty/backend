@@ -5,6 +5,7 @@ const productController = require('../controllers/productController')
 // const validators = require('../middleware/validators')
 const authMiddleware = require('../middleware/authMiddleware')
 const multer = require('multer')
+const adminAuthMiddleware = require('../middleware/adminAuthMiddleware')
 const getFields = multer()
 
 const productRouter = Router()
@@ -18,10 +19,10 @@ const productRouter = Router()
 
 
 productRouter.get('/', productController.getPaginated)
-productRouter.post('/', authMiddleware, getFields.any(), productController.post)
-productRouter.patch('/:id', authMiddleware, getFields.any(), productController.patch)
-productRouter.get('/:id', productController.get)
-productRouter.delete('/:id', authMiddleware, productController.delete)
+productRouter.post('/', adminAuthMiddleware, getFields.any(), productController.post)
+productRouter.patch('/:id', adminAuthMiddleware, getFields.any(), productController.patch)
+productRouter.get('/:id', authMiddleware, productController.get)
+productRouter.delete('/:id', adminAuthMiddleware, productController.delete)
 
 // productRouter.get('/getAllProductIds', controllers.getAllProductIds)
 // productRouter.get('/:id', validators.validateProductId, controllers.getProductId)

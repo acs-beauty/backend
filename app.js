@@ -10,7 +10,7 @@ const swaggerJSDoc = require('swagger-jsdoc')
 
 const app = express()
 
-app.use(cors({ origin: '*' }))
+app.use(cors({ credentials: true, origin: '*' }))
 app.use(express.json())
 app.use(cookieParser())
 app.use('/api', router)
@@ -778,13 +778,8 @@ app.all('*', (req, res, next) => {
  *                  schema:
  *                      $ref: '#components/schema/UserForRegistration'
  *      responses:
- *          200:
+ *          201:
  *              description: registered successfully
- *              content:
- *                  application/json:
- *                      schema:
- *                          items:
- *                              $ref: '#components/schema/token'
  */
 
 /**
@@ -801,11 +796,42 @@ app.all('*', (req, res, next) => {
  *      responses:
  *          200:
  *              description: logined successfully
- *              content:
- *                  application/json:
- *                      schema:
- *                          items:
- *                              $ref: '#components/schema/token'
+ */
+
+/**
+ * @swagger
+ * /api/user/logout:
+ *  post:
+ *      summary: user logout
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schema/UserForRegistration'
+ *      responses:
+ *          200:
+ *              description: logouted successfully
+ */
+
+/**
+ * @swagger
+ * /api/user/activate/{token}:
+ *  get:
+ *      summary: activate from email link and redirect to link
+ *      parameters:
+ *        - in: path
+ *          name: token
+ *          schema:
+ *              type: string
+ *          required: true
+ */
+
+/**
+ * @swagger
+ * /api/user/refresh:
+ *  get:
+ *      summary: update refreshToken 
  */
 
 /**
@@ -869,7 +895,7 @@ app.all('*', (req, res, next) => {
 
 /**
  * @swagger
- * /api/category/{id}:
+ * /api/category:
  *  get:
  *      summary: get categories
  *
