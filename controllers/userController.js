@@ -45,6 +45,10 @@ class UserController {
       return next(ApiError.badRequest('Неверный email'))
     }
 
+    if (!user.activated) {
+      return next(ApiError.badRequest('Пользователь не активирован'))
+    }
+
     let comparePassword = bcrypt.compareSync(password, user.password)
     if (!comparePassword) {
       return next(ApiError.badRequest('Указан неверный пароль'))
