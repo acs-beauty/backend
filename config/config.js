@@ -10,6 +10,7 @@ const config = {
       require: true,
       rejectUnauthorized: false,
     },
+    // useUTC: true,
   },
   logging: false,
   // cli: {
@@ -17,6 +18,8 @@ const config = {
   // },
   operatorsAliases: process.env.OPERATOR_ALIASES,
   seederStorage: process.env.SEEDER_STORAGE,
+  // timezone: '+02:00',
+  // timezone: 'Europe/Kiev',
 }
 
 module.exports = config

@@ -69,7 +69,6 @@ class UserController {
     }
     user.activated = true
     await user.save()
-
     return res.redirect(process.env.CLIENT_URL)
   })
 

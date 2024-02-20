@@ -30,6 +30,7 @@ class FeedbackController {
       where: {
         id,
       },
+      // attributes: ['id', 'review', 'rating', 'status', 'createdAt'],
       returning: true,
     })
     if (!count) {
@@ -137,9 +138,9 @@ class FeedbackController {
       where,
       attributes: {
         include: [
-        [col('User.firstName'), 'firstName'],
-        [col('User.lastName'), 'lastName'],
-        [col('Product.name'), 'productName'],
+          [col('User.firstName'), 'firstName'],
+          [col('User.lastName'), 'lastName'],
+          [col('Product.name'), 'productName'],
         ],
         exclude: ['productId', 'userId'],
       },
