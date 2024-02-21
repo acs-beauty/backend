@@ -6,6 +6,8 @@ const setTokens = (res, id) => {
 
   res.cookie('accessToken', accessToken, { maxAge: 15 * 60 * 1000, httpOnly: true })
   res.cookie('refreshToken', refreshToken, { maxAge: 60 * 24 * 3600 * 1000, httpOnly: true })
+
+  return accessToken
 }
 
 module.exports = setTokens

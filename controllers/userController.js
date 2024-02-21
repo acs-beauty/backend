@@ -54,9 +54,9 @@ class UserController {
       return next(ApiError.badRequest('Указан неверный пароль'))
     }
 
-    setTokens(res, user.id)
+    const accessToken = setTokens(res, user.id)
 
-    return res.status(200).json()
+    return res.status(200).json({ token: accessToken })
   })
 
   activate = asyncErrorHandler(async (req, res, next) => {
