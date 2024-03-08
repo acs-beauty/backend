@@ -741,10 +741,10 @@ app.all('*', (req, res, next) => {
  * @swagger
  * /api/user/me:
  *  get:
- *      summary: get my account info
+ *      summary: get my own account info
  *      responses:
  *          200:
- *              description: to get my account info
+ *              description: to get my own account info
  *              content:
  *                  application/json:
  *                      schema:
