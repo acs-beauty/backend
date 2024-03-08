@@ -10,7 +10,14 @@ const swaggerJSDoc = require('swagger-jsdoc')
 
 const app = express()
 
-app.use(cors({ credentials: true, origin: '*' }))
+app.use(cors({ credentials: true, origin: '*', sameSite: 'none' }))
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Credentials', true)
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json')
+  next()
+})
 app.use(express.json())
 app.use(cookieParser())
 app.use('/api', router)
@@ -831,7 +838,7 @@ app.all('*', (req, res, next) => {
  * @swagger
  * /api/user/refresh:
  *  get:
- *      summary: update refreshToken 
+ *      summary: update refreshToken
  */
 
 /**
