@@ -12,8 +12,8 @@ const formatOrders = orders =>
 
 const formatOrder = order => {
   const items = order.products.map(product => {
-    const { name, price, discount, images } = product
-    return { name, price, discount, count: product.OrderProduct.count, images }
+    const { id, name, price, discount, images } = product
+    return { id, name, price, discount, count: product.OrderProduct.count, images }
   })
   const { products, ...rest } = order
   return { ...rest, products: items }
