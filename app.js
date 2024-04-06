@@ -10,7 +10,7 @@ const swaggerJSDoc = require('swagger-jsdoc')
 
 const app = express()
 
-app.use(cors({ credentials: true, origin: 'http://localhost:5173', sameSite: 'none' }))
+app.use(cors({ credentials: true, origin: ['http://localhost:5173', 'http://localhost:3000'], sameSite: 'none' }))
 // app.use(function (req, res, next) {
 //   res.header('Access-Control-Allow-Origin', '*')
 //   res.header('Access-Control-Allow-Credentials', true)
